@@ -32,7 +32,7 @@
 #include "../Terrain.h"
 #include "../Render.h"
 #include "../Poly.h"
-#include "../CamRBD.h"
+#include "../CamRbd.h"
 #include "../Image.h"
 #include "../ResourceManager.h"
 #include "../CfgParse.h"

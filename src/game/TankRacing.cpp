@@ -21,7 +21,7 @@
 
 #ifdef QT_CORE_LIB
 #include <QApplication>
-#include <QPixMap>
+#include <qpixmap.h>
 #include <QSplashScreen>
 #endif
 

@@ -5,10 +5,10 @@ SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 IF(NOT BUILD_HEADLESS)
   SET(GAME_SRCS
     "CJoyInput.cpp"
-    "GenericBuffer.cpp"      
+    "GenericBuffer.cpp"
     "Poly.cpp"
     "Render.cpp"
-    "SimpleStatus.cpp"        
+    "SimpleStatus.cpp"
     "Sound.cpp"
     "TankGUI.cpp"
   )
@@ -25,24 +25,24 @@ ELSE()
   )
 ENDIF(NOT BUILD_HEADLESS)
 
-SET(GAME_SRCS 
+SET(GAME_SRCS
 ${GAME_SRCS}
 "BanList.cpp"
 "BanList.h"           "Basis.cpp"            "Basis.h"
 "splash.png"          "BitPacking.cpp"       "BitPacking.h"
 "CamRbd.cpp"          "CamRbd.h"             "macros.h"
 "CfgParse.cpp"        "CfgParse.h"
-"CJoyInput.h"	  
+"CJoyInput.h"
 "Compression.cpp"
 "Compression.h"       "Crypt.cpp"            "Crypt.h"
-"CStr.cpp"            "CStr.h"               
+"CStr.cpp"            "CStr.h"
 "Directories.h"       "EntityBase.cpp"       "EntityBase.h"
 "EntityFlag.cpp"      "EntityFlag.h"         "EntityGUI.cpp"
 "EntityGUI.h"         "EntityPFire.cpp"      "EntityPFire.h"
 "EntityRacetank.cpp"  "EntityTank.cpp"       "EntityTank.h"
 "FileCRCList.cpp"     "FileCRCList.h"        "FileManager.cpp"
 "FileManager.h"       "Find.cpp"             "Find.h"
-"GenericBuffer.h"   
+"GenericBuffer.h"
 "Heartbeat.cpp"
 "Heartbeat.h"         "HelpText.cpp"         "HelpText.h"
 "IFF.cpp"             "IFF.h"                "Image.cpp"
@@ -52,12 +52,12 @@ ${GAME_SRCS}
 "neuquant.h"          "PacketProcessors.cpp" "PacketProcessors.h"
 "Physics.cpp"         "Physics.h"            "pi.cpp"
 "pi.h"                "Poly.h"
-"Quantizer.cpp"       "Quantizer.h"          "Reg.cpp"       
+"Quantizer.cpp"       "Quantizer.h"          "Reg.cpp"
 "Reg.h"               "Render.h"
-"ResourceManager.cpp" "ResourceManager.h"    
+"ResourceManager.cpp" "ResourceManager.h"
 "SimpleStatus.h"      "Sound.h"              "StatsPackage.cpp"
 "StatsPackage.h"      "TankAI.cpp"           "TankAI.h"
-"TankGame.cpp"        "TankGame.h"        
+"TankGame.cpp"        "TankGame.h"
 "TankGUI.h"           "TankRacing.cpp"       "TankRacing.h"
 "Terrain.cpp"         "Terrain.h"            "TextLine.cpp"
 "TextLine.hpp"        "Timer.cpp"            "Timer.h"
@@ -116,6 +116,8 @@ IF(NOT BUILD_HEADLESS)
     qt5_add_resources(RCCS_SRCS ${GAME_RESOURCES})
     SET(GAME_SRCS ${GAME_SRCS} ${RCCS_SRCS})
     SOURCE_GROUP("gen" FILES ${RCCS_SRCS})
+  ELSE()
+    SET(BAD_GUI_REQS "${BAD_GUI_REQS} QT5")
   ENDIF()
 ENDIF(NOT BUILD_HEADLESS)
 
@@ -171,6 +173,7 @@ IF(NOT BUILD_HEADLESS)
   ELSE()
     SET(BAD_GUI_REQS "${BAD_GUI_REQS} GLEW")
   ENDIF()
+  target_link_libraries(TM stdc++fs)
 ENDIF(NOT BUILD_HEADLESS)
 
 MARK_AS_ADVANCED(SFML_INCLUDE_DIR)

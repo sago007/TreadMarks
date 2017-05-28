@@ -22,7 +22,7 @@
 
 #include "../Terrain.h"
 #include "../Render.h"
-#include "../CamRBD.h"
+#include "../CamRbd.h"
 #include "../Image.h"
 #include "../ResourceManager.h"
 #include "../Basis.h"

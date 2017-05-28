@@ -1,15 +1,15 @@
 // This file is part of Tread Marks
-// 
+//
 // Tread Marks is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // Tread Marks is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with Tread Marks.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -1072,8 +1072,8 @@ void DoMain()
 		StartHelp(HELP_OrderingInfo);
 		return;
 	case BID_Web :
-		SetActiveWindow(NULL);
-		OpenWebLink("http://www.longbowgames.com");
+		//SetActiveWindow(NULL);
+		//OpenWebLink("http://www.longbowgames.com");
 
 		break;
 	case BID_Tutorial:
@@ -2499,7 +2499,7 @@ void DoGraphicsOptions()
 			}
 
 			bool bFound = false;
-			
+
 			for(auto it = aResolutions.begin(); it != aResolutions.end(); ++it)
 			{
 				if(it->first == CTankGame::Get().GetSettings()->GraphicsSettings.GLBWIDTH && it->second == CTankGame::Get().GetSettings()->GraphicsSettings.GLBHEIGHT)
@@ -3668,4 +3668,3 @@ void DoMenus(){
 		break;
 	}
 }
-
