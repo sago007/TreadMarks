@@ -1,9 +1,9 @@
 class = mesh
 type = tmlogo
 
-mesh = trophy/tmht.lwo
+mesh = Trophy/TMHT.lwo
 
-texture = intro/intro2.bmp
+texture = Intro/Intro2.bmp
 
 scale = 10.0
 collide = 0
@@ -23,4 +23,3 @@ fade = 1.0
 ServerSynch = 0
 
 SecondaryFrustum = 1
-

@@ -42,6 +42,9 @@ ConfigFile::~ConfigFile(){
 }
 int ConfigFile::Read(const char *n, int length){	//Reads named file into internal data area for parsing.
 	FILE *f = fopen(n, "rb");
+	if (!f) {
+		fprintf(stderr, "Failed to open: \"%s\"\n", n);
+	}
 	int ret = Read(f, length);
 	if(f) fclose(f);
 	return ret;

@@ -250,6 +250,9 @@ public:
 			}
 			fclose(f);
 		}
+		else {
+			fprintf(stderr, "Failed to load: %s\n", bmp );
+		}
 		return false;
 	};
 	bool LoadBMP8(FILE *f){

@@ -129,4 +129,7 @@ void CBanList::LoadBanList(char *sFileName)
 		}
 		fclose(fp);
 	}
+	else {
+		fprintf(stderr, "Failed to open: \"%s\"\n", sFileName);
+	}
 }

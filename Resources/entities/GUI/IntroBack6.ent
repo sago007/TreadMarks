@@ -1,7 +1,7 @@
 class = guibackground
 type = introback6
 
-texture = intro/intro5a.bmp
+texture = Intro/Intro5A.bmp
 
 xscale = 1.0
 yscale = 1.0
@@ -29,4 +29,3 @@ PerturbXV = 0.0
 PerturbYV = -0.1
 PerturbStart = 0.00
 PerturbEnd = 0.00
-

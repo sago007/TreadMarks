@@ -181,6 +181,7 @@ int main(int argc, char** argv)
 		while(fgets(buf, sizeof(buf) - 1, f)) CTankGame::Get().GetVW()->FM.AddSearchDir(FilePathOnly(buf));
 		fclose(f);
 	}else{
+		fprintf(stderr, "Failed to load: %s\n", "dirs.cfg" );
 	//	return FALSE;
 	}
 	//
@@ -210,7 +211,7 @@ int main(int argc, char** argv)
 	CTankGame::Get().GetVW()->FM.AddSearchDir("addons/art/");
 
 	// Post-finally, check the official directories
-	CTankGame::Get().GetVW()->FM.AddSearchDir("maps/");
+	CTankGame::Get().GetVW()->FM.AddSearchDir("Maps/");
 	CTankGame::Get().GetVW()->FM.AddSearchDir("objects/");
 	CTankGame::Get().GetVW()->FM.AddSearchDir("entities/");
 	CTankGame::Get().GetVW()->FM.AddSearchDir("sound/");
@@ -267,25 +268,25 @@ int main(int argc, char** argv)
 	//
 	// Russ
 	char tempstr[256];
-	Language.Load("Local\\Language.TXT");
-	Paths.Load("Local\\Paths.TXT");
+	Language.Load("Local/Language.TXT");
+	Paths.Load("Local/Paths.TXT");
 
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Help.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Help.TXT");
 	TextBlock.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Tutorial.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Tutorial.TXT");
 	TextBlock2.Load(tempstr);
 
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Lines.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Lines.TXT");
 	Text.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Names.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Names.TXT");
 	Names.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Weapons.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Weapons.TXT");
 	Weapons.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Insignia.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Insignia.TXT");
 	Insignia.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Sounds.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Sounds.TXT");
 	SoundPaths.Load(tempstr);
-	sprintf(tempstr, "%s\\%s", Paths.Get(0), "Controls.TXT");
+	sprintf(tempstr, "%s/%s", Paths.Get(0), "Controls.TXT");
 	ControlText.Load(tempstr);
 
 	CTankGame::Get().GetSettings()->InputSettings.InitControls();

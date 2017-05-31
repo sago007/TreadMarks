@@ -68,20 +68,23 @@ int FileManager::AddSearchDir(const char *dir){	//Adds a directory to the search
 		char end = dir[strlen(dir) - 1];
 		if(end != '/' && end != '\\') t = CStr(dir) + "/";
 		else t = dir;
+		fprintf(stderr, "Added: %s\n", dir);
 		if(SearchDirHead.AddItem(new CStr(t))) return 1;
 	}
 	return 0;
 }
 int FileManager::FindPackedFiles(){	//Scans for packed files in current search directories and makes note of them for further searches.
 	//NOT IMPLEMENTED YET!!!
-	return NULL;
+	return 0;
 }
 FILE *FileManager::Open(const char *name){	//The returned pointer is for convenience only!  DO NOT fclose the file stream!
 	Close();
 	CStrList *cl = &SearchDirHead;
 	if(name && strlen(name) > 0){
 		while((cl != NULL) && (cl->Data != NULL) && (NULL == (f = ::fopen(*cl->Data + name, "rb")))){
+			//std::string s = std::string(*cl->Data) + name;
 			cl = cl->NextLink();
+			//fprintf(stderr, "Failed to find: %s\n",s.c_str());
 		}
 		if(f){
 			FileName = *cl->Data + name;
@@ -90,6 +93,7 @@ FILE *FileManager::Open(const char *name){	//The returned pointer is for conveni
 	}
 	if(f == NULL && name && strlen(name) > 0){
 		OutputDebugLog("File Not Found in search path: \"" + CStr(name) + "\"\n");
+		fprintf(stderr, "File Not Found in search path: %s\n", name);
 	}
 	return f;
 }
@@ -106,6 +110,7 @@ FILE *FileManager::OpenWildcard(const char *wild, char *nameret, int namelen, bo
 	if(scanbasedir) find.AddSearch(wild, recursive, FilePathOnly(wild));	//Then search base dir.
 	//Later, do other stuff for packed file searching.
 	if(find.Items() <= 0) OutputDebugLog("Wildcard had no matches: " + CStr(wild) + "\n");
+	if(find.Items() <= 0) fprintf(stderr, "Wildcard had no matches: %s\n", wild);
 	return NextWildcard(nameret, namelen);
 }
 FILE *FileManager::NextWildcard(char *nameret, unsigned int namelen){	//Continues searching by previous wildcard.
@@ -134,15 +139,15 @@ void FileManager::Close(){
 //These work on the currently opened file, either physical or in pack.
 size_t FileManager::fread(void *buf, size_t size, size_t count){
 	if(f && buf) return ::fread(buf, size, count, f);
-	return NULL;
+	return 0;
 }
 int FileManager::fseek(long offset, int origin){
 	if(f) return ::fseek(f, offset, origin);
-	return NULL;
+	return 0;
 }
 long FileManager::ftell(){
 	if(f) return ::ftell(f);
-	return NULL;
+	return 0;
 }
 long FileManager::length(){
 	long pos, len = 0;

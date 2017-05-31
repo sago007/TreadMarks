@@ -1,9 +1,9 @@
 class = guimouse
 type = mouse1
 
-#texture = textures/fiery5.bmp
-texture = textures/blackshiny2.bmp
-mesh = pointer2.lwo
+#texture = Textures/Fiery5.bmp
+texture = Textures/BlackShiny2.bmp
+mesh = Pointer2.lwo
 scale = 1.0
 
 blend = add
@@ -18,4 +18,3 @@ Rotation = 45, -60, 0
 RotateSpeed = 0, 0, 20
 
 ServerSynch = 0
-

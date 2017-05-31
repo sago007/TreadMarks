@@ -74,6 +74,8 @@ int IFF::OpenIn(const char *name, int offset){	//On OpenIn, Start points to firs
 		ret = OpenIn(f);
 		OwnFile = true;
 	}
+	else
+		fprintf(stderr, "Failed to open: \"%s\"\n", name);
 	return ret;
 }
 int IFF::OpenIn(FILE *f){	//On OpenIn, Start points to first real chunk, on OpenOut, Start points to very start of FORM chunk!
@@ -263,6 +265,9 @@ int IFF::OpenOut(const char *name, int offset){
 		WriteLong(0);	//Zero size, fill this in later.
 		WriteLong(0);	//No type, fill in type later.  //IFFType = StringToUlong(type));
 		return 1;
+	}
+	if (name && offset >= 0 && !F) {
+		fprintf(stderr, "Failed to open: \"%s\"\n", name);
 	}
 	Close();
 	return 0;

@@ -3,7 +3,7 @@
 class = text
 type = font1
 
-texture = fonts/font1.bmp
+texture = Fonts/Font1.bmp
 
 charsx = 8
 charsy = 8
@@ -15,4 +15,3 @@ alphagrad = 1
 alphagradbias = 0.9
 
 mixedcase = 0
-

@@ -182,6 +182,7 @@ public:
 	};
 	void DeleteList(){
 		CStrList *Ptr, *Ptr2;
+		UnlinkItem();
 		Ptr = Next;
 		while(Ptr){
 			Ptr2 = Ptr;	//Copy pointer.
@@ -196,7 +197,7 @@ public:
 			Ptr2->UnlinkItem();	//Unlink current item.
 			delete Ptr2;	//Destroy unlinked item.
 		}
-		UnlinkItem();
+		
 		delete Data;
 		Data = NULL;
 	};

@@ -196,6 +196,7 @@ bool MixTable::MakeLookup(PaletteEntry *pe, bool disk){
 			}
 			fclose(f);
 		}
+		fprintf(stderr, "Failed to open: %s\n", fn);
 	}
 #endif
 

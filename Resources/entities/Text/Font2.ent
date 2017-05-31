@@ -3,16 +3,15 @@
 class = text
 type = font2
 
-texture = fonts/font2.bmp
+texture = Fonts/Font2.bmp
 
 charsx = 16
 charsy = 8
 
-map = ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !@#$%^&*()-_=+\|~[]{};:'",.<>/?äöü
+map = ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !@#$%^&*()-_=+\|~[]{};:'",.<>/?ï¿½ï¿½ï¿½
 
 alphagrad = 1
 
 alphagradbias = 0.9
 
 mixedcase = 1
-

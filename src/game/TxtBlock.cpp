@@ -44,8 +44,10 @@ int CTextBlock::Load(char *file)
     this->Free();
 
     fp = fopen(file, "rb");
-    if (!fp)
+    if (!fp) {
+		fprintf(stderr, "Failed to open: \"%s\"\n", file);
 		return -1;
+	}
     fseek(fp,0,SEEK_END);
 	l=ftell(fp);
 	fseek(fp,0,SEEK_SET);

@@ -49,7 +49,10 @@ int CText::Load(char *file)
     this->Free();
 
     fp = fopen(file, "rb");
-    if (!fp) return -1;
+    if (!fp) {
+		printf("Failed to load: \"%s\"\n", file);
+		return -1;
+	}
     fseek(fp,0,SEEK_END); l=ftell(fp); fseek(fp,0,SEEK_SET);
     this->Buffer = (char *)malloc(l+1);
     fread(this->Buffer,1,l,fp); fclose(fp);

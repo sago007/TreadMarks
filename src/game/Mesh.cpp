@@ -51,6 +51,9 @@ bool Mesh::LoadLWO(const char *name, float Scale){
 		ret = LoadLWO(f, Scale);
 		fclose(f);
 	}
+	else {
+		fprintf(stderr, "Failed to open: \"%s\"\n", name);
+	}
 	return ret;
 }
 bool Mesh::LoadLWO(FILE *f, float Scale){
@@ -90,6 +93,7 @@ bool Mesh::LoadLWO(FILE *f, float Scale){
 		}
 	}
 	OutputDebugLog("LoadLWO failed.\n");
+	fprintf(stderr, "Failed to open LWO\n");
 	return false;
 }
 bool Mesh::BasicCube(float meters){

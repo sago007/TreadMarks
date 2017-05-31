@@ -300,6 +300,9 @@ void Sound::SetVoice2D(int voice)
 void Sound::StartMusic(const CStr& sFilename)
 {
 	bool bSucceeded = music.openFromFile(sFilename.get());
+	if (!bSucceeded) {
+		fprintf(stderr, "Failed to open: %s\n", sFilename.get());
+	}
 	music.play();
 }
 

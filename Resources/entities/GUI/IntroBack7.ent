@@ -1,7 +1,7 @@
 class = guibackground
 type = introback7
 
-texture = intro/intro5b.bmp
+texture = Intro/Intro5B.bmp
 
 xscale = 1.0
 yscale = 1.0
@@ -29,4 +29,3 @@ PerturbXV = 0.0
 PerturbYV = -0.2
 PerturbStart = 0.00
 PerturbEnd = 0.002
-

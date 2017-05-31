@@ -44,6 +44,7 @@
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <cassert>
 #endif
 
 using namespace std;
@@ -2679,7 +2680,7 @@ bool CTankGame::StartGame(){
 				PlayerEnt->SetInt(ATT_PLAYERTANK, true);
 				PlayerEnt->SetString(ATT_NAME, GameSettings.PlayerName);
 				//
-				int tmpType;
+				int tmpType = 0;
 				if (VW.MapCfg.FindKey("MapType"))
 					VW.MapCfg.GetIntVal(&tmpType);
 
@@ -2882,7 +2883,7 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 				sprintf(sOutput, Text.Get(TEXT_DEDI_KICKINGPLAYER), FirstCommand.next->sEntry);
 			}
 #ifndef HEADLESS
-			sprintf(sOutput, "%s\n", sOutput);
+			strcat(sOutput, "\n");
 			GetDedicatedWin()->OutputFunc(sOutput, 0);
 #endif
 			for(int i = 0; i < MAX_CLIENTS; i++)

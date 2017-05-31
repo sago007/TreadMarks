@@ -17,7 +17,9 @@
 
 CStr GetAppDataDir()
 {
-    return CStr("~/.local/share/Tread Marks/");
+	CStr the_path =  getenv("HOME");
+	the_path = the_path + CStr("/.local/share/Tread Marks/");
+    return the_path;
 }
 
 CStr GetCommonAppDataDir()

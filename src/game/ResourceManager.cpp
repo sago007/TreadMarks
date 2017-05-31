@@ -295,8 +295,12 @@ int ResourceManager::LoadSound(SoundNode *node){	//Ditto a sound, re-does max bi
 		pFM->PushFile();
 		if(pFM->Open(node->name) || DisableLoading){	//Found on disk.
 			OutputDebugLog(CStr("Loading Sound: ") + node->name + "\n");
-			if(!DisableLoading)
-				node->buffer.loadFromFile(pFM->GetFileName().get());
+			if(!DisableLoading) {
+				bool success = node->buffer.loadFromFile(pFM->GetFileName().get());
+				if (!success) {
+					fprintf(stderr, "Failed to load: %s\n", pFM->GetFileName().get() );
+				}
+			}
 			node->id = -1;
 			pFM->PopFile();
 			return 1;

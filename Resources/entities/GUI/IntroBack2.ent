@@ -1,8 +1,8 @@
 class = guibackground
 type = introback2
 
-texture = intro/intro2.bmp
-#texture = intro/intro3.bmp
+texture = Intro/Intro2.bmp
+#texture = Intro/Intro3.bmp
 
 xscale = 1.0
 yscale = 1.0

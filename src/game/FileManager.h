@@ -50,8 +50,8 @@ public:
 public:
 	FILE *Open(const char *name);	//The returned pointer is for convenience only!  DO NOT fclose the file stream!
 	FILE *GetFile();	//Ditto.
-	FILE *OpenWildcard(const char *wild, char *nameret = NULL, int namelen = NULL, bool recursive = false, bool scanbasedir = true);	//Opens a file by wildcard.
-	FILE *NextWildcard(char *nameret = NULL, unsigned int namelen = NULL);	//Continues searching by previous wildcard.
+	FILE *OpenWildcard(const char *wild, char *nameret = NULL, int namelen = 0, bool recursive = false, bool scanbasedir = true);	//Opens a file by wildcard.
+	FILE *NextWildcard(char *nameret = NULL, unsigned int namelen = 0);	//Continues searching by previous wildcard.
 	//Note that when wildcarding, only the first occurance of multiple files with the same name in the search path will ever be opened.
 	//
 	bool PushFile();	//Used to nest access to files through FileManager.  MUST CALL POP FOR EVERY PUSH!  Nesting wildcard opens will fail.

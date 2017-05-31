@@ -97,6 +97,7 @@ bool LoadBMP(const char *name, Bitmap *bmp, PaletteEntry *pe){
 		fclose(f);
 		return t;
 	}
+	fprintf(stderr, "Failed to open: \"%s\"\n", name);
 	return false;
 }
 
@@ -1125,6 +1126,7 @@ bool ImageSet::LoadSet(const char *n){
 		fclose(f);
 		return ret;
 	}
+	fprintf(stderr, "Failed to open: \"%s\"\n", n);
 	return false;
 }
 #define IMAGESETVERSION 1
