@@ -101,7 +101,7 @@ int Activated(EntityBase **e = NULL){
 		return BID_FirstTimeOnMenu;
 	}
 	EntityGID a = CTankGame::Get().GetVW()->GetActivated();
-	CTankGame::Get().GetVW()->SetActivated(NULL);
+	CTankGame::Get().GetVW()->SetActivated(0);
 	if(a){
 		for(int i = 0; i < MAX_SLOTS; i++){
 			if(GUISlot[i].gid == a){
@@ -2404,9 +2404,9 @@ void DoGraphicsOptions()
 		tempstr, BID_Res);  AddVec3(L, V);
 
 	if (CTankGame::Get().GetSettings()->GraphicsSettings.UseFullScreen) {
-		sprintf(tempstr, Text.Get(TEXT_GRAPHICSFULL));
+		sprintf(tempstr, "%s", Text.Get(TEXT_GRAPHICSFULL));
 	} else {
-		sprintf(tempstr, Text.Get(TEXT_GRAPHICSWINDOW));
+		sprintf(tempstr, "%s", Text.Get(TEXT_GRAPHICSWINDOW));
 	}
 	GuiEnt("guibutton", "button1", V, S, CVec3(1, 1, 1),
 		tempstr, BID_Mode);  AddVec3(L, V);

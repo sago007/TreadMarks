@@ -20,13 +20,15 @@
 #ifndef BASIS_H
 #define BASIS_H
 
+#include <stdint.h>
+
 #define MAXOCTAVE 6
 #define MAXNTH 10
 #define TABSIZE 256
 
 struct FeaturePoint{
 	float f;	//Distance, sorted by.
-	unsigned long i;	//Non-unique ID, 0-255.
+	uint32_t i;	//Non-unique ID, 0-255.
 };
 
 class Basis{

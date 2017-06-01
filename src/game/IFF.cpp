@@ -129,7 +129,7 @@ double IFF::ReadFloat(double *pnt){
 	return 0.0;
 }
 ulong IFF::ReadLong(){
-	unsigned long Temp;
+	uint32_t Temp;
 	if(IsOpen && fread(&Temp, sizeof(Temp), 1, F)){
 		return ntohl(Temp);
 	}

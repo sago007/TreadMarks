@@ -520,7 +520,7 @@ public:
 		//which might make things easier on the map editor.
 private:
 	bool ForceGroup;
-	unsigned long msec;	//Time stamp for global think.
+	uint32_t msec;	//Time stamp for global think.
 	signed long msecdiff;	//When client, difference from current client clock to get server clock.
 	int vmsec;	//Time since last global think ("length" of this think).
 	float ffrac;
@@ -529,9 +529,9 @@ private:
 	int msecdiffan;
 	//
 #define SYNCH_EVERY 100
-	unsigned long lastsynch;
+	uint32_t lastsynch;
 #define PING_EVERY 1000
-	unsigned long lastping;
+	uint32_t lastping;
 	//
 	int gamemode;
 	//

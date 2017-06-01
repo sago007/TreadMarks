@@ -1160,7 +1160,7 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 						}
 					}
 				}
-			//	if((*node)[m].BlitRaw8to32((unsigned long*)tbmp.Data(), tbmp.Pitch(), 0, 0, tbmp.Width(), tbmp.Height(), false, rgba)){
+			//	if((*node)[m].BlitRaw8to32((uint32_t*)tbmp.Data(), tbmp.Pitch(), 0, 0, tbmp.Width(), tbmp.Height(), false, rgba)){
 //				tbmp.GammaCorrect(1.8f);
 				glBindTexture(GL_TEXTURE_2D, (*node)[m].id);
 				//

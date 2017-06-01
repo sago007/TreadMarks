@@ -115,7 +115,7 @@ protected:	//OpenGl again.
 //	int LodBump[MAX_LOD_BUMP][2];	//Which LOD cells should have their detail bumped up?
 //	int nLodBump;
 public:	//ick...  public...
-	unsigned int TexIDs[TEXIDSIZE][TEXIDSIZE];
+	uint32_t TexIDs[TEXIDSIZE][TEXIDSIZE];
 	ByteRect TexDirty[TEXIDSIZE][TEXIDSIZE];
 	int Redownload(int tx, int ty);
 	//
@@ -142,8 +142,8 @@ protected:
 	float	Ambient;
 	int		ScorchTex;
 public:
-	unsigned long	*data32;
-//	unsigned long	*ShadeLookup32;
+	uint32_t	*data32;
+//	uint32_t	*ShadeLookup32;
 public:
 	void RotateEdges();	//Rotates edges into center or vice versa for painting wrappability.
 	Terrain();

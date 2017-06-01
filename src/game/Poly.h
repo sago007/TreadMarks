@@ -123,7 +123,7 @@ public:
 	char pad1;
 	char pad2;
 public:
-	Poly3D(){ Points[0] = Points[1] = Points[2] = NULL; Flags = Group = 0; return;};//Tex = NULL; return;};
+	Poly3D(){ Points[0] = Points[1] = Points[2] = 0; Flags = Group = 0; return;};//Tex = NULL; return;};
 	~Poly3D(){ return;};
 	void SetPoints(int p1, int p2, int p3){ Points[0] = p1; Points[1] = p2; Points[2] = p3;};
 	void SetUVs(Float u1, Float v1, Float u2, Float v2, Float u3, Float v3){

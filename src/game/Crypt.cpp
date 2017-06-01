@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 unsigned int Checksum(const void *data, int length){
 	unsigned int sum = 0x5e04a58c ^ (unsigned int)length;
@@ -65,7 +66,7 @@ int Crypt(const void *data, int length, void **out, int *outlen){
 			if(ik >= keylen) ik = 0;
 		}
 	}
-	*((unsigned long*)buf) = (unsigned long)buflen ^ 0xabbafad5;
+	*((uint32_t*)buf) = (uint32_t)buflen ^ 0xabbafad5;
 	*out = buf;
 	*outlen = buflen;
 	return 1;
@@ -83,7 +84,7 @@ int Decrypt(const void *data, int length, void **out, int *outlen){
 	//	printf("Bad malloc.\n");
 		return 0;
 	}
-	unsigned long t = *((unsigned long*)data);
+	uint32_t t = *((uint32_t*)data);
 	int buflen = (int)(t ^ 0xabbafad5);
 	if(buflen != length){
 	//	printf("Bad sizes.  External: %d  Internal: %d  T: %x\n", length, buflen, t);

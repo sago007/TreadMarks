@@ -208,7 +208,7 @@ int BinaryTriangle2::Split2(){//float propoh){	//Note, leaves, cl->r and cr->l h
 };
 void BinaryTriangle2::Split(){//float propoh){
 //	h = propoh;
-	if(b == NULL){	//No bottom, so split half-diamond.
+	if(b == 0){	//No bottom, so split half-diamond.
 		if(Split2()){
 			BTP(cl)->r = BTP(cr)->l = 0;	//Null hanging pointers.
 		}
@@ -359,24 +359,24 @@ void BinaryTriangle2::TestSplitClip(int level, int index,
 	if(t < -radius || t2 < -radius){	//Clipped totally.
 		//Okay, trying something...  Set neighbor pointers that reference this to null, so it won't be
 		//force split at all.  This will BREAK if a concurrent tree is used...
-		cl = cr = NULL;	//In case we have already been force split some amount.
+		cl = cr = 0;	//In case we have already been force split some amount.
 		if(b){
-			if(BTP(BTP(b)->b) == this) BTP(b)->b = NULL;
-			else if(BTP(BTP(b)->l) == this) BTP(b)->l = NULL;
-			else if(BTP(BTP(b)->r) == this) BTP(b)->r = NULL;
-			b = NULL;
+			if(BTP(BTP(b)->b) == this) BTP(b)->b = 0;
+			else if(BTP(BTP(b)->l) == this) BTP(b)->l = 0;
+			else if(BTP(BTP(b)->r) == this) BTP(b)->r = 0;
+			b = 0;
 		}
 		if(l){
-			if(BTP(BTP(l)->b) == this) BTP(l)->b = NULL;
-			else if(BTP(BTP(l)->l) == this) BTP(l)->l = NULL;
-			else if(BTP(BTP(l)->r) == this) BTP(l)->r = NULL;
-			l = NULL;
+			if(BTP(BTP(l)->b) == this) BTP(l)->b = 0;
+			else if(BTP(BTP(l)->l) == this) BTP(l)->l = 0;
+			else if(BTP(BTP(l)->r) == this) BTP(l)->r = 0;
+			l = 0;
 		}
 		if(r){
-			if(BTP(BTP(r)->b) == this) BTP(r)->b = NULL;
-			else if(BTP(BTP(r)->l) == this) BTP(r)->l = NULL;
-			else if(BTP(BTP(r)->r) == this) BTP(r)->r = NULL;
-			r = NULL;
+			if(BTP(BTP(r)->b) == this) BTP(r)->b = 0;
+			else if(BTP(BTP(r)->l) == this) BTP(r)->l = 0;
+			else if(BTP(BTP(r)->r) == this) BTP(r)->r = 0;
+			r = 0;
 		}
 		iheight = IHEIGHT_NORENDER;
 		return;
@@ -588,7 +588,7 @@ inline void BinTriVert3MT(float x, float y, float h){
 	glVertex3f(x, h, y);
 }
 static union{
-int FanStack[200];
+int32_t FanStack[200];
 float FanStackf[200];
 };
 
@@ -685,8 +685,8 @@ static void RenderBinTriFan(BinaryTriangle2 *btri, int x1, int y1, int x2, int y
 		PolyCount++;
 		if(nFanStack > 0){
 #define HASH(x, y) (((x) <<16) ^ (y))
-			register int fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
-			register int fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
+			int fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
+			int fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
 			if(((fanfoo - HASH(x1, y1)) | (fanfoo2 - HASH(x2, y2))) == 0){
 		//	if(x1 == FanStack[0] && y1 == FanStack[1]){
 			//	if(x2 == FanStack[nFanStack - 2] && y2 == FanStack[nFanStack - 1]){
@@ -728,7 +728,7 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int flags, floa
 	//
 	//
 	//Align bintripool on 32byte boundary
-	BinTriPool = (BinaryTriangle2*)((((unsigned long)RealBinTriPool) + 31) & (~31));
+	//BinTriPool = (BinaryTriangle2*)((((uint32_t)RealBinTriPool) + 31) & (~31));
 //	BinTriPool = RealBinTriPool;
 	//
 	msecs += ms;

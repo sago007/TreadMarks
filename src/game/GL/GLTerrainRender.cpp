@@ -96,7 +96,7 @@ public:
 //Should be even multiple of 4.
 
 static BinaryTriangle RealBinTriPool[BINTRIPOOL + 1];
-static BinaryTriangle *BinTriPool;
+//static BinaryTriangle *BinTriPool;
 static int NextBinTriPool = 0;
 
 static Terrain *curmap;
@@ -114,7 +114,7 @@ inline int ElectiveSplitSafe(){
 }
 inline BinaryTriangle *AllocBinTri(){
 	if(NextBinTriPool < BINTRIPOOL){
-		BinaryTriangle *t = &BinTriPool[NextBinTriPool++];
+		BinaryTriangle *t = &RealBinTriPool[NextBinTriPool++];
 		t->iheight = 0;
 		return t;
 	}
@@ -547,7 +547,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 	}
 	//
 	//Align bintripool on 32byte boundary
-	BinTriPool = (BinaryTriangle*)((((unsigned long)RealBinTriPool) + 31) & (~31));
+	//BinTriPool = (BinaryTriangle*)((((uint32_t)RealBinTriPool) + 31) & (~31));
 	//
 	msecs += ms;
 	//

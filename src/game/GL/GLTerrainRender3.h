@@ -60,11 +60,11 @@ class BinTriPool
 {
 private:
 	BinaryTriangleR3	RealBinTriPool[BINTRIPOOL + 1];
-	BinaryTriangleR3	*AlignedBinTriPool;
+	//BinaryTriangleR3	*AlignedBinTriPool;
 	int					NextBinTriPool;
 
 public:
-	BinTriPool() {NextBinTriPool = 0; 	AlignedBinTriPool = (BinaryTriangleR3*)((((unsigned long)RealBinTriPool) + 31) & (~31));}
+	BinTriPool() {NextBinTriPool = 0; 	/*AlignedBinTriPool = (BinaryTriangleR3*)((((uint32_t)RealBinTriPool) + 31) & (~31));*/ }
 	void ResetBinTriPool(){ NextBinTriPool = 0;}
 	int AvailBinTris(){ return BINTRIPOOL - NextBinTriPool;}
 	int ElectiveSplitSafe(){ return NextBinTriPool < BINTRISAFE;}
@@ -72,7 +72,7 @@ public:
 	{
 		if(NextBinTriPool < BINTRIPOOL)
 		{
-			BinaryTriangleR3 *t = &AlignedBinTriPool[NextBinTriPool++];
+			BinaryTriangleR3 *t = &RealBinTriPool[NextBinTriPool++];
 			t->iheight = 0;
 			return t;
 		}

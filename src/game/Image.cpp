@@ -39,7 +39,7 @@ inline int ReadLong(FILE *f){ int n = 0; fread(&n, sizeof(int), 1, f); return n;
 bool BGRAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 	if(argb && pe){
 		for(int i = 0; i < 256; i++){
-			argb[i].argb = (unsigned long)((pe[i].peRed <<16) | (pe[i].peGreen <<8) | pe[i].peBlue | (alpha <<24));
+			argb[i].argb = (uint32_t)((pe[i].peRed <<16) | (pe[i].peGreen <<8) | pe[i].peBlue | (alpha <<24));
 		}
 		return true;
 	}
@@ -48,7 +48,7 @@ bool BGRAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 bool RGBAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 	if(argb && pe){
 		for(int i = 0; i < 256; i++){
-			argb[i].argb = (unsigned long)((pe[i].peRed) | (pe[i].peGreen <<8) | (pe[i].peBlue <<16) | (alpha <<24));
+			argb[i].argb = (uint32_t)((pe[i].peRed) | (pe[i].peGreen <<8) | (pe[i].peBlue <<16) | (alpha <<24));
 		}
 		return true;
 	}
@@ -105,26 +105,26 @@ bool LoadBMP(const char *name, Bitmap *bmp, PaletteEntry *pe){
 struct BitmapFileHeader
 {
 	unsigned short  bfType;
-	unsigned long   bfSize;
+	uint32_t   bfSize;
 	unsigned short  bfReserved1;
 	unsigned short  bfReserved2;
-	unsigned long   bfOffBits;
+	uint32_t   bfOffBits;
 };
 #pragma pack(pop)
 
 struct BitmapInfoHeader
 {
-	unsigned long   biSize;
+	uint32_t   biSize;
 	long            biWidth;
 	long            biHeight;
 	unsigned short  biPlanes;
 	unsigned short  biBitCount;
-	unsigned long   biCompression;
-	unsigned long   biSizeImage;
+	uint32_t   biCompression;
+	uint32_t   biSizeImage;
 	long            biXPelsPerMeter;
 	long            biYPelsPerMeter;
-	unsigned long   biClrUsed;
-	unsigned long   biClrImportant;
+	uint32_t   biClrUsed;
+	uint32_t   biClrImportant;
 };
 
 struct RGBQuad
@@ -830,7 +830,7 @@ bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int
 		w = std::min(w, width - insetx);
 		h = std::min(h, height - insety);
 		int x, y;
-	//	unsigned long *lsource, *ltsrc, *ltdst;
+	//	uint32_t *lsource, *ltsrc, *ltdst;
 		unsigned char *source, *tsrc, *tdst;
 		if(trans && (bpp == 8 || bpp == 16 || bpp == 32)){	//Transblit not supported on 24bit.
 			source = data + insetx * pixelpitch + insety * pitch;
@@ -850,7 +850,7 @@ bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int
 					}
 				}else{
 					for(x = 0; x < w; x++){
-						if(((unsigned long*)tsrc)[x]) ((unsigned long*)tdst)[x] = ((unsigned long*)tsrc)[x];
+						if(((uint32_t*)tsrc)[x]) ((uint32_t*)tdst)[x] = ((uint32_t*)tsrc)[x];
 					}
 				}
 				dest += dpitch;

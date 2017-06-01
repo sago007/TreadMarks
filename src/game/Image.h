@@ -48,7 +48,7 @@
 
 struct ARGB{
 	union{
-		unsigned long argb;
+		uint32_t argb;
 		unsigned short argb16;	//Can NOT be set through use of b, g, r, and a.
 		struct{
 			unsigned char b, g, r, a;
@@ -63,7 +63,7 @@ bool RGBAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha = 0);	//Same i
 inline int HiBit(int num){
 	int bit = 31;
 	while(bit){
-		if((unsigned long)num & (unsigned long)((unsigned long)1 << bit)) return bit;
+		if((uint32_t)num & (uint32_t)((uint32_t)1 << bit)) return bit;
 		bit--;
 	}
 	return 0;

@@ -127,7 +127,7 @@ FILE *FileManager::GetFile(){
 CStr FileManager::GetFileName(){
 	return FileName;
 }
-unsigned long FileManager::GetFileOffset(){
+uint32_t FileManager::GetFileOffset(){
 	return FileOffset;
 }
 void FileManager::Close(){

@@ -66,7 +66,7 @@ bool Terrain::DownloadTextures(){
 		}
 		GLGenTextures(TEXIDSIZE * TEXIDSIZE, (GLuint*)TexIDs);
 		//First patch seams by copying neighboring data.
-		unsigned long *tdd, *tds;
+		uint32_t *tdd, *tds;
 		for(y = 0; y < h; y += TexSize){	//Horizontal lines.
 			tdd = data32 + y * w;
 			tds = data32 + ((y - 1) & (h - 1)) * w;
@@ -159,7 +159,7 @@ int Terrain::UpdateTextures(int x1, int y1, int w, int h){
 
 int Terrain::Redownload(int px, int py){
 	if(!data32) return 0;
-	static unsigned long tbuf[TexSize * TexSize];
+	static uint32_t tbuf[TexSize * TexSize];
 	int tpw = Width() / TexSize, tph = Height() / TexSize;
 	//
 	GLuint id = TexIDs[px & (tpw - 1)][py & (tph - 1)];
@@ -196,7 +196,7 @@ int Terrain::Redownload(int px, int py){
 		ts = (unsigned char*)(data32 + ys * Width() + xs);
 		for(int y = ys; y < ys + br.h; y++){
 		//	memcpy(td, ts, ((unsigned int)br.w) <<2);
-			for(int t = 0; t < ((unsigned int)br.w); t++) ((unsigned long*)td)[t] = ((unsigned long*)ts)[t];
+			for(int t = 0; t < ((unsigned int)br.w); t++) ((uint32_t*)td)[t] = ((uint32_t*)ts)[t];
 			ts += Width() <<2;
 			td += ((unsigned int)br.w) <<2;
 		}

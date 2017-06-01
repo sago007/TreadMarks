@@ -22,11 +22,11 @@
 class FileCRCList : public LinklistBase<FileCRCList> {
 public:
 	CStr filename;
-	unsigned long crc;
+	uint32_t crc;
 	int size;
 	FileCRCList() {filename = ""; crc = 0;}
-//	FileCRCList(char *file, unsigned long hash) {filename = file; crc = hash;}
-	FileCRCList(const char *file, unsigned long hash, int len) {filename = file; crc = hash; size = len;}
+//	FileCRCList(char *file, uint32_t hash) {filename = file; crc = hash;}
+	FileCRCList(const char *file, uint32_t hash, int len) {filename = file; crc = hash; size = len;}
 
 	bool FileCRC(const char *file);
 

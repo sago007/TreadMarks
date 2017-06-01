@@ -124,7 +124,6 @@ void EntityPFireType::UnlinkResources(){
 //
 EntityPFire::EntityPFire(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 		int id, int flags) : EntityBase(et, Pos, Rot, Vel, id, flags) {
-	EntityPFireType *TP = (EntityPFireType*)TypePtr;
 	if(!RegisterEntity("ParticleFireBurner")) Remove();
 	//Only allow one particle fire entity at a time.
 	mssinceping = 0;
@@ -478,11 +477,9 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 	int iseconds = time(NULL) - FirstUseTime;	//Installed seconds.
 	int iminutes = iseconds / 60;
 	int ihours = iminutes / 60;
-	int idays = ihours / 24;
 	int sseconds = (time(NULL) - SecsStart);	//Session Seconds.
 	int bseconds = sseconds + TotalSecs;	//Blanked seconds.
 	int bminutes = bseconds / 60;
-	int bhours = bminutes / 60;
 	//
 	//
 	int i, j;//, l;
@@ -834,7 +831,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 //		tmr2.Start();
 		Burns++;
 		//New burn code.
- #define BLONG unsigned long
+ #define BLONG uint32_t
  #define BLONGS sizeof(BLONG)
  #define UCP (unsigned char*)
  #define BURNIT(n) temp = (*(UCP lptr + n - pitch) + *(UCP lptr + n - 1) + *(UCP lptr + n) + *(UCP lptr + n + 1) - BURNFADE) >>2; \

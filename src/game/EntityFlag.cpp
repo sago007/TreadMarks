@@ -362,8 +362,6 @@ bool EntityFlag::SetInt(int type, int attr)
 }
 
 void EntityFlag::DeliverPacket(const unsigned char *data, int len){
-	EntityFlagType *TP = (EntityFlagType*)TypePtr;
-
 	if(data)
 	{
 		switch(data[0])

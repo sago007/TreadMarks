@@ -346,11 +346,11 @@ bool Terrain::Init(int x, int y){
 	heightmask = height - 1;
 	//
 //	if(!data32){
-	if(NULL == (data32 = (unsigned long*)malloc(width * height * sizeof(unsigned long)))){
+	if(NULL == (data32 = (uint32_t*)malloc(width * height * sizeof(uint32_t)))){
 		Free();
 		return false;
 	}
-	memset(data32, 0, width * height * 4);
+	memset(data32, 0, width * height * sizeof(uint32_t));
 //	}
 	return Clear();
 }
@@ -861,13 +861,13 @@ bool Terrain::TextureLight32(EcoSystem *eco, int numeco, int x1, int y1, int x2,
 			}
 			if(ScorchTex >= 0 && EcoOk[ScorchTex]){
 				tpe2 = &eco[ScorchTex].tex->pe[*(eco[ScorchTex].tex->Data() + (x & xmask[ScorchTex]) + ((y & ymask[ScorchTex]) <<xshift[ScorchTex]))];//* eco[ScorchTex].tex->Pitch())];
-				register int foo = ((x & widthmask) <<2);
+				int foo = ((x & widthmask) <<2);
 				int si = ((255 - (int)GetCwrap(x, y)) * (NUM_SHADE)) >>8;	//Alpha blend to special scorch texture rather than to black.
 				tdst[foo + 0] = ShadeLookup32[r >>2][i] + ShadeLookup32[tpe2->peRed][si];	//Average ecosystem pixels together.
 				tdst[foo + 1] = ShadeLookup32[g >>2][i] + ShadeLookup32[tpe2->peGreen][si];
 				tdst[foo + 2] = ShadeLookup32[b >>2][i] + ShadeLookup32[tpe2->peBlue][si];
 			}else{
-				register int foo = ((x & widthmask) <<2);
+				int foo = ((x & widthmask) <<2);
 				tdst[foo + 0] = ShadeLookup32[r >>2][i];	//Average ecosystem pixels together.
 				tdst[foo + 1] = ShadeLookup32[g >>2][i];
 				tdst[foo + 2] = ShadeLookup32[b >>2][i];

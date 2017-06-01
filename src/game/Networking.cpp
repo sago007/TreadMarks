@@ -251,7 +251,7 @@ bool Network::InitSocket(){
 printf("Error creating socket.\n");
 		return false;
 	}
-	unsigned long yes = 1;
+	uint32_t yes = 1;
 	#ifdef WIN32
 		ioctlsocket(Sock, FIONBIO, &yes);
 	#else

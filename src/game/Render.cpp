@@ -405,7 +405,7 @@ bool RenderEngine::TerrainRender(Terrain *map, Camera *cam, PolyRender *poly,
 	for(i = 0; i < rbd->height; i++) datayaddr[i] = (UCHAR*)rbd->data + rbd->pitch * i;
 
 	UCHAR HMix = 0, HMixD = 0, VMix = 0, VMixD = 0;
-	unsigned long int HMixV = 0, VMixV = 0;
+	uint32_t int HMixV = 0, VMixV = 0;
 	UCHAR *HMixP = NULL;
 	UCHAR *VMixP = NULL;
 
@@ -970,7 +970,7 @@ bool RenderEngine::TerrainRender(Terrain *map, Camera *cam, PolyRender *poly,
 #else
 					HMixD = Mlookup[cend];
 					HMix = 0;
-	//				HMixV = *((unsigned long int*)Mix4 + (lmapc <<8) + mapc);
+	//				HMixV = *((uint32_t int*)Mix4 + (lmapc <<8) + mapc);
 				//	HMixP = &Mix4[lmapc][mapc][0];
 					HMixP = (Mix4 + (lmapc <<10) + (mapc <<2));
 				//	for(c = 0; c < cend; c++){
@@ -992,7 +992,7 @@ bool RenderEngine::TerrainRender(Terrain *map, Camera *cam, PolyRender *poly,
 							linet = *ybufp - t;
 							VMixD = Mlookup[linet];
 							VMix = 0;
-	//						VMixV = *((unsigned long int*)Mix4 + ((HMixV & 0xff) <<8) + *cbufp);
+	//						VMixV = *((uint32_t int*)Mix4 + ((HMixV & 0xff) <<8) + *cbufp);
 						//	VMixP = &Mix4[mapcy][*cbufp][0];
 							VMixP = (Mix4 + (mapcy <<10) + (*cbufp <<2));
 						//	for(line = 0; line < linet; line++){
