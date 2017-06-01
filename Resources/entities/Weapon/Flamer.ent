@@ -8,7 +8,7 @@ Secmesh = weapons/Flamer/FlamerTankHigh.lwo
 Secmesh1 = weapons/Flamer/FlamerTankMed.lwo
 Secmesh2 = weapons/Flamer/FlamerTankLow.lwo
 
-texture = textures/Flamer.bmp
+texture = Textures/Flamer.bmp
 sizebias = -1
 
 #projectile = MagmaSpew

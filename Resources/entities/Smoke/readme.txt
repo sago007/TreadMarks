@@ -6,5 +6,5 @@ This applies to Explo entities as well, for the individual puffs.
 Gravity = amount of world gravity to apply to entity, default is 0.0, 1.0 is normal grav.
 This applies for Explo entities as well.
 
-RandomRotate = 0 to disable random rotation of the smoke sprites.
+RandomRotate = 0 to disable random rotation of the smoke Sprites.
 

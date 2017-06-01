@@ -7,15 +7,15 @@ mesh2 = sculpture/Beetle/BeetleLT.lwo
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-#texture = textures/CarpetGreen.bmp
-#texture = textures/CarpetBlueDX.bmp
-#texture = textures/EarthBrown.bmp
-#texture = textures/EarthMulti.bmp
-#texture = textures/StonePebblesDX.bmp
-#texture = textures/SnakeSkinBlueOrange.bmp
-#texture = textures/WallpaperGreenGold.bmp
-texture = textures/GemAmber.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/CarpetGreen.bmp
+#texture = Textures/CarpetBlueDX.bmp
+#texture = Textures/EarthBrown.bmp
+#texture = Textures/EarthMulti.bmp
+#texture = Textures/StonePebblesDX.bmp
+#texture = Textures/SnakeSkinBlueOrange.bmp
+#texture = Textures/WallpaperGreenGold.bmp
+texture = Textures/GemAmber.bmp
 
 
 

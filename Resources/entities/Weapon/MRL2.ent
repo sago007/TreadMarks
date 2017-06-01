@@ -3,7 +3,7 @@ type = MRL2
 
 mesh = weapons/Mrl2/MRL2HighT.lwo
 mesh1 = weapons/Mrl2/MRL2MedT.lwo
-texture = textures/MRL2.bmp
+texture = Textures/MRL2.bmp
 sizebias = -1
 
 projectile = missilemrl1

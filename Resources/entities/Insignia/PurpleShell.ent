@@ -2,7 +2,7 @@ class = insignia
 type = PurpleShell
 name = Notch
 
-texture = textures/teamlogos/PurpleShell.bmp
+texture = Textures/teamlogos/PurpleShell.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

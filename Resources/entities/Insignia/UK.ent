@@ -2,7 +2,7 @@ class = insignia
 type = UK
 name = Union Jack
 
-texture = textures/teamlogos/UK.bmp
+texture = Textures/teamlogos/UK.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

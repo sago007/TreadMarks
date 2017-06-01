@@ -4,7 +4,7 @@ Class = smoke
 Type = flareGrenade
 #The type of the entity.
 
-Texture = sprites/flareBrightOrange.bmp
+Texture = Sprites/flareBrightOrange.bmp
 
 #Which image to use.
 sizebias = -2

@@ -2,7 +2,7 @@ class = insignia
 type = Elements
 name = Elements
 
-texture = textures/teamlogos/Elements.bmp
+texture = Textures/teamlogos/Elements.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -5,8 +5,8 @@ mesh = SphereHigh.lwo
 mesh1 = SphereLow.lwo
 lodbias = 0.05
 
-texture = sprites/laserball.bmp
-#texture = textures/Fiery5.bmp
+texture = Sprites/laserball.bmp
+#texture = Textures/Fiery5.bmp
 width = 2
 height = 2
 

@@ -2,7 +2,7 @@ class = insignia
 type = China
 name = China
 
-texture = textures/teamlogos/China.bmp
+texture = Textures/teamlogos/China.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

@@ -2,7 +2,7 @@ class = insignia
 type = Psychadelic
 name = Psychadelic
 
-texture = textures/teamlogos/Psychadelic.bmp
+texture = Textures/teamlogos/Psychadelic.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

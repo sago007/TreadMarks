@@ -4,8 +4,8 @@ Class = smoke
 Type = NapalmSmoke
 #The type of the entity.
 
-Texture = sprites/PlasmaOrange.bmp
-#Texture = sprites/FireFractal2.bmp
+Texture = Sprites/PlasmaOrange.bmp
+#Texture = Sprites/FireFractal2.bmp
 #Which image to use.
 
 Width = 3

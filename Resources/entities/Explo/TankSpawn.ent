@@ -4,8 +4,8 @@ Class = explo
 Type = TankSpawn
 #The type of the entity.
 
-#Texture = sprites/PlasmaBall.bmp
-Texture = sprites/flareBlue2.bmp
+#Texture = Sprites/PlasmaBall.bmp
+Texture = Sprites/flareBlue2.bmp
 #Which image to use.
 
 Width = 1.0

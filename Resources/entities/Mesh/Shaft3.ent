@@ -6,12 +6,12 @@ mesh = sculpture/Shaft/Shaft.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-#texture = textures/BlackShiny2.bmp
-#texture = textures/ShinyOrange.bmp
-#texture = textures/Fiery5.bmp
+#texture = Textures/BlackShiny2.bmp
+#texture = Textures/ShinyOrange.bmp
+#texture = Textures/Fiery5.bmp
 #texture = SciFi4.bmp
-#texture = textures/PurplePlasma.bmp
-texture = textures/RadialOrangeLightning.bmp
+#texture = Textures/PurplePlasma.bmp
+texture = Textures/RadialOrangeLightning.bmp
 
 scale = 1.0
 collide = 1

@@ -3,7 +3,7 @@ type = BoxOfDeath
 
 mesh = weapons/BoxOfDeath3/BoxOfDeath3HighT.lwo
 mesh1 = weapons/BoxOfDeath3/BoxOfDeath3LowT.lwo
-texture = textures/BoxOfDeath3.bmp
+texture = Textures/BoxOfDeath3.bmp
 sizebias = -1
 
 projectile = missilewasp

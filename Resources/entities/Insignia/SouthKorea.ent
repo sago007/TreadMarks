@@ -2,7 +2,7 @@ class = insignia
 type = SouthKorea
 name = South Korea
 
-texture = textures/teamlogos/SouthKorea.bmp
+texture = Textures/teamlogos/SouthKorea.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

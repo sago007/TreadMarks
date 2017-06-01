@@ -2,7 +2,7 @@ class = insignia
 type = Shuriken
 name = Shuriken
 
-texture = textures/teamlogos/Shuriken.bmp
+texture = Textures/teamlogos/Shuriken.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -32,7 +32,7 @@ SmokeTrailEnt = crud/GreenSparksThin
 
 Smoketrail = 1
 
-Texture = sprites/PlasmaBall.bmp
+Texture = Sprites/PlasmaBall.bmp
 Width = 2.0
 Height = 2.0
 Blend = add

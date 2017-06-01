@@ -4,7 +4,7 @@ Class = smoke
 Type = laserball
 #The type of the entity.
 
-Texture = sprites/LaserBall.bmp
+Texture = Sprites/LaserBall.bmp
 #Which image to use.
 
 Width = 2

@@ -4,9 +4,9 @@ Class = explo
 Type = masshit
 #The type of the entity.
 
-#texture = sprites/firefractal1.bmp
-#Texture = sprites/GreenRing.bmp
-Texture = sprites/FlareGreen.bmp
+#texture = Sprites/firefractal1.bmp
+#Texture = Sprites/GreenRing.bmp
+Texture = Sprites/FlareGreen.bmp
 #Which image to use.
 
 Width = 6

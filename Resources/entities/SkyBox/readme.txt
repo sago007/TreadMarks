@@ -10,9 +10,9 @@ channel, Shift is added to the color channel.  First Gain is applied, then Bias,
 then the result is multiplied by Scale, and finally Shift is added.  Each color
 channel is handled independendtly.
 
-AutoFog = whether fog color should be computed from sky textures or not (default is 1, on)
+AutoFog = whether fog color should be computed from sky Textures or not (default is 1, on)
 
-FilterSky = should sky textures be box-filtered for smoothness (default is 1, on)
+FilterSky = should sky Textures be box-filtered for smoothness (default is 1, on)
 
 ScorchEco = EcoSystem id that should be used for tread marks/scorch marks instead of black.
 

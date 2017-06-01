@@ -2,7 +2,7 @@ class = insignia
 type = Bullseye
 name = Bullseye
 
-texture = textures/teamlogos/Bullseye.bmp
+texture = Textures/teamlogos/Bullseye.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

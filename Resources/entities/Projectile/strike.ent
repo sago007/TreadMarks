@@ -3,7 +3,7 @@ type = strike
 nameid = 19
 
 mesh = weapons/missiles/Bomb.lwo
-texture = textures/Bomb.bmp
+texture = Textures/Bomb.bmp
 #temporary!
 
 speed = 50

@@ -2,7 +2,7 @@ class = insignia
 type = MapleLeaf
 name = Maple Leaf
 
-texture = textures/teamlogos/MapleLeaf.bmp
+texture = Textures/teamlogos/MapleLeaf.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

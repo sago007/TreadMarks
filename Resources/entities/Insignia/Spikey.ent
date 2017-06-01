@@ -2,8 +2,8 @@ class = insignia
 type = spikey
 name = Confederate
 
-texture = textures/teamlogos/spikey.bmp
-#texture = textures/teamlogos/SheepFlag.bmp
+texture = Textures/teamlogos/spikey.bmp
+#texture = Textures/teamlogos/SheepFlag.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

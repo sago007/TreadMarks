@@ -5,7 +5,7 @@ mesh = weapons/Drill2/Drill2EngineHighT.lwo
 #mesh1 = weapons/Drill2/Drill2EngineMedT.lwo
 #secmesh = weapons/Drill2/Drill2BitHighT.lwo
 #secmesh1 = weapons/Drill2/Drill2BitMedT.lwo
-texture = textures/Drill2.bmp
+texture = Textures/Drill2.bmp
 sizebias = -1
 
 #projectile = GAUbullets

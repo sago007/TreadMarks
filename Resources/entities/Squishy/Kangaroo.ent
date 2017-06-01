@@ -5,14 +5,14 @@ mesh = sculpture/kangaroo/kangaroo150.lwo
 mesh1 = sculpture/kangaroo/kangaroo90.lwo
 mesh2 = sculpture/kangaroo/kangaroo20.lwo
 
-#texture = textures/sheep.bmp
-#texture = textures/EarthBrown.bmp
+#texture = Textures/sheep.bmp
+#texture = Textures/EarthBrown.bmp
 #texture = JimSandCW3.bmp
 
 #texture = JimSandB.bmp
-texture = textures/Kangaroo.bmp
+texture = Textures/Kangaroo.bmp
 
-#texture = textures/RockFace.bmp
+#texture = Textures/RockFace.bmp
 
 scale = 1.0
 collide = 1

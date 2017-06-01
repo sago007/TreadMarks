@@ -7,13 +7,13 @@ mesh = sculpture/ZMale/ZMale4Base.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-#texture = textures/Fiery5.bmp
-#texture = textures/Waypoint.bmp
-#texture = textures/WallTexSC5.bmp
-#texture = textures/RockFace.bmp
-#texture = textures/StoneMosaic.bmp
-#texture = textures/BlackShiny1.bmp
-texture = textures/Chrome1.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/WallTexSC5.bmp
+#texture = Textures/RockFace.bmp
+#texture = Textures/StoneMosaic.bmp
+#texture = Textures/BlackShiny1.bmp
+texture = Textures/Chrome1.bmp
 
 
 

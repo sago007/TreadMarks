@@ -11,17 +11,17 @@ LodBias = 0.3
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-#texture = textures/Fiery5.bmp
-#texture = textures/Waypoint.bmp
-#texture = textures/RockFace.bmp
-#texture = textures/TerrainRidgedCourse.bmp
-#texture = textures/BlackShiny1.bmp
-#texture = textures/BlackShiny2b.bmp
-texture = textures/BlackShiny3.bmp
-#texture = textures/LizardSkinBrown.bmp
-#texture = textures/CarvedOrange.bmp
-#texture = textures/CarvedBronzeA.bmp
-#texture = textures/CarvedBronze2.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/RockFace.bmp
+#texture = Textures/TerrainRidgedCourse.bmp
+#texture = Textures/BlackShiny1.bmp
+#texture = Textures/BlackShiny2b.bmp
+texture = Textures/BlackShiny3.bmp
+#texture = Textures/LizardSkinBrown.bmp
+#texture = Textures/CarvedOrange.bmp
+#texture = Textures/CarvedBronzeA.bmp
+#texture = Textures/CarvedBronze2.bmp
 
 
 

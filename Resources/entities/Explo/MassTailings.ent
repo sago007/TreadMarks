@@ -4,8 +4,8 @@ Class = explo
 Type = masstailings
 #The type of the entity.
 
-#texture = sprites/firefractal1.bmp
-Texture = sprites/GreenRing.bmp
+#texture = Sprites/firefractal1.bmp
+Texture = Sprites/GreenRing.bmp
 #Which image to use.
 
 Width = 1

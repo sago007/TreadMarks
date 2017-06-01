@@ -2,7 +2,7 @@ class = insignia
 type = RookWhite
 name = White Rook
 
-texture = textures/teamlogos/RookWhite.bmp
+texture = Textures/teamlogos/RookWhite.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

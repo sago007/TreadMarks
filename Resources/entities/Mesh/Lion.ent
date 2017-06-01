@@ -9,7 +9,7 @@ mesh2 = Sculpture/Lion/LionLT.lwo
 
 LodBias = 0.3
 
-texture = textures/Waypoint.bmp
+texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 1

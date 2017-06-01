@@ -2,7 +2,7 @@ class = insignia
 type = BlueBlackWhite
 name = Watermark
 
-texture = textures/teamlogos/BlueBlackWhite.bmp
+texture = Textures/teamlogos/BlueBlackWhite.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

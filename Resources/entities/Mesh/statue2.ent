@@ -6,20 +6,20 @@ mesh1 = Sculpture/Diva2/Diva2MT.lwo
 mesh2 = Sculpture/Diva2/Diva2LT.lwo
 
 LodBias = 0.3
-#texture = textures/Waypoint.bmp
-#texture = textures/MarbleWhiteBlackGold.bmp
-#texture = textures/SnakeSkinSilver.bmp
-#texture = textures/SnakeSkinPink.bmp
-#texture = textures/SnakeSkinGreenBlue.bmp
-#texture = textures/SnakePurple.bmp
-#texture = textures/BlackShiny3.bmp
-#texture = textures/RadialBlueLightning.bmp
-#texture = textures/BlueTiles.bmp
-texture = textures/BlueTilesNew.bmp
-#texture = textures/Chrome2.bmp
-#texture = textures/ChromeYellow.bmp
-#texture = textures/ChromeTeamBlue.bmp
-#texture = textures/LaserBeam2.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/MarbleWhiteBlackGold.bmp
+#texture = Textures/SnakeSkinSilver.bmp
+#texture = Textures/SnakeSkinPink.bmp
+#texture = Textures/SnakeSkinGreenBlue.bmp
+#texture = Textures/SnakePurple.bmp
+#texture = Textures/BlackShiny3.bmp
+#texture = Textures/RadialBlueLightning.bmp
+#texture = Textures/BlueTiles.bmp
+texture = Textures/BlueTilesNew.bmp
+#texture = Textures/Chrome2.bmp
+#texture = Textures/ChromeYellow.bmp
+#texture = Textures/ChromeTeamBlue.bmp
+#texture = Textures/LaserBeam2.bmp
 
 
 

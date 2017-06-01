@@ -3,7 +3,7 @@ type = Cruise
 
 mesh = weapons/CruiseMissile/CruiseMissileHighT.lwo
 mesh1 = weapons/CruiseMissile/CruiseMissileMedT.lwo
-texture = textures/CruiseMissile.bmp
+texture = Textures/CruiseMissile.bmp
 sizebias = -1
 
 projectile = CruiseMissile

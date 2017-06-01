@@ -2,7 +2,7 @@ class = insignia
 type = DartBoard
 name = Dartboard
 
-texture = textures/teamlogos/DartBoard.bmp
+texture = Textures/teamlogos/DartBoard.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

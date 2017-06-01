@@ -10,17 +10,17 @@ LodBias = 0.3
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-#texture = textures/RadialBlueLightning.bmp
-#texture = textures/LaserBeam2.bmp
-#texture = textures/Fiery5Green.bmp
-#texture = textures/FieryBlue.bmp
-#texture = textures/Fiery2B.bmp
-#texture = textures/BlackShiny3.bmp
-#texture = textures/SnakeSkinPink.bmp
-texture = textures/SnakeSkinSilver.bmp
-#texture = textures/GloppyGreen2.bmp
-#texture = textures/LaserBeam2red2.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/RadialBlueLightning.bmp
+#texture = Textures/LaserBeam2.bmp
+#texture = Textures/Fiery5Green.bmp
+#texture = Textures/FieryBlue.bmp
+#texture = Textures/Fiery2B.bmp
+#texture = Textures/BlackShiny3.bmp
+#texture = Textures/SnakeSkinPink.bmp
+texture = Textures/SnakeSkinSilver.bmp
+#texture = Textures/GloppyGreen2.bmp
+#texture = Textures/LaserBeam2red2.bmp
 
 
 

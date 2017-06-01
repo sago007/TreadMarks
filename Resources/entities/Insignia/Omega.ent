@@ -2,7 +2,7 @@ class = insignia
 type = Omega
 name = Black Omega
 
-texture = textures/teamlogos/Omega.bmp
+texture = Textures/teamlogos/Omega.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

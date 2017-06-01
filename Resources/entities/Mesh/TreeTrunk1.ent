@@ -7,10 +7,10 @@ mesh = sculpture/TreeTest/TreeTrunk1.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-texture = textures/AnimalSkin.bmp
-#texture = textures/Fiery5.bmp
-#texture = textures/BlackShiny1.bmp
-#texture = textures/Waypoint.bmp
+texture = Textures/AnimalSkin.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/BlackShiny1.bmp
+#texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 1

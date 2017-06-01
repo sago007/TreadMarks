@@ -11,8 +11,8 @@ mesh2 = sculpture/ZPot2/ZPot2LT.lwo
 
 LodBias = 0.3
 
-texture = textures/BlackShiny2B.bmp
-#texture = textures/WallTexSC5.bmp
+texture = Textures/BlackShiny2B.bmp
+#texture = Textures/WallTexSC5.bmp
 
 scale = 1.0
 collide = 1

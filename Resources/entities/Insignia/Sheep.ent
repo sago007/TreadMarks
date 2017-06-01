@@ -2,7 +2,7 @@ class = insignia
 type = Sheep
 name = Sheep!
 
-texture = textures/teamlogos/SheepFlag.bmp
+texture = Textures/teamlogos/SheepFlag.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

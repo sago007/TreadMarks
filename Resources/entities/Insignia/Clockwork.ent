@@ -2,7 +2,7 @@ class = insignia
 type = Clockwork
 name = Clockwork
 
-texture = textures/teamlogos/Clockwork.bmp
+texture = Textures/teamlogos/Clockwork.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

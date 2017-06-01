@@ -20,7 +20,7 @@ TurretMesh = tank8turretCTH.lwo
 TurretMesh1 = Tank8TurretBT.lwo
 TurretMesh2 = Tank8TurretLow.lwo
 
-Texture = textures/tank8Bright.bmp
+Texture = Textures/tank8Bright.bmp
 
 Scale = 1.0
 

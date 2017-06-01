@@ -9,17 +9,17 @@ mesh2 = Sculpture/LongFigure/LongFigure4LT.lwo
 
 LodBias = 0.3
 
-#texture = textures/Waypoint.bmp
-#texture = textures/SnakePurple.bmp
-#texture = textures/WallTexSC5.bmp
-#texture = textures/Water1.bmp
-#texture = textures/RockFace.bmp
-#texture = textures/BlackShiny2b.bmp
-#texture = textures/Fiery2B.bmp
-#texture = textures/RadialOrangeLightning.bmp
-#texture = textures/RadialBlueLightning.bmp
-#texture = textures/ChromeTeamBlue.bmp
-texture = textures/ChromeYellow.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/SnakePurple.bmp
+#texture = Textures/WallTexSC5.bmp
+#texture = Textures/Water1.bmp
+#texture = Textures/RockFace.bmp
+#texture = Textures/BlackShiny2b.bmp
+#texture = Textures/Fiery2B.bmp
+#texture = Textures/RadialOrangeLightning.bmp
+#texture = Textures/RadialBlueLightning.bmp
+#texture = Textures/ChromeTeamBlue.bmp
+texture = Textures/ChromeYellow.bmp
 
 
 

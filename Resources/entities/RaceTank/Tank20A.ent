@@ -18,8 +18,8 @@ GunMesh = Tank20A/20AGunHighT.lwo
 GunMesh1 = Tank20A/20AGunMedT.lwo
 GunMesh2 = Tank20A/20AGunLowT.lwo
 
-Texture = textures/Tank20A.bmp
-#Texture = textures/BlackShiny2a.bmp
+Texture = Textures/Tank20A.bmp
+#Texture = Textures/BlackShiny2a.bmp
 Scale = 1.0
 
 #meters per second.

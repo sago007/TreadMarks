@@ -4,7 +4,7 @@ Class = explo
 Type = TinyGreenSparks
 #The type of the entity.
 
-Texture = sprites/PlasmaBall.bmp
+Texture = Sprites/PlasmaBall.bmp
 #Which image to use.
 
 Width = 0.2

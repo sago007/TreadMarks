@@ -18,8 +18,8 @@ GunMesh = M1/M1GunHTriple.lwo
 GunMesh1 = M1/M1GunMTriple.lwo
 GunMesh2 = M1/M1GunLTriple.lwo
 
-Texture = textures/M1.bmp
-#Texture = textures/BlackShiny2a.bmp
+Texture = Textures/M1.bmp
+#Texture = Textures/BlackShiny2a.bmp
 Scale = 1.0
 
 #meters per second.

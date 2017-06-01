@@ -9,8 +9,8 @@ LodBias = 0.3
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-texture = textures/StoneMosaic.bmp
+#texture = Textures/Waypoint.bmp
+texture = Textures/StoneMosaic.bmp
 
 scale = 1.0
 collide = 1

@@ -2,7 +2,7 @@ class = insignia
 type = Bars
 name = Bars
 
-texture = textures/teamlogos/Bars.bmp
+texture = Textures/teamlogos/Bars.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -3,10 +3,10 @@ type = teamred
 name = Red
 
 #mesh = BaubleSphereH.lwo
-#texture = textures/ChromeTeamRed.bmp
+#texture = Textures/ChromeTeamRed.bmp
 
-#texture = textures/teamlogos/RedBanner.bmp
-texture = textures/teamlogos/RedBanner.bmp
+#texture = Textures/teamlogos/RedBanner.bmp
+texture = Textures/teamlogos/RedBanner.bmp
 
 mesh = bannerteamh.lwo
 mesh1 = bannerteamm.lwo

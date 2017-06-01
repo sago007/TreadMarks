@@ -10,19 +10,19 @@ LodBias = 0.3
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-#texture = textures/WallpaperAbstract.bmp
-#texture = textures/GlyphsFine.bmp
-#texture = textures/TerrainRidgedCourse.bmp
-#texture = textures/CraggyRedRock.bmp
-#texture = textures/CarvedBronze.bmp
-#texture = textures/CarvedOrange.bmp
-#texture = textures/ChromeYellow.bmp
-#texture = textures/LaserBeam1.bmp
-#texture = textures/ElectricHoney.bmp
-#texture = textures/BlackShiny3.bmp
-texture = textures/BlackShiny1.bmp
-#texture = textures/Scales.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/WallpaperAbstract.bmp
+#texture = Textures/GlyphsFine.bmp
+#texture = Textures/TerrainRidgedCourse.bmp
+#texture = Textures/CraggyRedRock.bmp
+#texture = Textures/CarvedBronze.bmp
+#texture = Textures/CarvedOrange.bmp
+#texture = Textures/ChromeYellow.bmp
+#texture = Textures/LaserBeam1.bmp
+#texture = Textures/ElectricHoney.bmp
+#texture = Textures/BlackShiny3.bmp
+texture = Textures/BlackShiny1.bmp
+#texture = Textures/Scales.bmp
 
 
 

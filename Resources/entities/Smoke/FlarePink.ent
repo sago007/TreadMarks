@@ -4,10 +4,10 @@ Class = smoke
 Type = flarepink
 #The type of the entity.
 
-Texture = sprites/flare3.bmp
-#Texture = sprites/flareBrightOrange.bmp
-#Texture = sprites/flareBrightOrange2.bmp
-#Texture = sprites/flare4.bmp
+Texture = Sprites/flare3.bmp
+#Texture = Sprites/flareBrightOrange.bmp
+#Texture = Sprites/flareBrightOrange2.bmp
+#Texture = Sprites/flare4.bmp
 
 #Which image to use.
 sizebias = -2

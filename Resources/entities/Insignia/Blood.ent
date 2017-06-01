@@ -2,7 +2,7 @@ class = insignia
 type = Blood
 name = Blood
 
-texture = textures/teamlogos/Blood.bmp
+texture = Textures/teamlogos/Blood.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

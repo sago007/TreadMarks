@@ -4,10 +4,10 @@ Class = explo
 Type = firenapalm
 #The type of the entity.
 
-#Texture = sprites/LumpyFire1.bmp
-#Texture = sprites/fireball.img
-Texture = sprites/PlasmaOrange.bmp
-#texture = sprites/firefractal1.bmp
+#Texture = Sprites/LumpyFire1.bmp
+#Texture = Sprites/fireball.img
+Texture = Sprites/PlasmaOrange.bmp
+#texture = Sprites/firefractal1.bmp
 #Which image to use.
 
 Width = 4

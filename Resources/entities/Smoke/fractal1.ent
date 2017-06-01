@@ -4,8 +4,8 @@ Class = smoke
 Type = fractal1
 #The type of the entity.
 
-Texture = sprites/SmokeFractal1.bmp
-#Texture = sprites/FireFractal2.bmp
+Texture = Sprites/SmokeFractal1.bmp
+#Texture = Sprites/FireFractal2.bmp
 #Which image to use.
 
 Width = 2

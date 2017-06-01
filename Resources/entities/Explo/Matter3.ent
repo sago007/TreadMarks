@@ -4,8 +4,8 @@ Class = explo
 Type = Matter3
 #The type of the entity.
 
-#texture = sprites/firefractal1.bmp
-Texture = sprites/LumpySmoke1.bmp
+#texture = Sprites/firefractal1.bmp
+Texture = Sprites/LumpySmoke1.bmp
 #Which image to use.
 
 Width = 10

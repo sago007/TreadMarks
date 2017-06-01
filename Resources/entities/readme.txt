@@ -17,8 +17,8 @@ make the sprite much more opaque, but still with fade at the edges.
 Also for all Sprite (and now Mesh) derived classes, setting SizeBias
 will specify the number of mip-map detail levels _below_ the global
 maximum that the texture will be sized to.  Use this to keep low-priority
-textures at the correct relative size to high-pri textures.  e.g. if most
-tanks use 512 textures and weapons use 256, then SizeBias should be at
+Textures at the correct relative size to high-pri Textures.  e.g. if most
+tanks use 512 Textures and weapons use 256, then SizeBias should be at
 least -1 for all weapons, so that when the user selects 256 as a max
 tex res, the weapons will be sized down to 128.
 

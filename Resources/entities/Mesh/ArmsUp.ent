@@ -10,11 +10,11 @@ LodBias = 0.3
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-#texture = textures/RockFace.bmp
-#texture = textures/SnakeSkinGreenBlue.bmp
-texture = textures/TerrainRidgedCourse.bmp
-#texture = textures/Field.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/RockFace.bmp
+#texture = Textures/SnakeSkinGreenBlue.bmp
+texture = Textures/TerrainRidgedCourse.bmp
+#texture = Textures/Field.bmp
 
 #smoothshade = 1
 

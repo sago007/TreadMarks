@@ -2,7 +2,7 @@ class = insignia
 type = Japan
 name = Japan
 
-texture = textures/teamlogos/Japan.bmp
+texture = Textures/teamlogos/Japan.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

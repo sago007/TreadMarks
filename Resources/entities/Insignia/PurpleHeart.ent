@@ -2,7 +2,7 @@ class = insignia
 type = PurpleHeart
 name = Purple Heart
 
-texture = textures/teamlogos/PurpleHeart.bmp
+texture = Textures/teamlogos/PurpleHeart.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -2,7 +2,7 @@ class = explosphere
 type = laserbeam1
 
 mesh = weapons/laserbeam.lwo
-texture = textures/laserbeam2.bmp
+texture = Textures/laserbeam2.bmp
 
 scale = 1.0
 collide = 0

@@ -2,7 +2,7 @@ class = insignia
 type = Katana
 name = Katana
 
-texture = textures/teamlogos/Katana.bmp
+texture = Textures/teamlogos/Katana.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

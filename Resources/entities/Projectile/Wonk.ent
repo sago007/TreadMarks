@@ -29,7 +29,7 @@ smoketrail = 1
 
 SoundEnt = Wonk
 
-Texture = sprites/LaserBall.bmp
+Texture = Sprites/LaserBall.bmp
 Width = 4
 Height = 1
 blend = add

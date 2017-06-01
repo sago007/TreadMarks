@@ -16,8 +16,8 @@ mesh = sculpture/TreeTest/TreeLeaf1A.lwo
 texture = TreeTest1.bmp
 #texture = JimTreeTest.bmp
 #texture = JimGrass.bmp
-#texture = textures/Fiery5.bmp
-#texture = textures/Waypoint.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 0

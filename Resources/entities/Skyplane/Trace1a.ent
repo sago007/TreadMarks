@@ -6,8 +6,8 @@ type = trace1a
 
 texture = sky/trace1_001a.bmp
 
-detailtexture = textures/TerrainMult4.bmp
-watertexture = textures/water1.bmp
+detailtexture = Textures/TerrainMult4.bmp
+watertexture = Textures/water1.bmp
 wateralpha = 0.75
 waterenv = 0.7
 

@@ -29,7 +29,7 @@ SoundEnt = DoomSiren
 
 mesh = weapons/icbm/ICBMHighT.lwo
 mesh1 = weapons/icbm/ICBMMedT.lwo
-texture = textures/ICBM.bmp
+texture = Textures/ICBM.bmp
 sizebias = -1
 
 SmokeTrailEnt = fractal1long

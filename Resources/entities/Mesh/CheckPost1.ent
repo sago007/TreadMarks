@@ -4,7 +4,7 @@ type = checkpost1
 mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-texture = textures/Waypoint.bmp
+texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 1

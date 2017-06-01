@@ -10,7 +10,7 @@ mesh1 = sculpture/ZStonesB/ZStonesBMT.lwo
 
 LodBias = 0.6
 
-texture = textures/BlackShiny2.bmp
+texture = Textures/BlackShiny2.bmp
 
 scale = 1.0
 collide = 1

@@ -2,7 +2,7 @@ class = insignia
 type = Checkers
 name = Checkers
 
-texture = textures/teamlogos/Checkers.bmp
+texture = Textures/teamlogos/Checkers.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

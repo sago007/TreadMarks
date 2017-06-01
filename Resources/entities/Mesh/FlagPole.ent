@@ -7,7 +7,7 @@ mesh2 = Pole.lwo
 
 LodBias = 0.3
 
-texture = textures/Waypoint.bmp
+texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 0

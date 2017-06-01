@@ -4,8 +4,8 @@ Class = smoke
 Type = fire1
 #The type of the entity.
 
-#Texture = sprites/fire3_1.bmp
-Texture = sprites/LumpyFire1.bmp
+#Texture = Sprites/fire3_1.bmp
+Texture = Sprites/LumpyFire1.bmp
 #Which image to use.
 
 Width = 2

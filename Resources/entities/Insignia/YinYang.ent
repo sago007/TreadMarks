@@ -2,7 +2,7 @@ class = insignia
 type = YinYang
 name = Yin-Yang
 
-texture = textures/teamlogos/YinYang.bmp
+texture = Textures/teamlogos/YinYang.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

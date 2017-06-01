@@ -2,7 +2,7 @@ class = mesh
 type = redlaser
 
 mesh = weapons/laserbeam.lwo
-texture = textures/laserbeam2red.bmp
+texture = Textures/laserbeam2red.bmp
 
 scale = 1.0
 collide = 0

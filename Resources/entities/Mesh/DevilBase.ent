@@ -7,10 +7,10 @@ mesh = sculpture/Devil/DevilBaseHT.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-#texture = textures/Fiery5.bmp
-#texture = textures/Waypoint.bmp
-#texture = textures/WallTexSC5.bmp
-texture = textures/BlackShiny1.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/WallTexSC5.bmp
+texture = Textures/BlackShiny1.bmp
 
 
 

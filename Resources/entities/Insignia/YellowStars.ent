@@ -2,7 +2,7 @@ class = insignia
 type = YellowStars
 name = Yellow Stars
 
-texture = textures/teamlogos/YellowStars.bmp
+texture = Textures/teamlogos/YellowStars.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -5,7 +5,7 @@ mesh = weapons/Gau/GAUHighT.lwo
 mesh1 = weapons/Gau/GAUmedT.lwo
 secmesh = weapons/Gau/GAUBarrelsHighT.lwo
 secmesh1 = weapons/Gau/GAUBarrelsMedT.lwo
-texture = textures/GAU.bmp
+texture = Textures/GAU.bmp
 sizebias = -1
 
 #projectile = missile/smallunguided

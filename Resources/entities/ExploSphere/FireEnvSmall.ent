@@ -7,8 +7,8 @@ mesh = SphereHigh.lwo
 mesh1 = SphereLow.lwo
 lodbias = 0.1
 
-texture = textures/Fiery1.bmp
-#texture = textures/RadialBlueLightning.bmp
+texture = Textures/Fiery1.bmp
+#texture = Textures/RadialBlueLightning.bmp
 
 scale = 1.0
 collide = 0

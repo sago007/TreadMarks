@@ -3,7 +3,7 @@ type = launcher1
 
 mesh = weapons/launcher1/launcher1hight.lwo
 mesh1 = weapons/launcher1/launcher1MedT.lwo
-texture = textures/launcher1.bmp
+texture = Textures/launcher1.bmp
 sizebias = -1
 
 #projectile = missile/smallunguided

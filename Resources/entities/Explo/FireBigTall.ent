@@ -4,9 +4,9 @@ Class = explo
 Type = FireBigTall
 #The type of the entity.
 
-#Texture = sprites/LumpyFire1.bmp
-Texture = sprites/fireball.img
-#texture = sprites/firefractal1.bmp
+#Texture = Sprites/LumpyFire1.bmp
+Texture = Sprites/fireball.img
+#texture = Sprites/firefractal1.bmp
 #Which image to use.
 
 Width = 30

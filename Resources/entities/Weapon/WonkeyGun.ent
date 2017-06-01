@@ -4,7 +4,7 @@ type = WonkeyGun
 mesh = weapons/WonkeyGun/WonkeyGunHigh.lwo
 mesh1 = weapons/WonkeyGun/WonkeyGunMed.lwo
 mesh2 = weapons/WonkeyGun/WonkeyGunLow.lwo
-texture = textures/BlackShinyEvil.bmp
+texture = Textures/BlackShinyEvil.bmp
 sizebias = -1
 
 projectile = Wonk

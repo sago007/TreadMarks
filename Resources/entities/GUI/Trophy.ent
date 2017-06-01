@@ -3,9 +3,9 @@ type = trophy
 
 mesh = trophy/trophy2t.lwo
 
-#texture = textures/Fiery5.bmp
-#texture = textures/BlueTilesGold.bmp
-texture = textures/CarvedGold.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/BlueTilesGold.bmp
+texture = Textures/CarvedGold.bmp
 
 scale = 1.0
 collide = 0

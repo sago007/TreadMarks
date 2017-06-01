@@ -9,7 +9,7 @@ mesh1 = sculpture/ZFigure/ZFigureTaperLT.lwo
 
 LodBias = 0.5
 
-texture = textures/BlackShiny2.bmp
+texture = Textures/BlackShiny2.bmp
 
 scale = 1.0
 collide = 1

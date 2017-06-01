@@ -22,10 +22,10 @@ GunMesh = Liquid5/Liquid5GunHT.lwo
 GunMesh1 = Liquid5/Liquid5GunMT.lwo
 GunMesh2 = Liquid5/Liquid5GunMT.lwo
 
-#Texture = textures/fieryblue.bmp
-#Texture = textures/BlackShiny2b.bmp
-#Texture = textures/ShinyOrange.bmp
-Texture = textures/BlackShinyEvil.bmp
+#Texture = Textures/fieryblue.bmp
+#Texture = Textures/BlackShiny2b.bmp
+#Texture = Textures/ShinyOrange.bmp
+Texture = Textures/BlackShinyEvil.bmp
 Scale = 1.0
 
 #meters per second.

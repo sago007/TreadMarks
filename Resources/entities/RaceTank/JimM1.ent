@@ -18,8 +18,8 @@ GunMesh = JimTankM1/BarrelM1Tripled.lwo
 GunMesh1 = JimTankM1/BarrelM1Tripled.lwo
 GunMesh2 = JimTankM1/BarrelM1Tripled.lwo
 
-Texture = textures/JimM1copy.bmp
-#Texture = textures/BlackShiny2a.bmp
+Texture = Textures/JimM1copy.bmp
+#Texture = Textures/BlackShiny2a.bmp
 Scale = 1.0
 
 #meters per second.

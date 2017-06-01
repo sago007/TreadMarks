@@ -16,7 +16,7 @@ TurretMesh = tank5/tank5turretHigh.lwo
 TurretMesh1 = tank5/tank5Turret.lwo
 TurretMesh2 = tank5/tank5TurretLow.lwo
 
-Texture = textures/tank5s.bmp
+Texture = Textures/tank5s.bmp
 
 Scale = 1.0
 

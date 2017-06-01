@@ -2,7 +2,7 @@ class = insignia
 type = StarsAndStripes
 name = Stars and Stripes
 
-texture = textures/teamlogos/StarsAndStripes.bmp
+texture = Textures/teamlogos/StarsAndStripes.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

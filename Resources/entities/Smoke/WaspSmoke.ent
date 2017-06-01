@@ -4,7 +4,7 @@ Class = smoke
 Type = WaspSmoke
 #The type of the entity.
 
-Texture = sprites/SmokeFractal1.bmp
+Texture = Sprites/SmokeFractal1.bmp
 #Which image to use.
 
 Width = .5

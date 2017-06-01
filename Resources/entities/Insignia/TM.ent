@@ -2,7 +2,7 @@ class = insignia
 type = TM
 name = Tread Marks
 
-texture = textures/teamlogos/TMFlag.bmp
+texture = Textures/teamlogos/TMFlag.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

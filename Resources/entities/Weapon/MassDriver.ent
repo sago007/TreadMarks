@@ -8,7 +8,7 @@ secmesh = weapons/MassDriver2/MD2RingHighT.lwo
 secmesh1 = weapons/MassDriver2/MD2RingMedT.lwo
 secmesh2 = weapons/MassDriver2/MD2RingLowT.lwo
 
-texture = textures/MassDriver.bmp
+texture = Textures/MassDriver.bmp
 sizebias = -1
 
 #projectile = missile/smallunguided

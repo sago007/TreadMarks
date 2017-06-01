@@ -39,7 +39,7 @@ spiral = 30.0
 spiralramp = 0.0
 spiralperiod = 0.3
 
-Texture = sprites/PlasmaOrange.bmp
+Texture = Sprites/PlasmaOrange.bmp
 Width = 0.5
 Height = 0.5
 Blend = add

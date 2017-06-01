@@ -5,7 +5,7 @@ mesh = SphereHigh.lwo
 mesh1 = SphereLow.lwo
 lodbias = 0.1
 
-texture = textures/PurplePlasma2.bmp
+texture = Textures/PurplePlasma2.bmp
 
 scale = 1.0
 collide = 0

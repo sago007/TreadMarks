@@ -2,7 +2,7 @@ class = insignia
 type = BlueSword
 name = Alliance
 
-texture = textures/teamlogos/BlueSword.bmp
+texture = Textures/teamlogos/BlueSword.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

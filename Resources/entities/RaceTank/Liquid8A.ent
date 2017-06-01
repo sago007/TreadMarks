@@ -22,9 +22,9 @@ GunMesh = Liquid8A/Liquid8AGunHT.lwo
 GunMesh1 = Liquid8A/Liquid8AGunLT.lwo
 GunMesh2 = Liquid8A/Liquid8AGunLT.lwo
 
-#Texture = textures/GreenTiles.bmp
-#Texture = textures/DragonSkinRedSmall.bmp
-Texture = textures/Scales.bmp
+#Texture = Textures/GreenTiles.bmp
+#Texture = Textures/DragonSkinRedSmall.bmp
+Texture = Textures/Scales.bmp
 
 Scale = 1.0
 

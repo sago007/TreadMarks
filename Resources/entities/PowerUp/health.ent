@@ -2,8 +2,8 @@ class = powerup
 type = health
 
 mesh = powerups/CrosswrenchT.lwo
-#texture = textures/powerups/heart1.bmp
-texture = textures/Crosswrench.bmp
+#texture = Textures/powerups/heart1.bmp
+texture = Textures/Crosswrench.bmp
 sizebias = -2
 
 healthfix = 0.4

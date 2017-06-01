@@ -30,10 +30,10 @@ SoundEnt = Laser2
 #No sound for 30mm projectile, will only be used from BoltOn and that will run sound loop.
 
 #mesh = weapons/laserbeam.lwo
-#texture = textures/laserbeam2.bmp
+#texture = Textures/laserbeam2.bmp
 #Blend = add
 #scalematrix = 1, 1, 300
-Texture = sprites/LaserBall.bmp
+Texture = Sprites/LaserBall.bmp
 #Width = 2
 #Height = 2
 Width = 4

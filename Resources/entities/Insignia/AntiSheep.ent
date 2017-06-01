@@ -2,7 +2,7 @@ class = insignia
 type = AntiSheep
 name = The AntiSheep!
 
-texture = textures/teamlogos/AntiSheepFlag.bmp
+texture = Textures/teamlogos/AntiSheepFlag.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

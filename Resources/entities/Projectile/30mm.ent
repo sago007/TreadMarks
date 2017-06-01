@@ -25,7 +25,7 @@ SmokeEnt = explosphere/Teardrop
 SoundEnt = 
 #No sound for 30mm projectile, will only be used from BoltOn and that will run sound loop.
 
-Texture = sprites/LumpyFire1.bmp
+Texture = Sprites/LumpyFire1.bmp
 Width = 0.5
 Height = 0.3
 Blend = add

@@ -33,7 +33,7 @@ SoundEnt = tankgun1
 SmokeTrailEnt = DirtBall
 SmokeTrail = 1
 
-Texture = sprites/RoundSmoke1.bmp
+Texture = Sprites/RoundSmoke1.bmp
 Width = 0.9
 Height = 0.9
 Blend = add

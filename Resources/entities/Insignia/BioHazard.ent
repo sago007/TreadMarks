@@ -2,7 +2,7 @@ class = insignia
 type = BioHazard
 name = Bio-Hazard
 
-texture = textures/teamlogos/BioHazard.bmp
+texture = Textures/teamlogos/BioHazard.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -2,7 +2,7 @@ class = insignia
 type = AussieFlag
 name = Australia
 
-texture = textures/teamlogos/ozflag.bmp
+texture = Textures/teamlogos/ozflag.bmp
 
 mesh = FlagH.lwo
 mesh1 = FlagM.lwo

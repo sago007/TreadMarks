@@ -3,7 +3,7 @@ type = Dirtball
 
 mesh = weapons/Dirtball/Dirtball4HighT.lwo
 mesh1 = weapons/Dirtball/Dirtball4MedT.lwo
-texture = textures/dirtball.bmp
+texture = Textures/dirtball.bmp
 sizebias = -1
 
 #projectile = missile/smallunguided

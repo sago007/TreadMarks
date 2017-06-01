@@ -2,7 +2,7 @@ class = insignia
 type = Smiley
 name = Smiley
 
-texture = textures/teamlogos/Smiley.bmp
+texture = Textures/teamlogos/Smiley.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

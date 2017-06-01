@@ -6,18 +6,18 @@ mesh = sculpture/Snow/Snow3.lwo
 
 #mesh1 = sculpture/sheep/sheeplt.lwo
 
-#texture = textures/sheep.bmp
-#texture = textures/BlackShiny3.bmp
-#Texture = textures/BlackShinyEvil.bmp
-#texture = textures/Fiery2B.bmp
-#texture = textures/DragonSkinRed.bmp
-#texture = textures/Fiery5Blue2.bmp
-#texture = textures/Fiery5Green.bmp
-#texture = textures/CarvedBronze3.bmp
-#texture = textures/PigSkin.bmp
-#texture = textures/Chromeyellow.bmp
-#texture = textures/TerrainMult3.bmp
-texture = textures/LaserBeam2.bmp
+#texture = Textures/sheep.bmp
+#texture = Textures/BlackShiny3.bmp
+#Texture = Textures/BlackShinyEvil.bmp
+#texture = Textures/Fiery2B.bmp
+#texture = Textures/DragonSkinRed.bmp
+#texture = Textures/Fiery5Blue2.bmp
+#texture = Textures/Fiery5Green.bmp
+#texture = Textures/CarvedBronze3.bmp
+#texture = Textures/PigSkin.bmp
+#texture = Textures/Chromeyellow.bmp
+#texture = Textures/TerrainMult3.bmp
+texture = Textures/LaserBeam2.bmp
 
 scale = 3.0
 #scale = 0.75

@@ -4,7 +4,7 @@ type = rabbit
 mesh = sculpture/rabbit/rabbitHT.lwo
 mesh1 = sculpture/rabbit/rabbitMT.lwo
 
-texture = textures/sheep.bmp
+texture = Textures/sheep.bmp
 
 scale = 1.0
 collide = 1

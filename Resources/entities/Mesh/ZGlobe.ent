@@ -11,13 +11,13 @@ LodBias = 0.3
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-texture = textures/BlackShiny3.bmp
-#texture = textures/StoneMosaic.bmp
-#texture = textures/Fiery3.bmp
-#texture = textures/Fiery2B.bmp
-#texture = textures/Fiery5.bmp
-#texture = textures/Fiery2.bmp
-#texture = textures/RadialBlueLightning.bmp
+texture = Textures/BlackShiny3.bmp
+#texture = Textures/StoneMosaic.bmp
+#texture = Textures/Fiery3.bmp
+#texture = Textures/Fiery2B.bmp
+#texture = Textures/Fiery5.bmp
+#texture = Textures/Fiery2.bmp
+#texture = Textures/RadialBlueLightning.bmp
 
 
 

@@ -2,7 +2,7 @@ class = insignia
 type = Greymoon
 name = Greymoon
 
-texture = textures/teamlogos/Greymoon.bmp
+texture = Textures/teamlogos/Greymoon.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

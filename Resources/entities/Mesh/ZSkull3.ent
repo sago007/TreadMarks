@@ -11,9 +11,9 @@ mesh2 = sculpture/ZSkull3/ZSkull3LT.lwo
 
 LodBias = 0.3
 
-#texture = textures/BlackShiny2.bmp
-texture = textures/Chromeyellow.bmp
-#texture = textures/BlueTilesNew.bmp
+#texture = Textures/BlackShiny2.bmp
+texture = Textures/Chromeyellow.bmp
+#texture = Textures/BlueTilesNew.bmp
 
 
 scale = 1.0

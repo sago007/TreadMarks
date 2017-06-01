@@ -2,7 +2,7 @@ class = insignia
 type = GreenEyes
 name = Monster
 
-texture = textures/teamlogos/GreenEyes.bmp
+texture = Textures/teamlogos/GreenEyes.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

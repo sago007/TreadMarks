@@ -2,7 +2,7 @@ class = insignia
 type = Peace
 name = Peace
 
-texture = textures/teamlogos/Peace.bmp
+texture = Textures/teamlogos/Peace.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

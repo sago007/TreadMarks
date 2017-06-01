@@ -44,7 +44,7 @@ SmokeTrailEnt = NapalmSmoke
 
 Smoketrail = 1
 
-Texture = sprites/PlasmaOrange.bmp
+Texture = Sprites/PlasmaOrange.bmp
 Width = 4.0
 Height = 4.0
 Blend = add

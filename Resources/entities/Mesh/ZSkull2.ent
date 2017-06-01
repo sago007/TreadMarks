@@ -10,11 +10,11 @@ mesh1 = sculpture/ZSkull2/ZSkull2LT.lwo
 
 LodBias = 0.5
 
-#texture = textures/BlackShiny2.bmp
-texture = textures/BlackShiny2B.bmp
-#texture = textures/BlackShinyEvil.bmp
-#texture = textures/ShinyOrange.bmp
-#texture = textures/Chromeyellow.bmp
+#texture = Textures/BlackShiny2.bmp
+texture = Textures/BlackShiny2B.bmp
+#texture = Textures/BlackShinyEvil.bmp
+#texture = Textures/ShinyOrange.bmp
+#texture = Textures/Chromeyellow.bmp
 
 #blend = add
 cullface = 0

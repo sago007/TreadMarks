@@ -2,7 +2,7 @@ class = insignia
 type = KnightBlack
 name = Black Knight
 
-texture = textures/teamlogos/KnightBlack.bmp
+texture = Textures/teamlogos/KnightBlack.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -22,11 +22,11 @@ GunMesh = Liquid9/Liquid9GunHT.lwo
 GunMesh1 = Liquid9/Liquid9GunLT.lwo
 GunMesh2 = Liquid9/Liquid9GunLT.lwo
 
-#Texture = textures/BlueTilesNew.bmp
-#Texture = textures/CarvedBronze.bmp
-#Texture = textures/GloppyGreen2.bmp
-#Texture = textures/AnimalSkinShiny.bmp
-Texture = textures/CircleGlassHilight.bmp
+#Texture = Textures/BlueTilesNew.bmp
+#Texture = Textures/CarvedBronze.bmp
+#Texture = Textures/GloppyGreen2.bmp
+#Texture = Textures/AnimalSkinShiny.bmp
+Texture = Textures/CircleGlassHilight.bmp
 
 Scale = 1.0
 

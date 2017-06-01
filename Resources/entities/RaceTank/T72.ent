@@ -18,8 +18,8 @@ GunMesh = T72/T72HGunTripled.lwo
 GunMesh1 = T72/T72MGunTripled.lwo
 GunMesh2 = T72/T72LGunTripled.lwo
 
-#Texture = textures/T72.bmp
-Texture = textures/BlackShiny2a.bmp
+#Texture = Textures/T72.bmp
+Texture = Textures/BlackShiny2a.bmp
 Scale = 1.0
 
 #meters per second.

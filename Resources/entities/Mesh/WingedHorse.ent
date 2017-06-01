@@ -10,10 +10,10 @@ LodBias = 0.3
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-#texture = textures/Waypoint.bmp
-#texture = textures/GemAmber.bmp
-#texture = textures/StoneMosaic.bmp
-texture = textures/Chrome1.bmp
+#texture = Textures/Waypoint.bmp
+#texture = Textures/GemAmber.bmp
+#texture = Textures/StoneMosaic.bmp
+texture = Textures/Chrome1.bmp
 
 
 scale = 1.0

@@ -3,7 +3,7 @@ type = missile1
 nameid = 8
 
 mesh = weapons/missiles/missile1t.lwo
-texture = textures/Bomb.bmp
+texture = Textures/Bomb.bmp
 #temporary!
 
 speed = 100

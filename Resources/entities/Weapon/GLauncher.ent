@@ -5,7 +5,7 @@ mesh = weapons/GLSeparate/GLauncherGunHT.lwo
 mesh1 = weapons/GLSeparate/GLauncherGunLT.lwo
 secmesh = weapons/GLSeparate/GLauncherBarrelHT.lwo
 secmesh1 = weapons/GLSeparate/GLauncherBarrelLT.lwo
-texture = textures/GLauncher.bmp
+texture = Textures/GLauncher.bmp
 sizebias = -1
 
 #projectile = missile/smallunguided

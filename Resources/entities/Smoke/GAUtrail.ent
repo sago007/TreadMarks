@@ -4,7 +4,7 @@ Class = smoke
 Type = GAUtrail
 #The type of the entity.
 
-Texture = sprites/LumpyFire1.bmp
+Texture = Sprites/LumpyFire1.bmp
 Width = 0.3
 Height = 0.3
 Blend = add

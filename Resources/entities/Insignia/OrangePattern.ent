@@ -2,7 +2,7 @@ class = insignia
 type = OrangePattern
 name = Links
 
-texture = textures/teamlogos/OrangePattern.bmp
+texture = Textures/teamlogos/OrangePattern.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -2,7 +2,7 @@ class = insignia
 type = Spartan
 name = Spartan
 
-texture = textures/teamlogos/Spartan.bmp
+texture = Textures/teamlogos/Spartan.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

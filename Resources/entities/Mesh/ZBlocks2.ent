@@ -5,7 +5,7 @@ mesh = sculpture/ZBlocks2/ZBlocks2HT.lwo
 #mesh = Waypoint2.lwo
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
-texture = textures/BlackShiny2.bmp
+texture = Textures/BlackShiny2.bmp
 
 scale = 1.0
 collide = 1

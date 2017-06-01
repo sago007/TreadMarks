@@ -2,7 +2,7 @@ class = insignia
 type = GoldHawk
 name = Goldhawk
 
-texture = textures/teamlogos/GoldHawk.bmp
+texture = Textures/teamlogos/GoldHawk.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

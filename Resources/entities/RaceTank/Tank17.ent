@@ -18,7 +18,7 @@ GunMesh = Tank17/17GunHighT.lwo
 GunMesh1 = Tank17/17GunMedT.lwo
 GunMesh2 = Tank17/17GunLowT.lwo
 
-Texture = textures/Tank17.bmp
+Texture = Textures/Tank17.bmp
 Scale = 1.0
 
 #meters per second.

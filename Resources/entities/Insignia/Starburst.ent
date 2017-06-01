@@ -2,7 +2,7 @@ class = insignia
 type = Starburst
 name = Starburst
 
-texture = textures/teamlogos/Starburst.bmp
+texture = Textures/teamlogos/Starburst.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -4,9 +4,9 @@ Class = explo
 Type = wasphit
 #The type of the entity.
 
-#texture = sprites/firefractal1.bmp
-#Texture = sprites/GreenRing.bmp
-Texture = sprites/PinkSwirl.bmp
+#texture = Sprites/firefractal1.bmp
+#Texture = Sprites/GreenRing.bmp
+Texture = Sprites/PinkSwirl.bmp
 #Which image to use.
 sizebias = -2
 

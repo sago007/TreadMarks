@@ -2,7 +2,7 @@ class = insignia
 type = OrangePattern2
 name = Rings
 
-texture = textures/teamlogos/OrangePattern2.bmp
+texture = Textures/teamlogos/OrangePattern2.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

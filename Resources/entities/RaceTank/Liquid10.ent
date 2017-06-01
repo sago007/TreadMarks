@@ -22,9 +22,9 @@ GunMesh = Liquid10/Liquid10GunHT.lwo
 GunMesh1 = Liquid10/Liquid10GunLT.lwo
 GunMesh2 = Liquid10/Liquid10GunLT.lwo
 
-#Texture = textures/BlueTilesNew.bmp
-Texture = textures/CarvedOrange.bmp
-#Texture = textures/CarvedBronze.bmp
+#Texture = Textures/BlueTilesNew.bmp
+Texture = Textures/CarvedOrange.bmp
+#Texture = Textures/CarvedBronze.bmp
 Scale = 1.0
 
 #meters per second.

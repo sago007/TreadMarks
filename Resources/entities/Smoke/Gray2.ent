@@ -4,7 +4,7 @@ Class = smoke
 Type = gray2
 #The type of the entity.
 
-Texture = sprites/SmokeC.img
+Texture = Sprites/SmokeC.img
 #Which image to use.
 
 Width = 2

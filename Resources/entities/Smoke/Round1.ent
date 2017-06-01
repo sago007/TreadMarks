@@ -4,7 +4,7 @@ Class = smoke
 Type = round1
 #The type of the entity.
 
-Texture = sprites/RoundSmoke2.bmp
+Texture = Sprites/RoundSmoke2.bmp
 #Which image to use.
 
 Width = 2

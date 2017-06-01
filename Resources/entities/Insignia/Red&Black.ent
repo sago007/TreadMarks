@@ -2,7 +2,7 @@ class = insignia
 type = Red&Black
 name = Rebellion
 
-texture = textures/teamlogos/Red&Black.bmp
+texture = Textures/teamlogos/Red&Black.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

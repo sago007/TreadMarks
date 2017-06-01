@@ -2,7 +2,7 @@ class = insignia
 type = FireSword
 name = Dictator
 
-texture = textures/teamlogos/FireSword.bmp
+texture = Textures/teamlogos/FireSword.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

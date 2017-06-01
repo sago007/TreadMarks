@@ -4,7 +4,7 @@ Class = explo
 Type = plasmahit
 #The type of the entity.
 
-Texture = sprites/laserball.bmp
+Texture = Sprites/laserball.bmp
 #Which image to use.
 
 Width = 10.0

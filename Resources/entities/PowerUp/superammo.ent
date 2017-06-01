@@ -2,8 +2,8 @@ class = powerup
 type = superammo
 
 mesh = powerups/box2medT.lwo
-texture = textures/powerups/ammo2gold.bmp
-#texture = textures/chrome1.bmp
+texture = Textures/powerups/ammo2gold.bmp
+#texture = Textures/chrome1.bmp
 sizebias = -2
 
 envmode = blend

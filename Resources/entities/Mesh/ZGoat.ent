@@ -11,11 +11,11 @@ mesh2 = sculpture/ZGoat/ZGoatLT.lwo
 
 LodBias = 0.3
 
-#texture = textures/BlackShiny2.bmp
-#texture = textures/BlackShinyEvil.bmp
-#texture = textures/BlackShiny3.bmp
-#texture = textures/Chromeyellow.bmp
-texture = textures/Fiery2B.bmp
+#texture = Textures/BlackShiny2.bmp
+#texture = Textures/BlackShinyEvil.bmp
+#texture = Textures/BlackShiny3.bmp
+#texture = Textures/Chromeyellow.bmp
+texture = Textures/Fiery2B.bmp
 
 
 scale = 1.0

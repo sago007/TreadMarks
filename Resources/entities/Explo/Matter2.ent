@@ -4,9 +4,9 @@ Class = explo
 Type = Matter2
 #The type of the entity.
 
-#Texture = sprites/LumpyFire1.bmp
-#Texture = sprites/fireball.img
-Texture = sprites/LumpySmoke1.bmp
+#Texture = Sprites/LumpyFire1.bmp
+#Texture = Sprites/fireball.img
+Texture = Sprites/LumpySmoke1.bmp
 #Which image to use.
 
 Width = 70

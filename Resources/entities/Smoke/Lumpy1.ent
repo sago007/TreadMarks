@@ -4,7 +4,7 @@ Class = smoke
 Type = lumpy1
 #The type of the entity.
 
-Texture = sprites/LumpySmoke1.bmp
+Texture = Sprites/LumpySmoke1.bmp
 #Which image to use.
 
 Width = 2

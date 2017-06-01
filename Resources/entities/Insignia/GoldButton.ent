@@ -2,7 +2,7 @@ class = insignia
 type = GoldButton
 name = Tyrant
 
-texture = textures/teamlogos/GoldButton.bmp
+texture = Textures/teamlogos/GoldButton.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

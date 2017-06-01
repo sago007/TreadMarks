@@ -2,7 +2,7 @@ class = insignia
 type = LDA
 name = LDA
 
-texture = textures/teamlogos/LDA.bmp
+texture = Textures/teamlogos/LDA.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

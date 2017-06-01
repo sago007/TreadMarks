@@ -22,10 +22,10 @@ GunMesh = Liquid3/Liquid3AGunHighT.lwo
 GunMesh1 = Liquid3/Liquid3AGunMedT.lwo
 GunMesh2 = Liquid3/Liquid3AGunLowT.lwo
 
-Texture = textures/BlueTippedRocksHilight.bmp
-#Texture = textures/Fiery5Blue.bmp
-#Texture = textures/BlackShiny2b.bmp
-#Texture = textures/ShinyOrange.bmp
+Texture = Textures/BlueTippedRocksHilight.bmp
+#Texture = Textures/Fiery5Blue.bmp
+#Texture = Textures/BlackShiny2b.bmp
+#Texture = Textures/ShinyOrange.bmp
 Scale = 1.0
 
 #meters per second.

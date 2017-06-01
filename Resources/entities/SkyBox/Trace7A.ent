@@ -7,8 +7,8 @@ type = trace7A
 skyboximages = skybox/skybox7A
 halfskybox = 1
 
-detailtexture = textures/TerrainMult4.bmp
-watertexture = textures/water1.bmp
+detailtexture = Textures/TerrainMult4.bmp
+watertexture = Textures/water1.bmp
 wateralpha = 0.75
 waterenv = 1.0
 

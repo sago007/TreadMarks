@@ -2,7 +2,7 @@ class = insignia
 type = BlueStripes
 name = Comet
 
-texture = textures/teamlogos/BlueStripes.bmp
+texture = Textures/teamlogos/BlueStripes.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -2,7 +2,7 @@ class = insignia
 type = Nuclear
 name = Nuclear
 
-texture = textures/teamlogos/Nuclear.bmp
+texture = Textures/teamlogos/Nuclear.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

@@ -2,7 +2,7 @@ class = insignia
 type = Banner
 name = Samurai
 
-texture = textures/teamlogos/Banner.bmp
+texture = Textures/teamlogos/Banner.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

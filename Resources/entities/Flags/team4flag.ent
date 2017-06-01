@@ -7,7 +7,7 @@ mesh2 = bannerteaml.lwo
 
 polemeshtype = FlagPole
 
-texture = textures/teamlogos/GreenBanner.bmp
+texture = Textures/teamlogos/GreenBanner.bmp
 
 smoothshade = 1
 

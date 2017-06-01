@@ -2,7 +2,7 @@ class = insignia
 type = treadhawk
 name = Tread Hawk
 
-texture = textures/teamlogos/treadhawk.bmp
+texture = Textures/teamlogos/treadhawk.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

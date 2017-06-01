@@ -2,7 +2,7 @@ class = insignia
 type = BattleAxe
 name = Battle Axe
 
-texture = textures/teamlogos/BattleAxe.bmp
+texture = Textures/teamlogos/BattleAxe.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

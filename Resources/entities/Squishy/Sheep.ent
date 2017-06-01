@@ -3,7 +3,7 @@ type = sheep
 
 mesh = sculpture/sheep/sheept.lwo
 mesh1 = sculpture/sheep/sheeplt.lwo
-texture = textures/sheep.bmp
+texture = Textures/sheep.bmp
 
 scale = 1.0
 collide = 1

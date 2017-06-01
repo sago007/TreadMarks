@@ -2,7 +2,7 @@ class = mesh
 type = redarrow
 
 mesh = WaypointArrow3.lwo
-texture = textures/RedArrow.bmp
+texture = Textures/RedArrow.bmp
 
 scale = 0.5
 collide = 0

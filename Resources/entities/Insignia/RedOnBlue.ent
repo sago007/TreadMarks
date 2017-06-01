@@ -2,7 +2,7 @@ class = insignia
 type = RedOnBlue
 name = Clamps
 
-texture = textures/teamlogos/RedOnBlue.bmp
+texture = Textures/teamlogos/RedOnBlue.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

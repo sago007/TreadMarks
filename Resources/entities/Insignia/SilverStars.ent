@@ -2,7 +2,7 @@ class = insignia
 type = SilverStars
 name = Silver Stars
 
-texture = textures/teamlogos/SilverStars.bmp
+texture = Textures/teamlogos/SilverStars.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo

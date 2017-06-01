@@ -11,8 +11,8 @@ LodBias = 0.3
 #mesh = Sculpture/Diva2T.lwo
 #mesh = Sculpture/LongFigure4T.lwo
 
-texture = textures/Fiery5.bmp
-#texture = textures/Waypoint.bmp
+texture = Textures/Fiery5.bmp
+#texture = Textures/Waypoint.bmp
 
 scale = 1.0
 collide = 0

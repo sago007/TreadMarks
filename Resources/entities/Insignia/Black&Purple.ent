@@ -2,7 +2,7 @@ class = insignia
 type = Black&Purple
 name = Dark Lotus
 
-texture = textures/teamlogos/Black&Purple.bmp
+texture = Textures/teamlogos/Black&Purple.bmp
 
 mesh = bannerh.lwo
 mesh1 = bannerm.lwo
