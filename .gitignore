@@ -3,3 +3,10 @@
 /Installers/*.p12
 /Installers/out/*.exe
 /*.p12
+BanList.txt
+CMakeCache.txt
+CMakeFiles
+*.cmake
+Makefile
+nbproject/
+src/game/TM
