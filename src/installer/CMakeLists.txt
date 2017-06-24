@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6.1)
+cmake_minimum_required(VERSION 3.5.1)
 
 IF(PATH_UCRT)
   INSTALL(DIRECTORY "${PATH_UCRT}/" DESTINATION "/" CONFIGURATIONS Release)
