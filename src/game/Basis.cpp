@@ -254,8 +254,8 @@ int Basis::Noise(unsigned char *table, int length, double x, double y, double xd
 	int xr[MAXOCTAVE + 1];
 	int yr[MAXOCTAVE + 1];
 	int x1p1, y1p1, i, j;
-//	unsigned int xfrac[MAXOCTAVE + 1];
-//	unsigned int yfrac[MAXOCTAVE + 1];
+//	uint32_t xfrac[MAXOCTAVE + 1];
+//	uint32_t yfrac[MAXOCTAVE + 1];
 //	double xd[MAXOCTAVE + 1];
 //	double yd[MAXOCTAVE + 1];
 	int d, xfrac, yfrac;

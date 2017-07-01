@@ -19,6 +19,7 @@
 #include "../GenericBuffer.h"
 
 #include <GL/glew.h>
+#include <stdint.h>
 
 #include "../Terrain.h"
 #include "../Render.h"
@@ -57,7 +58,7 @@ void GLPolyRender::GLBlendMode(int mode){
 		blendmode = mode;
 	}
 }
-void GLPolyRender::GLBindTexture(unsigned int id){
+void GLPolyRender::GLBindTexture(uint32_t id){
 	if(id != boundtex || texunbound){
 		glBindTexture(GL_TEXTURE_2D, id);
 		boundtex = id;
@@ -1367,64 +1368,13 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 }
 
 //These are the good pass-through functions.
-int GLGenTextures(int n, unsigned int *a){
+int GLGenTextures(int n, uint32_t*a){
 	glGenTextures(n, a);
 	return n;
 }
-int GLDeleteTextures(int n, unsigned int *a){
+int GLDeleteTextures(int n, uint32_t *a){
 	glDeleteTextures(n, a);
 	return n;
 }
 
-/*
-//Manual Gen and Delete textures for possible RagePro workaround.
-#define MAX_TEX_NAMES 10000
-char TextureNames[MAX_TEX_NAMES];
-int TextureNamesInitialized = 0;
-int TextureNameSearchFrom = 0;
-//
-int GLGenTextures(int n, unsigned int *a){
-	//
-	static foo = 1;
-	for(int t = 0; t < n; t++) a[t] = foo++;
-	return n;
-	//
-//	glGenTextures(n, a);
-	if(TextureNamesInitialized == 0){
-		memset(TextureNames, 0, MAX_TEX_NAMES);
-		TextureNamesInitialized = 1;
-		TextureNameSearchFrom = 0;
-	}
-	for(int i = 0; i < n; i++){
-		while(TextureNameSearchFrom < MAX_TEX_NAMES && TextureNames[TextureNameSearchFrom] != 0){
-			TextureNameSearchFrom++;
-		}
-		if(TextureNameSearchFrom >= MAX_TEX_NAMES){
-			OutputDebugLog("\n***\n***Texture name leak, broke bank!\n***\n\n");
-			break;
-		}else{
-			a[i] = TextureNameSearchFrom + 1;
-			TextureNames[TextureNameSearchFrom] = 1;	//Mark it as alloced.
-			TextureNameSearchFrom++;
-		}
-	}
-	return n;
-}
-int GLDeleteTextures(int n, unsigned int *a){
-	//
-	return n;
-	//
-//	glDeleteTextures(n, a);
-	for(int i = 0; i < n; i++){
-		int j = a[i];
-		if(j > 0 && j <= MAX_TEX_NAMES){
-			TextureNames[j - 1] = 0;	//Mark as free.
-			if((j - 1) < TextureNameSearchFrom) TextureNameSearchFrom = j - 1;	//Reset search start to earliest free.
-		}else{
-			OutputDebugLog("\n***\n***Bad delete textures ID!\n***\n\n");
-		}
-	}
-	return n;
-}
-*/
 

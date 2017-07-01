@@ -107,7 +107,7 @@ void TankPacketProcessor::PacketReceived(ClientID source, const char *data, int 
 	}
 };
 void TankPacketProcessor::OutOfBandPacket(sockaddr_in *src, const char *data, int len){
-	unsigned int head = 0;
+	uint32_t head = 0;
 	BitUnpackEngine pe(data, len);
 	pe.UnpackUInt(head, 32);
 	if(head == LONG_HEAD_HEARTREQ && CTankGame::Get().GetGameState()->ActAsServer && CTankGame::Get().GetVW()->Net.IsServerActive()){
@@ -134,7 +134,7 @@ void TankPacketProcessor::OutOfBandPacket(sockaddr_in *src, const char *data, in
 		return;
 	}
 	if(head == LONG_HEAD_PONG && len >= 12){	//OOB pongs can only be from a server to a client.
-		unsigned int t = RLONG(&data[8]);	//Returned time stamp for when we sent ping.
+		uint32_t t = RLONG(&data[8]);	//Returned time stamp for when we sent ping.
 		for(ServerEntryEx *se = (ServerEntryEx*)CTankGame::Get().GetServerHead()->NextLink(); se; se = (ServerEntryEx*)se->NextLink()){
 			if(CmpAddr(se->Address, *src)){	//Found server that ping was for.
 				se->PingCount++;
@@ -171,11 +171,11 @@ void MasterClientPacketProcessor::Disconnect(ClientID source, NetworkError ne){
 	}
 };
 void MasterClientPacketProcessor::PacketReceived(ClientID source, const char *data, int len){
-	unsigned int head = 0;
+	uint32_t head = 0;
 	BitUnpackEngine pe(data, len);
 	pe.UnpackUInt(head, 32);
 	if(head == LONG_HEAD_HEARTBEATEX && CTankGame::Get().GetServerHead()->CountItems() < 1000){	//Accept a heartbeat from master server.
-		unsigned int a = 0, p;
+		uint32_t a = 0, p;
 		pe.UnpackUInt(a, 32);
 		pe.UnpackUInt(p, 16);
 		if(a == 0){	//Null address signals start of dump.

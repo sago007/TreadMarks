@@ -399,7 +399,7 @@ bool EntityGod::Think()
 		char c = VW->GetChar();
 		if(c == '\n' || c == '\r'){
 			if(VW->GetChatMode()){	//Chat mode was on.
-				unsigned int teamid = TEAMID_NONE;
+				uint32_t teamid = TEAMID_NONE;
 				if(VW->GetChatMode() == 2){	//Team chat.
 					EntityBase *e = FindRegisteredEntity("PlayerEntity");
 					if(e) teamid = e->QueryInt(ATT_TEAMID);
@@ -742,11 +742,11 @@ bool EntitySkyplaneType::CacheResources(){
 					pe2 = &ppe[*(src + std::min(sx + 1, srcw - 1) + std::max(0, sy) * srcp)];
 					pe3 = &ppe[*(src + std::min(sx, srcw - 1) + std::max(0, sy + 1) * srcp)];
 					pe4 = &ppe[*(src + std::min(sx + 1, srcw - 1) + std::max(0, sy + 1) * srcp)];
-					unsigned int q1 = ((fsx - (float)sx) * 255.0f);
-					unsigned int q2 = ((fsy - (float)sy) * 255.0f);
-				//	unsigned int q1 = 128;
-				//	unsigned int q2 = 128;
-					unsigned int iq1 = 255 - q1, iq2 = 255 - q2;
+					uint32_t q1 = ((fsx - (float)sx) * 255.0f);
+					uint32_t q2 = ((fsy - (float)sy) * 255.0f);
+				//	uint32_t q1 = 128;
+				//	uint32_t q2 = 128;
+					uint32_t iq1 = 255 - q1, iq2 = 255 - q2;
 					dst[0] = ((pe1->peBlue * iq1 + pe2->peBlue * q1) * iq2 + (pe3->peBlue * iq1 + pe4->peBlue * q1) * q2) >>16;
 					dst[1] = ((pe1->peGreen * iq1 + pe2->peGreen * q1) * iq2 + (pe3->peGreen * iq1 + pe4->peGreen * q1) * q2) >>16;
 					dst[2] = ((pe1->peRed * iq1 + pe2->peRed * q1) * iq2 + (pe3->peRed * iq1 + pe4->peRed * q1) * q2) >>16;

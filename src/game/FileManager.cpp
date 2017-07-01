@@ -113,10 +113,10 @@ FILE *FileManager::OpenWildcard(const char *wild, char *nameret, int namelen, bo
 	if(find.Items() <= 0) fprintf(stderr, "Wildcard had no matches: %s\n", wild);
 	return NextWildcard(nameret, namelen);
 }
-FILE *FileManager::NextWildcard(char *nameret, unsigned int namelen){	//Continues searching by previous wildcard.
+FILE *FileManager::NextWildcard(char *nameret, uint32_t namelen){	//Continues searching by previous wildcard.
 	const char *name = find[findIndex++];
 	if(name && nameret && namelen > 0){
-		memcpy(nameret, name, std::min(namelen - 1, static_cast<unsigned int>(strlen(name)) + 1));
+		memcpy(nameret, name, std::min(namelen - 1, static_cast<uint32_t>(strlen(name)) + 1));
 		nameret[namelen - 1] = '\0';	//Add closing null in case we hit end.
 	}
 	return Open(name);	//Open will handle a null or boffed pointer.

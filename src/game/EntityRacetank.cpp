@@ -1191,7 +1191,7 @@ void EntityRacetank::DeliverPacket(const unsigned char *data, int len){
 			Rot3 rot, rotvel;
 			Mat3 rotm, rotvelm;
 			int i;
-			unsigned int time;
+			uint32_t time;
 			bp.UnpackUInt(time, 32);
 			//
 		//	for(i = 0; i < 3; i++){

@@ -642,19 +642,19 @@ bool Bitmap::Scale(int NewWidth, int NewHeight, bool lerp){
 	}
 	return false;
 }
-unsigned int Bitmap::GetPixel(int x, int y){
+uint32_t Bitmap::GetPixel(int x, int y){
 	if(data && x >= 0 && x < width && y >= 0 && y < height){
-		if(bpp == 8) return (unsigned int)*(data + y * pitch + x);
-		if(bpp == 16) return (unsigned int)*((unsigned short*)(data + y * pitch + x));
+		if(bpp == 8) return (uint32_t)*(data + y * pitch + x);
+		if(bpp == 16) return (uint32_t)*((unsigned short*)(data + y * pitch + x));
 		if(bpp == 24){
 			unsigned char *tp = data + y * pitch + x * 3;
-			return (unsigned int)tp[0] | ((unsigned int)tp[1] <<8) | ((unsigned int)tp[2] <<16);
+			return (uint32_t)tp[0] | ((uint32_t)tp[1] <<8) | ((uint32_t)tp[2] <<16);
 		}
-		if(bpp == 32) return *((unsigned int*)(data + y * pitch + (x <<2)));
+		if(bpp == 32) return *((uint32_t*)(data + y * pitch + (x <<2)));
 	}
 	return 0;
 }
-bool Bitmap::PutPixel(int x, int y, unsigned int pixel){
+bool Bitmap::PutPixel(int x, int y, uint32_t pixel){
 	if(data && x >= 0 && x < width && y >= 0 && y < height){
 		switch(bpp){
 		case 8 : *(data + y * pitch + x) = (unsigned char)pixel; break;
@@ -663,7 +663,7 @@ bool Bitmap::PutPixel(int x, int y, unsigned int pixel){
 			unsigned char *tp; tp = data + y * pitch + x * 3;
 			tp[0] = pixel & 255; tp[1] = (pixel >>8) & 255; tp[2] = (pixel >>16) & 255;
 			break;
-		case 32 : *((unsigned int*)(data + y * pitch + (x <<2))) = pixel; break;
+		case 32 : *((uint32_t*)(data + y * pitch + (x <<2))) = pixel; break;
 		}
 		return true;
 	}

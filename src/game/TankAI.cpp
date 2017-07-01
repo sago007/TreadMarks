@@ -477,7 +477,7 @@ bool CTankAI::CheckFire()
 	return false;
 }
 
-void CTankAI::Think(unsigned int msSinceLastThink)
+void CTankAI::Think(uint32_t msSinceLastThink)
 {
 	EntityTankGod *egod = (EntityTankGod*)CTankGame::Get().GetVW()->FindRegisteredEntity("TANKGOD");
 	if(!egod)

@@ -14,6 +14,7 @@
 // along with Tread Marks.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Timer.h"
+#include <stdint.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -37,7 +38,7 @@ void Timer::Start()
 	Started = true;
 }
 
-unsigned int Timer::Check(unsigned int FracSec)
+uint32_t Timer::Check(uint32_t FracSec)
 {
 	if(!Started)
 		return 0;
@@ -45,7 +46,7 @@ unsigned int Timer::Check(unsigned int FracSec)
 	tnow = GetClock();
 
 	if(tnow < tstart){	//Oops, millisecond rollover.
-		tnow = (unsigned int)(((tnow + (0xffffffff - tstart)) * FracSec) / 1000);
+		tnow = (uint32_t)(((tnow + (0xffffffff - tstart)) * FracSec) / 1000);
 	}else{
 		tnow = (int)(((tnow - tstart) * FracSec) / 1000);
 	}
@@ -57,7 +58,7 @@ unsigned int Timer::Check(unsigned int FracSec)
 #include <mach/mach_time.h>
 #endif
 
-unsigned int Timer::GetClock()
+uint32_t Timer::GetClock()
 {
 #ifdef WIN32
 	return timeGetTime();

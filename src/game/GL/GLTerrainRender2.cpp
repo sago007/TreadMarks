@@ -469,7 +469,7 @@ void BinaryTriangle2::TestSplitClip(int level, int index,
 //A section of world for rendering, may point to wrapped terrain off-map.
 struct MapPatch2{
 	int x, y;	//Coordinates in patch grid.
-	unsigned int id;
+	uint32_t id;
 //	BinaryTriangle2 ul, dr;
 	unsigned short ul, dr;
 	LodTree *lodul, *loddr;
@@ -481,7 +481,7 @@ struct MapPatch2{
 		BTP(ul)->Null(); BTP(ul)->b = dr;	//Links component root bintris together at bottoms.
 		BTP(dr)->Null(); BTP(dr)->b = ul;
 	};
-	MapPatch2(int X, int Y, unsigned int ID) : x(X), y(Y), id(ID) {
+	MapPatch2(int X, int Y, uint32_t ID) : x(X), y(Y), id(ID) {
 	//	ul.Null(); ul.b = &dr;	//Links component root bintris together at bottoms.
 	//	dr.Null(); dr.b = &ul;
 		ul = AllocBinTri();
@@ -489,7 +489,7 @@ struct MapPatch2{
 		BTP(ul)->Null(); BTP(ul)->b = dr;	//Links component root bintris together at bottoms.
 		BTP(dr)->Null(); BTP(dr)->b = ul;
 	};
-	void SetCoords(int X, int Y, unsigned int ID){
+	void SetCoords(int X, int Y, uint32_t ID){
 		x = X;
 		y = Y;
 		id = ID;

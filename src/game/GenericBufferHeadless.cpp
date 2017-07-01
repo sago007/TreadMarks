@@ -21,7 +21,7 @@
 #include "TankGame.h"
 #include "TankRacing.h"
 
-unsigned int TextureCompressionType=0;
+uint32_t TextureCompressionType=0;
 
 GenericBuffer::GenericBuffer() {
 	m_fullscreen = false;

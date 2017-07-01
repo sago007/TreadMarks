@@ -257,10 +257,10 @@ SoundNode *ResourceManager::GetSound(const char *n, bool loop, float volumebias)
 	}
 	return 0;
 }
-int ResourceManager::GetFileCRC(const char *n, unsigned int *crc, int *size)
+int ResourceManager::GetFileCRC(const char *n, uint32_t *crc, int *size)
 {
 	int len;
-	unsigned int hash = 0;
+	uint32_t hash = 0;
 	unsigned char *mem;
 	FILE *fp;
 
@@ -434,7 +434,7 @@ void ResourceManager::UndownloadTextures(){
 		for(int m = 0; m < node->Images(); m++){	//Now handle all images in set.
 			if((*node)[m].id){
 				//OutputDebugString("Calling DeleteTextures " + String((*node)[m].id) + ".\n");
-				GLDeleteTextures(1, (unsigned int*)&(*node)[m].id);	//Delete old object before rebinding.
+				GLDeleteTextures(1, (uint32_t*)&(*node)[m].id);	//Delete old object before rebinding.
 				(*node)[m].id = 0;
 			}
 		}

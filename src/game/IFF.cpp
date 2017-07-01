@@ -180,7 +180,7 @@ int IFF::ReadString(CStr *str){
 	if(IsOpen && str){
 		ushort l = 0;
 		if(ReadShort(&l)){
-			char *p = (char*)malloc((unsigned int)l + 1);
+			char *p = (char*)malloc((uint32_t)l + 1);
 			if(p && (ReadBytes(p, l) || l == 0)){	//Okay, this should work with 0 length strings...
 				p[l] = 0;	//Set null.
 				str->cpy(p);	//Copy to CStr.

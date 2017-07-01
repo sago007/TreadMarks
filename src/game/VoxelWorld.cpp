@@ -413,7 +413,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 						MemoryBuffer mem(cfgl->GetCompressedLength()), memout;
 						cfgl->GetCompressedData((char*)mem.Data(), mem.Length());
 						memout = ZCompress(&mem);
-						unsigned int l = memout.Length();
+						uint32_t l = memout.Length();
 						pe.PackUInt(l, 32);
 						for(int i = 0; i < l; i++){
 							pe.PackUInt(*((unsigned char*)memout.Data() + i), 8);
@@ -540,7 +540,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_ENTTYPE){	//This is the client->server version.
 			BitUnpackEngine pe(&data[1], len - 1);
 			ClassHash thash;
-			unsigned int checksum;
+			uint32_t checksum;
 			while(pe.UnpackUInt(thash, 32) && pe.UnpackUInt(checksum, 32)){	//For each entry in the packet.
 				ConfigFileList *cfgl = ConfigListHead.NextLink();	//Find the corresponding entity type and set client's checksum of that type.
 				if(cfgl && (cfgl = cfgl->Find(thash))) cfgl->ClientChecksum[source] = checksum;
@@ -550,7 +550,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if (data[0] == BYTE_HEAD_RESCRC && len > 12){
 			BitUnpackEngine pe(&data[1], len - 1);
 			FileCRCList *fl;
-			unsigned int length, crc, size;
+			uint32_t length, crc, size;
 
 			// Recieve CRCs here from client
 
@@ -560,7 +560,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				MemoryBuffer mem(length), memout;
 				if(mem.Data() && mem.Length() >= length){
 					for(int i = 0; i < length; i++){
-						unsigned int n = 0;
+						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
@@ -613,7 +613,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_CHATMSG){	//Chat message from client to server, for distribution.
 			BitUnpackEngine pe(data, len);
 			pe.SkipBits(8);
-			unsigned int teamid;
+			uint32_t teamid;
 			CStr text;
 			pe.UnpackUInt(teamid, 32);
 			pe.UnpackString(text, 7);
@@ -621,7 +621,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_PONG && len >= 5){	//Client to server pong.
-			unsigned int ptime = RLONG(&data[1]);
+			uint32_t ptime = RLONG(&data[1]);
 			EntityBase *e = GetEntity(Clients[source].ClientEnt);
 			if(e) e->SetInt(ATT_PING, msec - ptime);	//Set ping value in client's ent, which will get propagated
 			return;
@@ -720,7 +720,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_ENTTYPE){	//This is the server->client version.
 #ifndef DISABLE_TYPE_SYNCH
 			BitUnpackEngine pe(&data[1], len - 1);
-			unsigned int num = 0, total = 0, len = 0;
+			uint32_t num = 0, total = 0, len = 0;
 		//	CStr str;
 			pe.UnpackUInt(num, 16);
 			pe.UnpackUInt(total, 16);
@@ -729,7 +729,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				MemoryBuffer mem(len), memout;
 				if(mem.Data() && mem.Length() >= len){
 					for(int i = 0; i < len; i++){
-						unsigned int n = 0;
+						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
@@ -766,7 +766,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		}
 		if(data[0] == BYTE_HEAD_RESCRC && len>=2) {
 			FileCRCList *fl;
-			unsigned int length, crc, size,i;
+			uint32_t length, crc, size,i;
 
 			// Send of CRCs to server
 
@@ -1007,7 +1007,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 						MemoryBuffer mem(cfgl->GetCompressedLength()), memout;
 						cfgl->GetCompressedData((char*)mem.Data(), mem.Length());
 						memout = ZCompress(&mem);
-						unsigned int l = memout.Length();
+						uint32_t l = memout.Length();
 						pe.PackUInt(l, 32);
 						for(int i = 0; i < l; i++){
 							pe.PackUInt(*((unsigned char*)memout.Data() + i), 8);
@@ -1100,7 +1100,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_ENTTYPE){	//This is the client->server version.
 			BitUnpackEngine pe(&data[1], len - 1);
 			ClassHash thash;
-			unsigned int checksum;
+			uint32_t checksum;
 			while(pe.UnpackUInt(thash, 32) && pe.UnpackUInt(checksum, 32)){	//For each entry in the packet.
 				ConfigFileList *cfgl = ConfigListHead.NextLink();	//Find the corresponding entity type and set client's checksum of that type.
 				if(cfgl && (cfgl = cfgl->Find(thash))) cfgl->ClientChecksum[source] = checksum;
@@ -1118,7 +1118,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_CHATMSG){	//Chat message from client to server, for distribution.
 			BitUnpackEngine pe(data, len);
 			pe.SkipBits(8);
-			unsigned int teamid;
+			uint32_t teamid;
 			CStr text;
 			pe.UnpackUInt(teamid, 32);
 			pe.UnpackString(text, 7);
@@ -1126,7 +1126,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_PONG && len >= 5){	//Client to server pong.
-			unsigned int ptime = RLONG(&data[1]);
+			uint32_t ptime = RLONG(&data[1]);
 			EntityBase *e = GetEntity(Clients[source].ClientEnt);
 			if(e) e->SetInt(ATT_PING, msec - ptime);	//Set ping value in client's ent, which will get propagated
 			return;
@@ -1220,7 +1220,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_ENTTYPE){	//This is the server->client version.
 #ifndef DISABLE_TYPE_SYNCH
 			BitUnpackEngine pe(&data[1], len - 1);
-			unsigned int num = 0, total = 0, len = 0;
+			uint32_t num = 0, total = 0, len = 0;
 		//	CStr str;
 			pe.UnpackUInt(num, 16);
 			pe.UnpackUInt(total, 16);
@@ -1229,7 +1229,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				MemoryBuffer mem(len), memout;
 				if(mem.Data() && mem.Length() >= len){
 					for(int i = 0; i < len; i++){
-						unsigned int n = 0;
+						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
@@ -1452,7 +1452,7 @@ int VoxelWorld::CountClients(){
 	}
 	return count;
 }
-bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, unsigned int teamid, bool localdisplay){
+bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, uint32_t teamid, bool localdisplay){
 	if(text){
 		CStr Text = text;
 		if(teamid != TEAMID_NONE){
@@ -1483,7 +1483,7 @@ bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, unsigne
 	}
 	return false;
 }
-int VoxelWorld::ChatMessage(const char *text, unsigned int teamid){	//Sends a chat message to the server, who sends it on to clients.
+int VoxelWorld::ChatMessage(const char *text, uint32_t teamid){	//Sends a chat message to the server, who sends it on to clients.
 	if(text && strlen(text) > 0){
 		if(!Net.IsClientActive()){//Net.IsServerActive()){
 			CStr out;// = text;

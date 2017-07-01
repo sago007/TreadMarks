@@ -60,7 +60,7 @@ int BitPackEngine::PackInt(int val, int bits){
 		int freebits = 8 - (bitpos & 7);	//Empty bits in current byte.
 		pos += bits;	//Increment internal pos now for next call.
 		if(freebits < 8){	//Partial byte free.
-			unsigned char mask = (unsigned int)((1 << (freebits - 0)) - 1);	//Mask for lowe end of bit yet unused.
+			unsigned char mask = (uint32_t)((1 << (freebits - 0)) - 1);	//Mask for lowe end of bit yet unused.
 			data[bytepos] = (data[bytepos] & (~mask)) | ((unsigned char)(val >> (BPW - freebits)) & mask);	//Save good part of data, or with value.
 			val <<= freebits;
 			bits -= freebits;
@@ -80,13 +80,13 @@ int BitPackEngine::PackUInt(int val, int bits){
 }
 int BitPackEngine::PackFloatInterval(float val, float min, float max, int bits){
 	if(bits > 0 && max > min){
-	//	return PackUInt((unsigned int)(((val - min) / (max - min)) * (float)((1 << bits) - 1)), bits);
-		unsigned int j;
+	//	return PackUInt((uint32_t)(((val - min) / (max - min)) * (float)((1 << bits) - 1)), bits);
+		uint32_t j;
 		if(val <= min){
 			j = 0;//val = min;
 		}else{
-			j = (unsigned int)(((val - min) / (max - min)) * (double)(1 << bits));
-			if(j >= ((unsigned int)1 << bits)) j = (1 << bits) - 1;
+			j = (uint32_t)(((val - min) / (max - min)) * (double)(1 << bits));
+			if(j >= ((uint32_t)1 << bits)) j = (1 << bits) - 1;
 		}
 		return PackUInt(j, bits);
 	}
@@ -160,7 +160,7 @@ int BitUnpackEngine::UnpackInt(int &outval, int bits){
 		//
 		int usedbits = 8 - (bitpos & 7);
 		val >>= usedbits;
-		val &= (((unsigned int)1 << (BPW - usedbits)) - 1);
+		val &= (((uint32_t)1 << (BPW - usedbits)) - 1);
 		val |= (((int)data[bytepos]) << (BPW - usedbits));
 		val >>= (BPW - bits);	//Scoot right.
 		outval = val;
@@ -168,18 +168,18 @@ int BitUnpackEngine::UnpackInt(int &outval, int bits){
 	}
 	return 0;
 }
-int BitUnpackEngine::UnpackUInt(unsigned int &val, int bits){
+int BitUnpackEngine::UnpackUInt(uint32_t &val, int bits){
 	int v;
 	if(UnpackInt(v, bits)){
-		if(bits < 32) v &= (((unsigned int)1 << bits) - 1);	//Mask off extraneous bits.
-		val = (unsigned int)v;
+		if(bits < 32) v &= (((uint32_t)1 << bits) - 1);	//Mask off extraneous bits.
+		val = (uint32_t)v;
 		return 1;
 	}
 	return 0;
 }
 int BitUnpackEngine::UnpackFloatInterval(float &val, float min, float max, int bits){
 	if(bits > 0 && max > min){
-		unsigned int v;
+		uint32_t v;
 		if(UnpackUInt(v, bits)){
 			double size = (max - min) / (double)(bits >= 32 ? 0xffffffff : 1 << bits);
 		//	val = min + (max - min) * ((float)v / (float)((1 << bits) - 1));

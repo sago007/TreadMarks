@@ -23,7 +23,7 @@
 #include <GL/glew.h>
 
 int MaxOpenGLTextureSize = 0;
-unsigned int TextureCompressionType=0;
+uint32_t TextureCompressionType=0;
 
 GLenum GL_Best_Clamp = GL_CLAMP;
 

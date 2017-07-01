@@ -16,6 +16,7 @@
 #include "Compression.h"
 #include <cstdlib>
 #include <cstring>
+#include <stdint.h>
 
 #define ZLIB_DLL
 //#define _WINDOWS
@@ -31,17 +32,17 @@ MemoryBuffer::MemoryBuffer() : data(0), len(0) {
 MemoryBuffer::MemoryBuffer(const MemoryBuffer &t) : data(0), len(0) {
 	*this = t;
 }
-MemoryBuffer::MemoryBuffer(unsigned int size) : data(0), len(0) {
+MemoryBuffer::MemoryBuffer(uint32_t size) : data(0), len(0) {
 	Init(size);
 }
-MemoryBuffer::MemoryBuffer(const void *src, unsigned int size) : data(0), len(0) {
+MemoryBuffer::MemoryBuffer(const void *src, uint32_t size) : data(0), len(0) {
 	Init(size);
 	Suck(src, size);
 }
 MemoryBuffer::~MemoryBuffer(){
 	Free();
 }
-bool MemoryBuffer::Init(unsigned int size){
+bool MemoryBuffer::Init(uint32_t size){
 	Free();
 	if(size > 0){
 		data = malloc(GRAN(size));
@@ -57,12 +58,12 @@ void MemoryBuffer::Free(){
 	data = 0;
 	len = 0;
 }
-int MemoryBuffer::Resize(unsigned int newsize){
+int MemoryBuffer::Resize(uint32_t newsize){
 	if(newsize > 0){
 		if(true){//GRAN(len) != GRAN(newsize) || !data){
 			void *data2 = malloc(GRAN(newsize));
 			if(data2){
-				unsigned int cpylen = newsize;
+				uint32_t cpylen = newsize;
 				if(len < cpylen) cpylen = len;
 				if(data && cpylen) memcpy(data2, data, cpylen);	//Copy old data to new buffer.
 				if(data) free(data);
@@ -74,7 +75,7 @@ int MemoryBuffer::Resize(unsigned int newsize){
 	}else Free();
 	return 0;
 }
-int MemoryBuffer::Suck(const void *src, unsigned int size){
+int MemoryBuffer::Suck(const void *src, uint32_t size){
 	if(len < size) size = len;
 	if(src && size && data){
 		memcpy(data, src, size);
@@ -82,7 +83,7 @@ int MemoryBuffer::Suck(const void *src, unsigned int size){
 	}
 	return 0;
 }
-unsigned int MemoryBuffer::Blow(void *out, unsigned int maxout){
+uint32_t MemoryBuffer::Blow(void *out, uint32_t maxout){
 	if(len < maxout) maxout = len;
 	if(out && maxout && data){
 		memcpy(out, data, maxout);
@@ -99,7 +100,7 @@ MemoryBuffer &MemoryBuffer::operator=(const MemoryBuffer &t){
 }
 
 
-MemoryBuffer ZCompress(const void *src, unsigned int size){
+MemoryBuffer ZCompress(const void *src, uint32_t size){
 	MemoryBuffer mem;
 	if(src && size){
 		z_stream c_stream; /* compression stream */
@@ -114,7 +115,7 @@ MemoryBuffer ZCompress(const void *src, unsigned int size){
 				c_stream.next_out = (unsigned char*)mem.Data();
 				c_stream.avail_out = mem.Length();
 				if(Z_STREAM_END == deflate(&c_stream, Z_FINISH)){
-					unsigned int newsize = c_stream.total_out;//mem.Length() - c_stream.avail_out;
+					uint32_t newsize = c_stream.total_out;//mem.Length() - c_stream.avail_out;
 					deflateEnd(&c_stream);
 					mem.Resize(newsize);
 					return mem;
@@ -130,7 +131,7 @@ MemoryBuffer ZCompress(MemoryBuffer *mem){
 	if(mem) return ZCompress(mem->Data(), mem->Length());
 	else return MemoryBuffer();
 }
-MemoryBuffer ZUncompress(const void *src, unsigned int size){
+MemoryBuffer ZUncompress(const void *src, uint32_t size){
 	MemoryBuffer mem;
 	if(src && size){
 		z_stream c_stream; /* compression stream */

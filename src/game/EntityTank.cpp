@@ -284,7 +284,7 @@ bool EntityTankGod::Think(){
 	//
 	return EntityGod::Think();
 }
-int EntityTankGod::UpdateTank(EntityBase *tank, int lap, int nextmainway, float distance, int frags, unsigned int teamid){	//Returns Place in race.
+int EntityTankGod::UpdateTank(EntityBase *tank, int lap, int nextmainway, float distance, int frags, uint32_t teamid){	//Returns Place in race.
 	if(!tank) return 0;
 	Target *t;
 	for(t = TgtHead.NextLink(); t; t = t->NextLink()) if(t->gid == tank->GID) break;
@@ -338,7 +338,7 @@ int EntityTankGod::RemoveTank(EntityBase *tank){	//Removes you from update list.
 	}
 	return 0;
 }
-EntityGID EntityTankGod::ClosestTank(Vec3 pos, EntityGID skipme, Vec3 dir, float rearbias, unsigned int skipteam, unsigned int fromteam){
+EntityGID EntityTankGod::ClosestTank(Vec3 pos, EntityGID skipme, Vec3 dir, float rearbias, uint32_t skipteam, uint32_t fromteam){
 	if(!pos) return 0;
 	Vec3 ndir = {1, 0, 0}, vd;
 	if(dir) NormVec3(dir, ndir);
@@ -2320,7 +2320,7 @@ bool EntityWeapon::Think(){
 				int tms = (TP->type_reloadtime * 1000.0f);
 				if(lastfiretime < VW->Time() - tms * 2) lastfiretime = VW->Time();
 			//	else lastfiretime += tms;
-				else lastfiretime = std::max(lastfiretime + tms, static_cast<unsigned int>(VW->Time() - VW->FrameTime()));	//Okay, limit it so the max firetime creep is the frame ms.
+				else lastfiretime = std::max(lastfiretime + tms, static_cast<uint32_t>(VW->Time() - VW->FrameTime()));	//Okay, limit it so the max firetime creep is the frame ms.
 			}
 			if(ammo <= 0){
 				//

@@ -180,8 +180,8 @@ bool ClientConnection::QueueInPacket(TransmissionMode mode, const char *data, in
 	}
 	return false;
 }
-unsigned int ClientConnection::BytesQueuedOut(unsigned int *packets){	//Calculates the number of bytes, and optionally packets, queued for in and out transport.  May be slow if queues are big.
-	unsigned int packs = 0, bytes = 0;
+uint32_t ClientConnection::BytesQueuedOut(uint32_t *packets){	//Calculates the number of bytes, and optionally packets, queued for in and out transport.  May be slow if queues are big.
+	uint32_t packs = 0, bytes = 0;
 	MiniPacket *mp;
 	for(mp = OutUnreliableHead.NextLink(); mp; mp = mp->NextLink()){ bytes += mp->Length; packs++; }
 	for(mp = OutReliableHead.NextLink(); mp; mp = mp->NextLink()){ bytes += mp->Length; packs++; }
@@ -189,8 +189,8 @@ unsigned int ClientConnection::BytesQueuedOut(unsigned int *packets){	//Calculat
 	if(packets) *packets = packs;
 	return bytes;
 }
-unsigned int ClientConnection::BytesQueuedIn(unsigned int *packets){
-	unsigned int packs = 0, bytes = 0;
+uint32_t ClientConnection::BytesQueuedIn(uint32_t *packets){
+	uint32_t packs = 0, bytes = 0;
 	MiniPacket *mp;
 	for(mp = InUnreliableHead.NextLink(); mp; mp = mp->NextLink()){ bytes += mp->Length; packs++; }
 	for(mp = InReliableHead.NextLink(); mp; mp = mp->NextLink()){ bytes += mp->Length; packs++; }
@@ -346,7 +346,7 @@ void Network::FreeClient(){
 	Server.Initialize();
 	ClientActive = false;
 }
-bool Network::Configure(unsigned int conntimeout, unsigned int reltimeout, unsigned int newconntimeout){
+bool Network::Configure(uint32_t conntimeout, uint32_t reltimeout, uint32_t newconntimeout){
 	ConnectionTimeout = conntimeout;
 	ReliableTimeout = reltimeout;
 	ConnectTimeout = newconntimeout;
@@ -426,7 +426,7 @@ bool Network::QueueSendClient(ClientID client, TransmissionMode mode, const char
 	return false;
 }
 //
-bool Network::SetClientRate(ClientID client, unsigned int rate){
+bool Network::SetClientRate(ClientID client, uint32_t rate){
 	if(Clients && ((client >= 0 && client < MaxClients) || client == CLIENTID_BROADCAST)){
 		for(int c = 0; c < MaxClients; c++){
 			if(c == client || client == CLIENTID_BROADCAST){
@@ -437,13 +437,13 @@ bool Network::SetClientRate(ClientID client, unsigned int rate){
 	}
 	return false;
 }
-unsigned int Network::GetClientRate(ClientID client){
+uint32_t Network::GetClientRate(ClientID client){
 	if(Clients && ((client >= 0 && client < MaxClients))){
 		return Clients[client].ByteRate;
 	}
 	return 0;
 }
-bool Network::SetServerRate(unsigned int rate){
+bool Network::SetServerRate(uint32_t rate){
 	MaxServerClientRate = std::max(500, std::min(int(rate), 10000));
 	if(Clients && MaxClients > 0){
 		for(int c = 0; c < MaxClients; c++){
@@ -452,21 +452,21 @@ bool Network::SetServerRate(unsigned int rate){
 	}
 	return true;
 }
-unsigned int Network::GetServerRate(){
+uint32_t Network::GetServerRate(){
 	return MaxServerClientRate;
 }
 //
-unsigned int Network::TotalBytesOut(){
+uint32_t Network::TotalBytesOut(){
 	return bytesout;
 }
-unsigned int Network::TotalBytesIn(){	//Statistic tracking functions.
+uint32_t Network::TotalBytesIn(){	//Statistic tracking functions.
 	return bytesin;
 }
 void Network::ResetByteCounters(){
 	bytesin = 0;
 	bytesout = 0;
 }
-bool Network::GetServerInByteCounts(unsigned int *ubytes, unsigned int *rbytes, unsigned int *obytes){	//Gets the byte counts for individual packet types received, but not necessarily delivered, from the server to us as a client.  This can show if we are being flooded with extraneous Reliable or Ordered packets.
+bool Network::GetServerInByteCounts(uint32_t *ubytes, uint32_t *rbytes, uint32_t *obytes){	//Gets the byte counts for individual packet types received, but not necessarily delivered, from the server to us as a client.  This can show if we are being flooded with extraneous Reliable or Ordered packets.
 	if(ubytes) *ubytes = Server.UnreliableBytesIn;
 	if(rbytes) *rbytes = Server.ReliableBytesIn;
 	if(obytes) *obytes = Server.OrderedBytesIn;
@@ -477,16 +477,16 @@ void Network::ResetServerInByteCounts(){	//Resets above counters.
 	Server.ReliableBytesIn = 0;
 	Server.OrderedBytesIn = 0;
 }
-void Network::SetChallengeKey(unsigned int key){
+void Network::SetChallengeKey(uint32_t key){
 	ChallengeKey = key;
 }
-unsigned int Network::ClientQueueSize(ClientID client){	//Returns the number of bytes queued out to a specific client but not yet sent or delivered.
+uint32_t Network::ClientQueueSize(ClientID client){	//Returns the number of bytes queued out to a specific client but not yet sent or delivered.
 	if(Clients && ((client >= 0 && client < MaxClients))){
 		return Clients[client].BytesQueuedOut();
 	}
 	return 0;
 }
-unsigned int Network::ServerQueueSize(){	//Returns bytes queued for sending to the server, but not yet sent or delivered.
+uint32_t Network::ServerQueueSize(){	//Returns bytes queued for sending to the server, but not yet sent or delivered.
 	return Server.BytesQueuedOut();
 }
 ClientConnectionStatus Network::ConnectionStatus(ClientID who){
@@ -501,7 +501,7 @@ int Network::SendTo(int s, char *buf, int len, int flag, const sockaddr *addr, i
 	//Optionally add packet loss and lag simulation here.
 	if(1){//rand() % 2 == 1){
 		int r = sendto(s, buf, len, flag, addr, addrlen);
-		if(r != SOCKET_ERROR && r > 0) bytesout += (unsigned int)r;
+		if(r != SOCKET_ERROR && r > 0) bytesout += (uint32_t)r;
 		return r;
 	}else{
 		return 0;
@@ -511,7 +511,7 @@ int Network::RecvFrom(int s, char *buf, int len, int flag, sockaddr *addr, sockl
 	//Optionally add packet loss and lag simulation here.
 	if(1){//rand() % 2 == 1){
 		int r = recvfrom(s, buf, len, flag, addr, addrlen);
-		if(r != SOCKET_ERROR && r > 0) bytesin += (unsigned int)r;
+		if(r != SOCKET_ERROR && r > 0) bytesin += (uint32_t)r;
 		return r;
 	}else{
 		return 0;
@@ -537,7 +537,7 @@ bool Network::SendOutOfBandPacket(sockaddr_in *dest, const char *data, int len){
 
 int Network::HTTPGet(sockaddr_in *dest, const char *file, char *buffer, int len){
 	if(dest && file && buffer && len > 0 && Initialized){
-		unsigned int httpsock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		uint32_t httpsock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if(httpsock != INVALID_SOCKET){
 			sockaddr_in sin;
 			sin = *dest;

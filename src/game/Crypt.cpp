@@ -21,14 +21,14 @@
 #include <string.h>
 #include <stdint.h>
 
-unsigned int Checksum(const void *data, int length){
-	unsigned int sum = 0x5e04a58c ^ (unsigned int)length;
+uint32_t Checksum(const void *data, int length){
+	uint32_t sum = 0x5e04a58c ^ (uint32_t)length;
 	if(data && length > 0){
 		for(int n = 0; n < length; n++){
-			unsigned int f = sum & 0x80000000;
+			uint32_t f = sum & 0x80000000;
 			sum = (sum << 1) | (f ? 1 : 0);
-			unsigned int d = (unsigned int)*((unsigned char*)data + n);
-			sum = (sum ^ d) ^ (unsigned int)n;
+			uint32_t d = (uint32_t)*((unsigned char*)data + n);
+			sum = (sum ^ d) ^ (uint32_t)n;
 		}
 		return sum;
 	}

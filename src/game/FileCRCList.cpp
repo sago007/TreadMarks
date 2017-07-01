@@ -20,7 +20,7 @@
 bool FileCRCList::FileCRC(const char *file)
 {
 	int tempsize = 0;
-	unsigned int tempcrc = 0;
+	uint32_t tempcrc = 0;
 
 	if (strlen(file) <= 2) return false;
 

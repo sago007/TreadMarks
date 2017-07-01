@@ -100,7 +100,7 @@ void CBanList::SaveBanList(char *sFileName)
 		CBanEntry *tmp = head;
 		while (tmp != NULL)
 		{
-			fprintf(fp, "%d.%d.%d.%d %u\n", tmp->IPAddress.s_addr >> 24, (tmp->IPAddress.s_addr & 0xff0000) >> 16, (tmp->IPAddress.s_addr & 0xff00) >> 8, tmp->IPAddress.s_addr & 0xff, (unsigned int)tmp->Expiration);
+			fprintf(fp, "%d.%d.%d.%d %u\n", tmp->IPAddress.s_addr >> 24, (tmp->IPAddress.s_addr & 0xff0000) >> 16, (tmp->IPAddress.s_addr & 0xff00) >> 8, tmp->IPAddress.s_addr & 0xff, (uint32_t)tmp->Expiration);
 			tmp = tmp->next;
 		}
 		fclose(fp);
@@ -117,8 +117,8 @@ void CBanList::LoadBanList(char *sFileName)
 		while (fgets(sTmp, 255, fp) != NULL)
 		{
 			in_addr IP;
-			unsigned int expire;
-			unsigned int ia, ib, ic, id;
+			uint32_t expire;
+			uint32_t ia, ib, ic, id;
 
 			sscanf(sTmp, "%d.%d.%d.%d %u", &ia, &ib, &ic, &id, &expire);
 			IP.s_addr = (ia << 24) | (ib << 16) | (ic << 8) | id;

@@ -118,7 +118,7 @@ int ConfigFile::GetCompressedData(char *dest, int maxlen, int offset, int bytes)
 	}
 	return 0;
 }
-unsigned int ConfigFile::GetChecksum(){
+uint32_t ConfigFile::GetChecksum(){
 	return checksum;
 }
 

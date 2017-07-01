@@ -118,7 +118,7 @@ void MixTable::BestColorInit(PaletteEntry *pe){
 	*/
 	/*
 	int r, g, b, x, y, z;
-	unsigned int diff, k, t;
+	uint32_t diff, k, t;
 	UCHAR col;
 	for(x = 0; x < INVPALSIZE; x++){
 		for(y = 0; y < INVPALSIZE; y++){
@@ -149,9 +149,9 @@ inline unsigned char MixTable::BestColor(PaletteEntry *pe, unsigned char r, unsi
 		CachedColors++;
 		return *ucp;	//Color reg already in Inverse Palette Table.
 	}
-	unsigned int diff = 2048;
+	uint32_t diff = 2048;
 	UCHAR col = 0;	//Last color reg with lowest difference found.
-	unsigned int k, t;
+	uint32_t k, t;
 	for(k = 0; k < 256; k++){
 		t = (abs(pe[k].peRed - r) <<1) + (abs(pe[k].peGreen - g) <<2) + abs(pe[k].peBlue - b);
 		if(t < diff){ diff = t; col = k; }

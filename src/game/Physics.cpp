@@ -120,7 +120,7 @@ void Vehicle::SetFriction(float fric){
 #define NEXTLUMP(a) (((a) + 1) & (HISTORY_SIZE - 1))
 #define PREVLUMP(a) (((a) - 1) & (HISTORY_SIZE - 1))
 //
-void Vehicle::SetCurrentTime(unsigned int time){
+void Vehicle::SetCurrentTime(uint32_t time){
 //	int curlump = History[CurrentLump].TimeStamp / FractionMS;
 	int curlump = CurrentTime / FractionMS;
 	int lump = time / FractionMS;
@@ -138,7 +138,7 @@ void Vehicle::SetCurrentTime(unsigned int time){
 //	History[CurrentLump].TimeStamp = time;
 	CurrentTime = time;
 }
-int Vehicle::SetControlInput(unsigned int time, float laccel, float raccel, float tursteer){
+int Vehicle::SetControlInput(uint32_t time, float laccel, float raccel, float tursteer){
 	//Sets inputs to the bucket AHEAD of normal...  Don't use for server authoritative inputs.
 //	int curlump = History[CurrentLump].TimeStamp / FractionMS;
 	int curlump = CurrentTime / FractionMS;
@@ -151,7 +151,7 @@ int Vehicle::SetControlInput(unsigned int time, float laccel, float raccel, floa
 //	History[n].TimeStamp = time;
 	return 1;
 }
-int Vehicle::SetAuthoritativeState(unsigned int time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
+int Vehicle::SetAuthoritativeState(uint32_t time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
 								   float laccel, float raccel, float turrot, float tursteer, int ingbits){
 //	int curlump = History[CurrentLump].TimeStamp / FractionMS;
 	int curlump = CurrentTime / FractionMS;
@@ -256,7 +256,7 @@ void Vehicle::SetVel(Vec3 vel){
 
 #include "CStr.h"
 
-void Vehicle::Think(float LeftAccel, float RightAccel, unsigned int clocktime, Vec3 pos, Rot3 rot, Vec3 vel,
+void Vehicle::Think(float LeftAccel, float RightAccel, uint32_t clocktime, Vec3 pos, Rot3 rot, Vec3 vel,
 					float *turrot, float turrotvel, Terrain *map){
 	int iter = abs(int(clocktime / FractionMS - LastThinkTime / FractionMS));
 	LastThinkTime = clocktime;

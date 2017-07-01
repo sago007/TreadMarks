@@ -2487,7 +2487,7 @@ void DoGraphicsOptions()
 
 		{
 			auto modeDesktop = sf::VideoMode::getDesktopMode();
-			std::set<std::pair<unsigned int, unsigned int>> aResolutions;
+			std::set<std::pair<uint32_t, uint32_t>> aResolutions;
 
 			// Put the resolutions in a set so they're sorted.
 			for(auto it = sf::VideoMode::getFullscreenModes().begin(); it != sf::VideoMode::getFullscreenModes().end(); ++it)
@@ -2776,7 +2776,7 @@ void DoCamCtlCfg()
 }
 // RUSS - translated to here...
 
-inline void BuildJoyString(char *tmpstr, int iAxisName, unsigned int iAxis)
+inline void BuildJoyString(char *tmpstr, int iAxisName, uint32_t iAxis)
 {
 	if(iAxis > 5)
 	{

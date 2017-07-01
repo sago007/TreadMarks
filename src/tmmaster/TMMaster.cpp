@@ -28,7 +28,7 @@
 
 #ifndef WIN32
 #include <unistd.h>
-inline void Sleep(unsigned int iMilliseconds)
+inline void Sleep(uint32_t iMilliseconds)
 {
     usleep(iMilliseconds*1000);
 }
@@ -559,7 +559,7 @@ void MasterPacketProcessor::PacketReceived(ClientID source, const char *data, in
 void MasterPacketProcessor::OutOfBandPacket(sockaddr_in *src, const char *data, int len){
 //	printf("OutOfBand Packet received.\n");
 	BitUnpackEngine pe(data, len);
-	unsigned int head = 0;
+	uint32_t head = 0;
 	pe.UnpackUInt(head, 32);
 	if(head == LONG_HEAD_HEARTBEAT){	//Refresh server in list, or add to list.
 	//	printf("Heartbeat packet...\n");

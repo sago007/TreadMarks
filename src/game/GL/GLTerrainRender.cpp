@@ -337,18 +337,18 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 //A section of world for rendering, may point to wrapped terrain off-map.
 struct MapPatch{
 	int x, y;	//Coordinates in patch grid.
-	unsigned int id;
+	uint32_t id;
 	BinaryTriangle ul, dr;
 	LodTree *lodul, *loddr;
 	MapPatch() : x(0), y(0), id(0) {
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	MapPatch(int X, int Y, unsigned int ID) : x(X), y(Y), id(ID) {
+	MapPatch(int X, int Y, uint32_t ID) : x(X), y(Y), id(ID) {
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	void SetCoords(int X, int Y, unsigned int ID){
+	void SetCoords(int X, int Y, uint32_t ID){
 		x = X;
 		y = Y;
 		id = ID;

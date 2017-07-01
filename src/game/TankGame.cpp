@@ -961,7 +961,7 @@ void CTankGame::DoPlayerAndCam()
 {
 	static float			CameraHeading = 0.0f;
 	static float			CameraPitch = 0.0f;
-	static unsigned int		LastClientPacketTime = 0;
+	static uint32_t		LastClientPacketTime = 0;
 	Camera					tCam;
 	float					MUD = 0.0f;
 	float					MLR = 0.0f;
@@ -2136,7 +2136,7 @@ bool CTankGame::DoFrame(){
 		framems = thinkms = polyms = voxelms = blitms = 0;
 		//
 		if(VW.Net.IsClientActive()){
-			unsigned int u, r, o;
+			uint32_t u, r, o;
 			VW.Net.GetServerInByteCounts(&u, &r, &o);
 			VW.Net.ResetServerInByteCounts();
 
@@ -2539,7 +2539,7 @@ bool CTankGame::StartGame(){
 	VW.ClearChar();
 	VW.SetFocus(NULL);
 	//
-	unsigned int gm = GAMEMODE_NOCANDRIVE;
+	uint32_t gm = GAMEMODE_NOCANDRIVE;
 	if(GameSettings.Deathmatch) gm |= GAMEMODE_DEATHMATCH;
 	else gm |= GAMEMODE_RACE;
 	if(GameSettings.TeamPlay){
