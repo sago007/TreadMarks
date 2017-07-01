@@ -57,7 +57,7 @@
 #define TEXID_ENCODE_RLE 2
 
 struct AvgRng{
-	int	a, r;
+	int32_t	a, r;
 };
 
 //Arrgh.  ::sigh::  Ok, we'll have the World Editable Values, and the internal chewed on
