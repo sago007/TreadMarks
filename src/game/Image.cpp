@@ -104,28 +104,30 @@ bool LoadBMP(const char *name, Bitmap *bmp, PaletteEntry *pe){
 #pragma pack(push,2)
 struct BitmapFileHeader
 {
-	unsigned short  bfType;
+	uint16_t  bfType;
 	uint32_t   bfSize;
-	unsigned short  bfReserved1;
-	unsigned short  bfReserved2;
+	uint16_t  bfReserved1;
+	uint16_t  bfReserved2;
 	uint32_t   bfOffBits;
 };
 #pragma pack(pop)
 
+#pragma pack(push,4)
 struct BitmapInfoHeader
 {
 	uint32_t   biSize;
-	long            biWidth;
-	long            biHeight;
-	unsigned short  biPlanes;
-	unsigned short  biBitCount;
+	int32_t    biWidth;
+	int32_t    biHeight;
+	uint16_t   biPlanes;
+	uint16_t   biBitCount;
 	uint32_t   biCompression;
 	uint32_t   biSizeImage;
-	long            biXPelsPerMeter;
-	long            biYPelsPerMeter;
+	int32_t    biXPelsPerMeter;
+	int32_t    biYPelsPerMeter;
 	uint32_t   biClrUsed;
 	uint32_t   biClrImportant;
 };
+#pragma pack(pop)
 
 struct RGBQuad
 {
