@@ -1005,7 +1005,7 @@ bool EntityRacetank::Think(){
 		//
 		Vec3MulMat43(sm1, tankMat, tp);
 		if(fabsf(ltread) > 0.5f)
-			VW->AddEntity("smoke", TP->smoketype, tp, NULL, CVec3(0.0f, 2.0f, 0.0f), 1000, NULL, 0, 0);
+			VW->AddEntity("smoke", TP->smoketype, tp, NULL, CVec3(0.0f, 2.0f, 0.0f), 1000, 0, 0, 0);
 		//
 		CopyVec3(vh.WP[vh.BackLeft], tp);
 		ttx = tp[0];
@@ -1022,7 +1022,7 @@ bool EntityRacetank::Think(){
 		//
 		Vec3MulMat43(sm2, tankMat, tp);
 		if(fabsf(rtread) > 0.5f)
-			VW->AddEntity("smoke", TP->smoketype, tp, NULL, CVec3(0.0f, 2.0f, 0.0f), 1000, NULL, 0, 0);
+			VW->AddEntity("smoke", TP->smoketype, tp, NULL, CVec3(0.0f, 2.0f, 0.0f), 1000, 0, 0, 0);
 		//
 		CopyVec3(vh.WP[vh.BackRight], tp);
 		ttx = tp[0];
@@ -1053,7 +1053,7 @@ bool EntityRacetank::Think(){
 						Vec3 tv = {vh.WP[w].x, std::max(WATERHEIGHT * 0.5f, vh.WP[w].y), vh.WP[w].z};
 						//
 						VW->AddEntity("crud", egod->QueryString(ATT_ECO_CRUD + eco), tv, NULL,
-							CVec3(0.0f, std::max(2.0f, vh.LinearVelocity * 0.2f), 0.0f), 0, NULL, 0, 0);
+							CVec3(0.0f, std::max(2.0f, vh.LinearVelocity * 0.2f), 0.0f), 0, 0, 0, 0);
 						rumblev += rumbleinc;
 					}
 				}

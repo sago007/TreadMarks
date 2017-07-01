@@ -82,7 +82,8 @@ int IFF::OpenIn(FILE *f){	//On OpenIn, Start points to first real chunk, on Open
 //	Close();
 	OwnFile = false;
 //	if(name && offset >= 0 && (F = fopen(name, "rb"))){
-	if(F = f){
+	F = f;
+	if(F){
 		IsOpen = true;
 		IsWrite = false;
 		Start = ftell(F);	//offset;

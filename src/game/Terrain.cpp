@@ -540,7 +540,8 @@ if(Form2 == TFORM_FRACTAL){
 			int xflip, yflip = 0, random;	//flip-flop variables.
 			for(y = 0; y < height; y += step){
 				xflip = 0;	//1 for first column, then 0, then 1, etc.
-				if(yflip = 1 - yflip){	//Is 1 for first line, 0 for next, etc.
+				yflip = 1 - yflip;
+				if(yflip){	//Is 1 for first line, 0 for next, etc.
 					for(x = 0; x < width; x += step){	//Even lines (starting at 0).
 						if(!(xflip = 1 - xflip)){
 							random = rand() % randrange - (randrange >>1);
@@ -551,7 +552,8 @@ if(Form2 == TFORM_FRACTAL){
 				}else{
 					for(x = 0; x < width; x += step){	//Odd lines (starting at 0).
 						random = rand() % randrange - (randrange >>1);
-						if(xflip = 1 - xflip){
+						xflip = 1 - xflip;
+						if(xflip){
 						//	SetH(x, y, random + (GetH(x, y - step) + GetH(x, std::min(y + step, height - 1))) >>1);
 							SetH(x, y, random + ((GetHwrap(x, y - step) + GetHwrap(x, y + step)) >>1));
 						}else{

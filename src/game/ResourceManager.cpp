@@ -103,8 +103,11 @@ ImageNode *ResourceManager::GetCreateImage(const char *n, int w, int h, int bpp,
 	//Find bitmap by name.  Create if not already loaded/created.
 	ImageNode *node = ImageNodeHead.NextLink();
 	if(pFM){
-		if(node && (node = node->Find(n, mipmap, trans, agrad))) return node;	//Already loaded.
-		if(node = ImageNodeHead.AddObject(new ImageNode(this, n, mipmap, trans, agrad))){
+		if(node && (node = node->Find(n, mipmap, trans, agrad))){
+			return node;	//Already loaded.
+		}
+		node = ImageNodeHead.AddObject(new ImageNode(this, n, mipmap, trans, agrad));
+		if(node){
 			if(DisableLoading){	//Make tiny placeholder instead.
 				node->Init(8, 8, bpp);
 			}else{
@@ -121,7 +124,8 @@ ImageNode *ResourceManager::GetImage(const char *n, bool mipmap, bool trans, Alp
 		if(node && (node = node->Find(n, mipmap, trans, agrad))) return node;	//Already loaded.
 		pFM->PushFile();
 		if(pFM->Open(n) || DisableLoading){	//Found on disk, or loading disabled.
-			if(node = ImageNodeHead.AddObject(new ImageNode(this, n, mipmap, trans, agrad))){
+			node = ImageNodeHead.AddObject(new ImageNode(this, n, mipmap, trans, agrad));
+			if(node){
 				OutputDebugLog(CStr("Loading Image: ") + n + " M:" + String(mipmap) + " T:" + String(trans) + " A:" + String(agrad) + "\n");
 			//	if(DisableLoading){	//Make tiny placeholder instead.
 			//		node->Init(8, 8, 8);
@@ -209,7 +213,8 @@ Mesh *ResourceManager::GetMesh(const char *n, double scale, bool smooth){	//Find
 	if(pFM && n && strlen(n) > 2){
 		if(node && (node = node->Find(n))) return node;	//Already loaded.
 		pFM->PushFile();
-		if(node = MeshNodeHead.AddObject(new MeshNode(this, n))){
+		node = MeshNodeHead.AddObject(new MeshNode(this, n));
+		if(node){
 			if(pFM->Open(n)){	//Found on disk.  NOTE:  For collisions and such, MESH LOADING CAN NOT BE DISABLED!  Meshes must be present on dedicated server!
 				OutputDebugLog(CStr("Loading Mesh: ") + n + "\n");
 				node->LoadLWO(pFM->GetFile(), scale);
@@ -235,7 +240,8 @@ SoundNode *ResourceManager::GetSound(const char *n, bool loop, float volumebias)
 		if(node && (node = node->Find(n, loop))) return node;	//Already loaded.
 		pFM->PushFile();
 		if(pFM->Open(n) || DisableLoading){	//Found on disk.
-			if(node = SoundNodeHead.AddObject(new SoundNode(this, n, loop))){
+			node = SoundNodeHead.AddObject(new SoundNode(this, n, loop));
+			if(node){
 				node->fVolumeBias = volumebias;
 			//	OutputDebugLog(CStr("Loading Sound: ") + n + "\n");
 			//	if(DisableLoading){

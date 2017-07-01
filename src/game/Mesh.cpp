@@ -74,7 +74,8 @@ bool Mesh::LoadLWO(FILE *f, float Scale){
 			}
 			iff.FindChunk("POLS");
 			for(p = 0; p < nPoly; p++){
-				if(npnts = iff.ReadShort() == 3){
+				npnts = (iff.ReadShort() == 3);
+				if(npnts){
 					Poly[p].Points[0] = iff.ReadShort();
 					Poly[p].Points[1] = iff.ReadShort();
 					Poly[p].Points[2] = iff.ReadShort();

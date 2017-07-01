@@ -91,8 +91,8 @@ bool MakeRemapTable(unsigned char *Remap, const PaletteEntry *oldpe, const Inver
 //Load and save functions now work if pe pointer is NULL.
 
 bool LoadBMP(const char *name, Bitmap *bmp, PaletteEntry *pe){
-	FILE *f;
-	if(f = fopen(name, "rb")){
+	FILE *f = fopen(name, "rb");
+	if(f){
 		bool t = LoadBMP(f, bmp, pe);
 		fclose(f);
 		return t;
@@ -518,8 +518,8 @@ bool Bitmap::RotateRight90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 		int NewPitch = (NewWidth + 3) & (~3);
 	//	if(NewWidth % 4 != 0) NewPitch = NewWidth + 4 - NewWidth % 4;
 	//		else NewPitch = NewWidth;
-		unsigned char *newdata;
-		if(newdata = (unsigned char*)malloc(NewPitch * NewHeight)){
+		unsigned char *newdata = (unsigned char*)malloc(NewPitch * NewHeight);
+		if(newdata){
 			for(int y = 0; y < NewHeight; y++){
 				for(int x = 0; x < NewWidth; x++){
 					*(newdata + x + y * NewPitch) = *(data + y + pitch * (height - 1) - x * pitch);

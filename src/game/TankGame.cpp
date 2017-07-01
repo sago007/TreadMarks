@@ -554,20 +554,20 @@ void CTankGame::DoHUD()
 		if(ammoent) Ammo2EntID = ammoent->GID;
 	}
 	if(ammoent){
-		sprintf(tempstr, Text_GetLine(TEXT_WEAPONMAIN));
+		sprintf(tempstr, "%s", Text_GetLine(TEXT_WEAPONMAIN));
 		EntityBase *we = VW.GetEntity(PlayerEnt->QueryInt(ATT_WEAPON_ENTITY));
 		if(we){
 			// FIXME: check length
 			weaponammo = we->QueryInt(ATT_WEAPON_AMMO) * we->QueryInt(ATT_WEAPON_MULT);
 			if(we->TypePtr->nameid != -1) {
 				// Russ: New way, 'nameid' in ENT is an index into Names.TXT for localised names
-				sprintf(tempstr, Names.Get(we->TypePtr->nameid) );
+				sprintf(tempstr, "%s", Names.Get(we->TypePtr->nameid) );
 			} else {
 				// Russ: Old way, should only be used for debugging and for mods
 				if (we->TypePtr->dname.len() > 250) {
 					sprintf(tempstr, "FIXME!");
 				} else {
-					sprintf(tempstr, we->TypePtr->dname.get());
+					sprintf(tempstr, "%s", we->TypePtr->dname.get());
 				}
 			}
 		}
@@ -679,7 +679,7 @@ void CTankGame::DoHUD()
 			at[0].name = "No Team";
 			int nat = 1, i, j, k, n;
 			//Enumerate active teams.
-			for(n = 0; e = GodEnt->TankByIndex(n); n++){
+			for(n = 0; (e = GodEnt->TankByIndex(n)) ; n++){
 			//	int i = 0;
 				for(i = 0; i < nat; i++){
 					if(e->QueryInt(ATT_TEAMID) == at[i].hash){
@@ -746,7 +746,7 @@ void CTankGame::DoHUD()
 
 						t->SetString(ATT_TEXT_STRING, tempstr);
 					}
-					for(n = 0; e = GodEnt->TankByIndex(n); n++){
+					for(n = 0; (e = GodEnt->TankByIndex(n)) ; n++){
 						if(e->QueryInt(ATT_TEAMID) == at[i].hash){	//Only display tanks that are in this team.
 							Vec3 color = {1, 0.7f, 0};
 							if(e->GID == PlayerEnt->GID) color[1] = 1.0;
@@ -765,7 +765,7 @@ void CTankGame::DoHUD()
 			}
 			//
 		}else{	//Not team mode.
-			for(int n = 0; e = GodEnt->TankByIndex(n); n++){
+			for(int n = 0; (e = GodEnt->TankByIndex(n)) ; n++){
 				Vec3 color = {1, 0.7f, 0};
 				if(e->GID == PlayerEnt->GID){
 					color[1] = 1.0;
@@ -896,6 +896,8 @@ void CTankGame::DoInput(){
 					case CEID_SpinCamBk:
 						InputState.PointCamBK = 1;
 						break;
+					default:
+						break;
 					}
 				}else{	//Control Up.
 					switch(id){
@@ -926,6 +928,8 @@ void CTankGame::DoInput(){
 					case CEID_SpinCamLt: InputState.PointCamLR = 0; break;
 					case CEID_SpinCamRt: InputState.PointCamLR = 0; break;
 					case CEID_SpinCamBk: InputState.PointCamBK = 0; break;
+					default: 
+						break;
 					}
 				}
 			}
@@ -1481,6 +1485,8 @@ bool CTankGame::DoFrame(){
 //FIXME	TEXT_STATUSSYNCENTITIES		LoadingStatus.Status("Synching Entity Type " + String(VW.EntitiesSynched) + " of " + String(VW.EntitiesToSynch));
 			LoadingStatus.Status("Synching Entity Type " + String(VW.EntitiesSynched) + " of " + String(VW.EntitiesToSynch));
 			break;
+		default:
+			break;
 		}
 		LoadingStatus.Draw(GenBuf);
 		VW.PulseNetwork(&TankPacket);
@@ -1514,7 +1520,7 @@ bool CTankGame::DoFrame(){
 				at[0].name = "No Team";
 				int nat = 1, i, n;
 				//Enumerate active teams.
-				for(n = 0; e = GodEnt->TankByIndex(n); n++){
+				for(n = 0; (e = GodEnt->TankByIndex(n)) ; n++){
 					for(i = 0; i < nat; i++){
 						if(e->QueryInt(ATT_TEAMID) == at[i].hash){
 							at[i].frags += e->QueryInt(ATT_FRAGS);
@@ -1540,7 +1546,7 @@ bool CTankGame::DoFrame(){
 			}
 			else
 			{
-				for(int n = 0; e = GodEnt->TankByIndex(n); n++){
+				for(int n = 0; (e = GodEnt->TankByIndex(n)) ; n++){
 					maxfrags = MAX(maxfrags, e->QueryInt(ATT_FRAGS));
 				}
 			}
@@ -1551,7 +1557,7 @@ bool CTankGame::DoFrame(){
 			int rlaps = GodEnt->QueryInt(ATT_RACE_LAPS);
 			int i = 0;
 			EntityBase *e;
-			while(e = GodEnt->TankByIndex(i++))
+			while( (e = GodEnt->TankByIndex(i++)) )
 			{
 				if(e->QueryInt(ATT_LAPS) >= rlaps)
 				{
@@ -1680,7 +1686,7 @@ bool CTankGame::DoFrame(){
 				if(insig){
 					PlayerEnt->SetInt(ATT_INSIGNIA2_HASH, insig->thash);
 				}else{
-					PlayerEnt->SetInt(ATT_INSIGNIA2_HASH, NULL);
+					PlayerEnt->SetInt(ATT_INSIGNIA2_HASH, 0);
 				}
 				int i = 0;
 				for(i = 0; i < GetNumTeams(); i++){	//Make sure team insignia is on OK list.
@@ -2297,6 +2303,8 @@ void CTankGame::DoSfmlEvents()
 					case sf::Keyboard::K :
 						GetGameState()->KillSelf = 1;	//Alt-K to self destruct.
 						break;
+					default:
+						break;
 					}
 				}
 				else
@@ -2408,6 +2416,8 @@ void CTankGame::DoSfmlEvents()
 			case sf::Mouse::Middle:
 				GetVW()->Ififo.Set("Mouse M", 1);
 				break;
+			default:
+				break;
 			}
 			break;
 		case sf::Event::MouseButtonReleased:
@@ -2421,6 +2431,8 @@ void CTankGame::DoSfmlEvents()
 				break;
 			case sf::Mouse::Middle:
 				GetVW()->Ififo.Set("Mouse M", 0);
+				break;
+			default:
 				break;
 			}
 			break;
@@ -2451,6 +2463,8 @@ void CTankGame::DoSfmlEvents()
 			GetVW()->snd.Free();
 			GetVW()->UndownloadTextures();
 			GenBuf.Destroy(true);
+			break;
+		default:
 			break;
 		}//Switch
 	}
@@ -2537,7 +2551,7 @@ bool CTankGame::StartGame(){
 	//
 	VW.SetChatMode(0);
 	VW.ClearChar();
-	VW.SetFocus(NULL);
+	VW.SetFocus(0);
 	//
 	uint32_t gm = GAMEMODE_NOCANDRIVE;
 	if(GameSettings.Deathmatch) gm |= GAMEMODE_DEATHMATCH;
@@ -2780,7 +2794,7 @@ bool CTankGame::StopGame(){
 	//
 	VW.SetChatMode(0);
 	VW.ClearChar();
-	VW.SetFocus(NULL);
+	VW.SetFocus(0);
 	//
 	VW.ClearVoxelWorld();	//Frees the map and all textures.
 	GameState.NumAITanks = 0;
@@ -2808,7 +2822,7 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 	FirstCommand.next = NULL;
 
 	TmpCommand = &FirstCommand;
-	while(sTmp = strtok(NULL, sDelim))
+	while( (sTmp = strtok(NULL, sDelim)) )
 	{
 		TmpCommand->next = new CommandEntry;
 		TmpCommand = TmpCommand->next;
@@ -2849,8 +2863,8 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 		{
 			if(VW.Clients[i].ClientName[0] != 0)
 			{
-				EntityBase* ClientEnt;
-				if(ClientEnt = VW.GetEntity(VW.Clients[i].ClientEnt))
+				EntityBase* ClientEnt = VW.GetEntity(VW.Clients[i].ClientEnt);
+				if(ClientEnt)
 				{
 #ifndef HEADLESS
 					sprintf(sOutput, "%d\t%d\t%d\t%s\n", i, VW.Clients[i].TeamID, ClientEnt->QueryInt(ATT_FRAGS), VW.Clients[i].ClientName.get());

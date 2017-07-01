@@ -316,7 +316,7 @@ void VoxelWorld::Connect(ClientID source){
 	//
 	//Send entity dump, map name, etc.
 	//
-	if(source >= 0 && source < MAX_CLIENTS){
+	if(source < MAX_CLIENTS){
 		//Valid client ID.
 		Clients[source].Init();
 		Clients[source].Connected = true;
@@ -339,7 +339,7 @@ void VoxelWorld::Disconnect(ClientID source, NetworkError ne){
 	//
 	//Remove entity associated with connection.
 	//
-	if(source >= 0 && source < MAX_CLIENTS){
+	if(source < MAX_CLIENTS){
 		//Valid client ID.
 		//
 		//TODO: Get rid of current client entity first.  Done.
@@ -962,7 +962,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 	if(len < 1) return;
 	//Process packets we can...
-	if(source >= 0 && source < MAX_CLIENTS && Clients[source].Connected){
+	if(source < MAX_CLIENTS && Clients[source].Connected){
 		if(data[0] == BYTE_HEAD_CONNINFO && len >= 75){
 			ClassHash OldEntType = Clients[source].EntType;
 			Clients[source].EntType = RLONG(&data[2]);

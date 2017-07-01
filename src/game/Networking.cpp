@@ -413,7 +413,7 @@ bool Network::QueueSendServer(TransmissionMode mode, const char *data, int len, 
 	return false;
 }
 bool Network::QueueSendClient(ClientID client, TransmissionMode mode, const char *data, int len, int pri){
-	if(Clients && ((client >= 0 && client < MaxClients) || client == CLIENTID_BROADCAST) && data && len > 0){
+	if(Clients && ((client < MaxClients) || client == CLIENTID_BROADCAST) && data && len > 0){
 		for(int c = 0; c < MaxClients; c++){
 			if(c == client || client == CLIENTID_BROADCAST){
 				if(Clients[c].CCS == CCS_Connected){
@@ -427,7 +427,7 @@ bool Network::QueueSendClient(ClientID client, TransmissionMode mode, const char
 }
 //
 bool Network::SetClientRate(ClientID client, uint32_t rate){
-	if(Clients && ((client >= 0 && client < MaxClients) || client == CLIENTID_BROADCAST)){
+	if(Clients && ((client < MaxClients) || client == CLIENTID_BROADCAST)){
 		for(int c = 0; c < MaxClients; c++){
 			if(c == client || client == CLIENTID_BROADCAST){
 				Clients[c].ByteRate = std::max(500, std::min(int(rate), MaxServerClientRate));
@@ -438,7 +438,7 @@ bool Network::SetClientRate(ClientID client, uint32_t rate){
 	return false;
 }
 uint32_t Network::GetClientRate(ClientID client){
-	if(Clients && ((client >= 0 && client < MaxClients))){
+	if(Clients && client < MaxClients){
 		return Clients[client].ByteRate;
 	}
 	return 0;
@@ -481,7 +481,7 @@ void Network::SetChallengeKey(uint32_t key){
 	ChallengeKey = key;
 }
 uint32_t Network::ClientQueueSize(ClientID client){	//Returns the number of bytes queued out to a specific client but not yet sent or delivered.
-	if(Clients && ((client >= 0 && client < MaxClients))){
+	if(Clients && ((client < MaxClients))){
 		return Clients[client].BytesQueuedOut();
 	}
 	return 0;
@@ -493,7 +493,7 @@ ClientConnectionStatus Network::ConnectionStatus(ClientID who){
 	if(who == CLIENTID_SERVER && ClientActive){
 		return Server.CCS;
 	}else{
-		if(ServerActive && Clients && who >= 0 && who < MaxClients) return Clients[who].CCS;
+		if(ServerActive && Clients && who < MaxClients) return Clients[who].CCS;
 	}
 	return CCS_None;
 }

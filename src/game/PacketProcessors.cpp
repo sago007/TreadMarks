@@ -168,6 +168,8 @@ void MasterClientPacketProcessor::Disconnect(ClientID source, NetworkError ne){
 	case NE_ServerFull : CTankGame::Get().GetGameState()->MasterError = "Master Server Full"; break;
 	case NE_LookupFailed : CTankGame::Get().GetGameState()->MasterError = "Name Lookup Failed"; break;
 	case NE_BindFailed : CTankGame::Get().GetGameState()->MasterError = "Bind Failed"; break;
+	default:
+		break;
 	}
 };
 void MasterClientPacketProcessor::PacketReceived(ClientID source, const char *data, int len){
@@ -207,7 +209,7 @@ void MasterClientPacketProcessor::PacketReceived(ClientID source, const char *da
 			int i = Instr(str, ":") + 2;
 			int j = i;
 			while(j < str.len()){
-				if(str.chr(j) == ',' || str.chr(j) == '.' && j > i){
+				if(str.chr(j) == ',' || (str.chr(j) == '.' && j > i) ){
 					CTankGame::Get().GetUserHead()->AddObject(new CStrLink(Mid(str, i, j - i)));
 					i = j + 1;
 				}else if(str.chr(j) == ' ') i = j + 1;
@@ -220,7 +222,7 @@ void MasterClientPacketProcessor::PacketReceived(ClientID source, const char *da
 			int i = Instr(str, ":") + 2;
 			int j = i;
 			while(j < str.len()){
-				if(str.chr(j) == ',' || str.chr(j) == '.' && j > i){
+				if(str.chr(j) == ',' || (str.chr(j) == '.' && j > i) ){
 					CTankGame::Get().GetChannelHead()->AddObject(new CStrLink(Mid(str, i, j - i)));
 					i = j + 1;
 				}else if(str.chr(j) == ' ') i = j + 1;
