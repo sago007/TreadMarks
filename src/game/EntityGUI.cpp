@@ -579,8 +579,8 @@ bool EntityGUIListbox::Think(){
 	}
 	int upscrollpresent = 0;
 	int listlen = listhead.CountItems(-1);
-	EntityBase *e;// = VW->GetEntity(fontent);
-	if(e = VW->GetEntity(upent)){
+	EntityBase *e = VW->GetEntity(upent);// = VW->GetEntity(fontent);
+	if(e){
 		e->SetPos(Position);
 		e->SetRot(Rotation);
 		e->SetVel(Velocity);
@@ -593,7 +593,8 @@ bool EntityGUIListbox::Think(){
 		}
 		upscrollpresent = 1;
 	}
-	if(e = VW->GetEntity(downent)){
+	e = VW->GetEntity(downent);
+	if(e){
 		Vec3 t = {Position[0], Position[1] + Rotation[1] * (float)(height + upscrollpresent), Position[2]};
 		e->SetPos(t);
 		e->SetRot(Rotation);
@@ -608,7 +609,8 @@ bool EntityGUIListbox::Think(){
 	}
 	selection = CLAMP(selection, -1, listlen - 1);
 	scroll = CLAMP(scroll, 0, MAX(0, listlen - height));
-	if(e = VW->GetEntity(knobent)){
+	e = VW->GetEntity(knobent);
+	if(e){
 		float scrollt = (float)scroll / (float)MAX(1, listlen - height);	//Percentage of scroll range scrolled.
 		float scrollh = (float)height / (float)MAX(1, listlen);	//Percentage that viewport is of total list, i.e. knob size.
 		scrollh = MIN(scrollh, 1.0f);
@@ -632,7 +634,8 @@ bool EntityGUIListbox::Think(){
 	int oriscroll = scroll;
 	ListboxEntry *le = listhead.FindItem(scroll + 1);
 	for(int i = 0; i < height; i++){
-		if(e = VW->GetEntity(listents[i])){
+		e = VW->GetEntity(listents[i]);
+		if(e){
 			Vec3 t = {Position[0], Position[1] + Rotation[1] * (float)(i + upscrollpresent), Position[2]};
 			e->SetPos(t);
 			e->SetRot(Rotation);
@@ -669,7 +672,8 @@ bool EntityGUIListbox::SetInt(int type, int val){
 			for(int i = 0; i < MAX_LISTBOX_HEIGHT; i++){
 				e = VW->GetEntity(listents[i]);
 				if(i < height && e == 0){
-					if(e = VW->AddEntity("guibutton", TP->type_listtype, Position, Rotation, Velocity, Flags, ID, 0, 0)){
+					e = VW->AddEntity("guibutton", TP->type_listtype, Position, Rotation, Velocity, Flags, ID, 0, 0);
+					if(e){
 						listents[i] = e->GID;
 					}
 				}else{
@@ -697,11 +701,15 @@ bool EntityGUIListbox::SetInt(int type, int val){
 	}
 	if(type == ATT_CMD_NICEREMOVE){
 		EntityBase *e;
-		if(e = VW->GetEntity(upent)) e->SetInt(ATT_CMD_NICEREMOVE, val);
-		if(e = VW->GetEntity(downent)) e->SetInt(ATT_CMD_NICEREMOVE, val);
-		if(e = VW->GetEntity(knobent)) e->SetInt(ATT_CMD_NICEREMOVE, val);
+		e = VW->GetEntity(upent);
+		if(e) e->SetInt(ATT_CMD_NICEREMOVE, val);
+		e = VW->GetEntity(downent);
+		if(e) e->SetInt(ATT_CMD_NICEREMOVE, val);
+		e = VW->GetEntity(knobent);
+		if(e) e->SetInt(ATT_CMD_NICEREMOVE, val);
 		for(int i = 0; i < MAX_LISTBOX_HEIGHT; i++){
-			if(e = VW->GetEntity(listents[i])) e->SetInt(ATT_CMD_NICEREMOVE, val);
+			e = VW->GetEntity(listents[i]);
+			if(e) e->SetInt(ATT_CMD_NICEREMOVE, val);
 		}
 		//Fall through.
 	}
