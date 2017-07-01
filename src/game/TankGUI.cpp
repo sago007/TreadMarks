@@ -58,7 +58,7 @@ int FirstTimeOnMenu = 0;
 
 struct GUIElementSlot{
 	EntityGID gid;
-	int button;
+	int32_t button;
 };
 
 #define MAX_SLOTS 128
@@ -153,7 +153,7 @@ void CacheMenus(){
 //Ladder roster stuff.
 struct RosterEntry : public LinklistBase<RosterEntry> {
 	CStr name, file;
-	int rank, racesstarted, racesfinished, racesaschamp, frags, deaths;
+	int32_t rank, racesstarted, racesfinished, racesaschamp, frags, deaths;
 public:
 	RosterEntry() : rank(0), racesstarted(0), racesfinished(0), racesaschamp(0), frags(0), deaths(0) { };
 	RosterEntry(LadderManager *l){

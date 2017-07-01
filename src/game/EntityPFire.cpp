@@ -205,8 +205,8 @@ enum{
 struct Particle{
 	double x, y, dx, dy, lx, ly;	//Particle position, velocity, and last position.
 	double ax, ay;	//Particle's attractor location.
-	int attract;	//Flag to use attractor or not.
-	int color;	//Particle color.
+	int32_t attract;	//Flag to use attractor or not.
+	int32_t color;	//Particle color.
 };
 
 

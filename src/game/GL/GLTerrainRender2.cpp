@@ -104,12 +104,12 @@ struct LodTree;
 
 struct BinaryTriangle2{
 //	BinaryTriangle2 *l, *r, *b, *cl, *cr;
-	unsigned short l, r, b, cl, cr;
+	uint16_t l, r, b, cl, cr;
 //	float h;	//Split vertex height.
 	unsigned char ih, dummy;
 	union{
 		float height;
-		int iheight;
+		int32_t iheight;
 	};
 //	int dumm1;//, dummy2;	//Bring total size up to 32 bytes.
 	void Null(){
