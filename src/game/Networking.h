@@ -220,8 +220,8 @@ public:
 	bool IsServerActive(){ return ServerActive; };
 	bool IsClientActive(){ return ClientActive; };
 
-	void LoadBanList(char *sFileName) { Bans.LoadBanList(sFileName); }
-	void SaveBanList(char *sFileName) { Bans.SaveBanList(sFileName); }
+	void LoadBanList(const char *sFileName) { Bans.LoadBanList(sFileName); }
+	void SaveBanList(const char *sFileName) { Bans.SaveBanList(sFileName); }
 	void BanClient(int ClientID, time_t Duration);
 
 public:

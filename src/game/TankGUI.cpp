@@ -3666,5 +3666,8 @@ void DoMenus(){
 	case MP_CamCtlCfg :
 		DoCamCtlCfg();
 		break;
+	default:
+		fprintf(stderr, "Unhandled MP_*-thing");
+		break;
 	}
 }

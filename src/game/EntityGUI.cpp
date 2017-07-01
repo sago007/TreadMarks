@@ -312,7 +312,7 @@ bool EntityGUIButton::Think(){
 		if(lastmouseover == 0) overstart = VW->Time();
 	}
 	if(overlinger > 0.0f){	//This enhancement will make the over glow linger for an amount of time.
-		float t = fabsf(sin(((double)(VW->Time() - overstart) / ((double)TP->type_pulsetime * 2000.0)) * PI2));
+		float t = std::abs(sin(((double)(VW->Time() - overstart) / ((double)TP->type_pulsetime * 2000.0)) * PI2));
 		t *= overlinger / MAX(0.01f, TP->type_overlinger);
 		size[2] = 1.0f + TP->type_pulseamount * t;
 		LerpVec3(Velocity, speccolor, t, color);
@@ -557,12 +557,15 @@ EntityGUIListbox::EntityGUIListbox(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 
 }
 EntityGUIListbox::~EntityGUIListbox(){
 	if(VW){
-		EntityBase *e;
-		if(e = VW->GetEntity(upent)) e->Remove();
-		if(e = VW->GetEntity(downent)) e->Remove();
-		if(e = VW->GetEntity(knobent)) e->Remove();
+		EntityBase *e = VW->GetEntity(upent);
+		if(e) e->Remove();
+		e = VW->GetEntity(downent);
+		if(e) e->Remove();
+		e = VW->GetEntity(knobent);
+		if(e) e->Remove();
 		for(int i = 0; i < MAX_LISTBOX_HEIGHT; i++){
-			if(e = VW->GetEntity(listents[i])) e->Remove();
+			e = VW->GetEntity(listents[i]);
+			if(e) e->Remove();
 			listents[i] = 0;
 		}
 	}

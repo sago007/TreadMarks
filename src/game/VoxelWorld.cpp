@@ -1329,7 +1329,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		}
 		if(data[0] == BYTE_HEAD_TIMESYNCH && len >= 5){	//This is the server->client version.
 			int msd = RLONG(&data[1]);
-			if(abs(msd - msecdiff) > 1000){	//Whack of a jump there, probably first time.
+			if(std::abs(msd - msecdiff) > 1000){	//Whack of a jump there, probably first time.
 				msecdiff = msd;
 				for(int n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = msd;
 			}else{	//Filter change.
@@ -1822,7 +1822,8 @@ bool VoxelWorld::SaveEntities(IFF *iff){
 		for(int i = 0; i < ENTITY_GROUPS; i++){
 			ent = EntHead[i].NextLink();
 			while(ent){
-				if(et = ent->TypePtr){	//Write class and type names.
+				et = ent->TypePtr;
+				if(et){	//Write class and type names.
 					iff->WriteLong(et->cname.len() + 1);
 					iff->WriteBytes((uchar*)et->cname.get(), et->cname.len() + 1); iff->Even();
 					iff->WriteLong(et->tname.len() + 1);
@@ -2046,7 +2047,7 @@ int VoxelWorld::ThinkEntities(/*int framemsec,*/ int flags){
 //	IDBucket.ClearBuckets();
 	//
 	//Send time synch request packets here now.  Doing it in a consistent place should make for less jitter.
-	if(Net.IsClientActive() && abs(long(msec - lastsynch)) > SYNCH_EVERY){
+	if(Net.IsClientActive() && std::abs(long(msec - lastsynch)) > SYNCH_EVERY){
 		lastsynch = msec;
 		char b[16];
 		b[0] = BYTE_HEAD_TIMESYNCH;
@@ -2055,7 +2056,7 @@ int VoxelWorld::ThinkEntities(/*int framemsec,*/ int flags){
 	}
 	//
 	//Send pings to clients.
-	if(Net.IsServerActive() && abs(long(msec - lastping)) > PING_EVERY){
+	if(Net.IsServerActive() && std::abs(long(msec - lastping)) > PING_EVERY){
 		lastping = msec;
 		char b[16];
 		b[0] = BYTE_HEAD_PING;

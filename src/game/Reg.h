@@ -68,7 +68,7 @@ public:
 
 	void Cast(const std::string& in, uint32_t& out) const { out = std::stoul(in); }
 	void Cast(const std::string& in, int& out) const { out = std::stoi(in); }
-	void Cast(const std::string& in, bool& out) const { out = !in.empty() && in[0] == 't' || in[0] == 'T' || in[0] == '1'; }
+	void Cast(const std::string& in, bool& out) const { out = (!in.empty() && in[0] == 't') || in[0] == 'T' || in[0] == '1'; }
 	void Cast(const std::string& in, float& out) const { out = std::stof(in); }
 
 	template <class T>

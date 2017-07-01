@@ -91,7 +91,7 @@ bool CBanList::IsBanned(in_addr IP)
 	return false;
 }
 
-void CBanList::SaveBanList(char *sFileName)
+void CBanList::SaveBanList(const char *sFileName)
 {
 	FILE	*fp = fopen(sFileName, "w");
 
@@ -107,7 +107,7 @@ void CBanList::SaveBanList(char *sFileName)
 	}
 }
 
-void CBanList::LoadBanList(char *sFileName)
+void CBanList::LoadBanList(const char *sFileName)
 {
 	FILE	*fp = fopen(sFileName, "r");
 

@@ -717,7 +717,6 @@ void GLPolyRender::GLRenderChamfered2DBoxObject(Chamfered2DBoxObject *thisbox, P
 
 	GLfloat v[8][2];
 
-	thisbox->Z;
 	v[0][0] = thisbox->x;
 	v[0][1] = thisbox->y + (thisbox->chamferwidth * 1.333);
 
@@ -1261,8 +1260,8 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 							}
 							glTexImage2D(GL_TEXTURE_2D, level, GL_R3_G3_B2, tbmp1.Width(), tbmp1.Height(), 0,
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = 0;
-							if(ii = glGetError())
+							int ii = glGetError();
+							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 
 							texels += tbmp1.Width() * tbmp1.Height();
@@ -1272,14 +1271,14 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 						if(update){	//Use TexSubImage to update existing texture object only.
 							glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, tbmp1.Width(), tbmp1.Height(),
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = 0;
-							if(ii = glGetError())
+							int ii = glGetError();
+							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 						}else{
 							glTexImage2D(GL_TEXTURE_2D, level, fmt, tbmp1.Width(), tbmp1.Height(), 0,
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = 0;
-							if(ii = glGetError())
+							int ii = glGetError();
+							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 						}
 						texels += tbmp1.Width() * tbmp1.Height();

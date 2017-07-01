@@ -521,7 +521,8 @@ public:
 	bool InitSet(int n){	//Ok, now InitSet does NOT harm the original bitmap!!
 		FreeSet();
 		if(n > 0){
-			if(names = new CStr[n]){
+			names = new CStr[n];
+			if(names){
 				if(n == 1) return true;
 				if(n > 1){
 					if((img = new Image[n - 1])){

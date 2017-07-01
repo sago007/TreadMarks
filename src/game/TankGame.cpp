@@ -2823,13 +2823,13 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 			if (sTmp2 != NULL) // we had another token
 			{
 				TmpCommand->sEntry[strlen(sTmp)-1] = ' '; // inserting a space ... might have been a newline or a tab, but now its a space
-				TmpCommand->sEntry[strlen(sTmp)] = NULL;
+				TmpCommand->sEntry[strlen(sTmp)] = 0;
 
 				strcpy(&TmpCommand->sEntry[strlen(sTmp)], sTmp2);
 			}
 			// we might have a trailing " to remove
 			if(TmpCommand->sEntry[strlen(TmpCommand->sEntry)-1] == '"')
-				TmpCommand->sEntry[strlen(TmpCommand->sEntry)-1] = NULL;
+				TmpCommand->sEntry[strlen(TmpCommand->sEntry)-1] = 0;
 		}
 		else
 		{
@@ -2847,7 +2847,7 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 #endif
 		for (int i = 0; i < MAX_CLIENTS; i++)
 		{
-			if(VW.Clients[i].ClientName[0] != NULL)
+			if(VW.Clients[i].ClientName[0] != 0)
 			{
 				EntityBase* ClientEnt;
 				if(ClientEnt = VW.GetEntity(VW.Clients[i].ClientEnt))
@@ -3230,9 +3230,9 @@ void CTankGame::SortMaps()
 
 void CTankGame::LoadTankNames(CStr sFilename)
 {
-	FILE *F;
+	FILE *F = VW.FM.Open(sFilename);
 
-	if(F = VW.FM.Open(sFilename))
+	if(F)
 	{
 		char buf[256];
 		while(NumTankNames < MaxTankNames && fgets(buf, 255, F)){

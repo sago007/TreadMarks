@@ -396,8 +396,8 @@ void GLRenderEngine3::RenderBinTriFan(BinaryTriangleR3 *btri, int x1, int y1, in
 		PolyCount++;
 		if(nFanStack > 0){
 #define HASH(x, y) (((x) <<16) ^ (y))
-			register int fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
-			register int fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
+			int fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
+			int fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
 			if(((fanfoo - HASH(x1, y1)) | (fanfoo2 - HASH(x2, y2))) == 0){
 				AddFanPoint(x3, y3, h3);
 				return;

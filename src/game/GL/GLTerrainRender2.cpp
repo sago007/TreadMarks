@@ -59,7 +59,7 @@ int FastFtoL(float f){
 
 //#pragma optimize("aw", on)
 
-#define SQUARE(x) ((x) * (x))
+//#define SQUARE(x) ((x) * (x))
 
 
 static void GLViewplane(float w, float h, float view, float n, float f){

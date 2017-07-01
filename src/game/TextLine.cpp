@@ -40,7 +40,7 @@ bool CText::Free()
     return false;
 }
 
-int CText::Load(char *file)
+int CText::Load(const char *file)
 {
     FILE *fp;
     int l;
@@ -90,7 +90,7 @@ char *CText::Get(int id)
 bool Text_FreeText() {
 	return Text.Free();
 }
-int Text_LoadLines(char *file) {
+int Text_LoadLines(const char *file) {
 	return Text.Load(file);
 }
 char *Text_GetLine(int id) {

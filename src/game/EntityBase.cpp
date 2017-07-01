@@ -460,8 +460,8 @@ bool EntityGod::Think()
 	}
 	//
 	for(int j = 0; j < MaxStatusLines; j++){
-		EntityBase *e;
-		if(e = VW->GetEntity(StatusEnt[i])){
+		EntityBase *e = VW->GetEntity(StatusEnt[i]);
+		if(e){
 			e->SetPos(CVec3(TP->type_statusx, y, 0));
 			e->SetRot(CVec3(TP->type_statusw, fabsf(TP->type_statush), 0));
 			e->SetVel(TP->type_statpricol[CLAMP(StatusPriorities[i], 0, MAX_STATUS_PRIORITY)]);
@@ -489,8 +489,8 @@ bool EntityGod::SetString(int type, const char *s){
 			StatusLines[curstat] = Mid(t, i, chars);//s;
 			StatusPriorities[curstat] = 0;
 			StatusTimes[curstat] = 0;
-			EntityBase *e;
-			if(e = VW->GetEntity(StatusEnt[curstat])) e->Remove();	//Remove any text entities we may be walking over.
+			EntityBase *e = VW->GetEntity(StatusEnt[curstat]);
+			if(e) e->Remove();	//Remove any text entities we may be walking over.
 			StatusEnt[curstat] = 0;
 			e = VW->AddEntity("text", TP->type_statusfont, CVec3(TP->type_statusx, TP->type_statusy, 0),
 				CVec3(TP->type_statusw, TP->type_statush, 0), CVec3(1, 1, 1), 0, 0, 0, 0);

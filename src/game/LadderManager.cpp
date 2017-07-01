@@ -122,7 +122,8 @@ bool LadderManager::Load(const char *name){
 		}
 		if(iff.FindChunk("LDR3")){
 			NumMaps = iff.ReadLong();
-			if(Maps = new MapInfo[NumMaps]){
+			Maps = new MapInfo[NumMaps];
+			if(Maps){
 				for(int n = 0; n < NumMaps; n++){
 					iff.ReadString(&Maps[n].title);
 					iff.ReadString(&Maps[n].file);
@@ -194,7 +195,7 @@ int LadderManager::GetRaceResults(){
 	//
 	if(PlayerEnt && GodEnt){
 		EntityBase *e = NULL;
-		for(int n = 0; e = GodEnt->TankByIndex(n); n++){
+		for(int n = 0; (e = GodEnt->TankByIndex(n)); n++){
 			if(n < NumRanksInRace){
 				if(e->GID == PlayerEnt->GID){	//Found player tank.
 					PlayerRank = FirstRankInRace + n;

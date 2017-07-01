@@ -56,8 +56,8 @@ public:
 
 	void AddBan(in_addr IP, long expire);
 	bool IsBanned(in_addr IP);
-	void SaveBanList(char *sFileName);
-	void LoadBanList(char *sFileName);
+	void SaveBanList(const char *sFileName);
+	void LoadBanList(const char *sFileName);
 };
 
 #endif // __BANLIST_H__

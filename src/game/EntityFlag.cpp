@@ -168,8 +168,9 @@ bool EntityFlag::Think()
 			{
 				EntityBase *col;
 				Vec3 colpnt;
-				while(col = VW->NextCollider(colpnt))
+				while( (col = VW->NextCollider(colpnt)) ) {
 					CollisionWith(col, colpnt);
+				}
 			}
 			//
 			if(VW->Net.IsClientActive() == false)

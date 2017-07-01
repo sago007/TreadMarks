@@ -78,7 +78,8 @@ struct LodTreeMap{
 	bool Init(int W, int H){
 		if(W > 0 && H > 0){
 			Free();
-			if(trees = new LodTree[W * H * 2]){
+			trees = new LodTree[W * H * 2];
+			if(trees){
 				w = W;
 				h = H;
 				return true;

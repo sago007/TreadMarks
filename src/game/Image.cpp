@@ -140,7 +140,7 @@ bool LoadBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe){
 	BitmapInfoHeader    BMPFileInfo;
 
 	RGBQuad             Palette[256];
-	int NumCols, BPP;
+	int BPP;
 
 	if(file == NULL || bmp == NULL) return false;
 
@@ -154,14 +154,14 @@ bool LoadBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe){
 	//Nope, can handle 24 and 32 bits now...
 	memset(Palette, 0, sizeof(Palette));
 	if((BPP = BMPFileInfo.biBitCount) == 8){// return false;
-		NumCols = BMPFileInfo.biClrUsed;	//Check the actual number of palette entries.
+		int NumCols = BMPFileInfo.biClrUsed;	//Check the actual number of palette entries.
 		if(NumCols == 0) NumCols = 256;
 
 		//get the BMP palette
 		if(false == fread(Palette, sizeof(RGBQuad), NumCols, file)) return false;
 	}
 	//Allocate memory for image data
-	if(!bmp->Init(BMPFileInfo.biWidth, abs(BMPFileInfo.biHeight), BPP)) return false;
+	if(!bmp->Init(BMPFileInfo.biWidth, std::abs(BMPFileInfo.biHeight), BPP)) return false;
 
 	//read BMP into memory
 	fseek(file, startpos, SEEK_SET);
@@ -202,7 +202,7 @@ bool LoadPackedBMP(void *bmi, Bitmap *bmp, PaletteEntry *pe){
 		memcpy(Palette, (char*)bmi + BMPFileInfo->biSize, sizeof(RGBQuad) * NumCols);
 	}
 	//Allocate memory for image data
-	if(!bmp->Init(BMPFileInfo->biWidth, abs(BMPFileInfo->biHeight), BPP)) return false;
+	if(!bmp->Init(BMPFileInfo->biWidth, std::abs(BMPFileInfo->biHeight), BPP)) return false;
 
 	//read BMP into memory
 	int sy = 0;
@@ -222,8 +222,8 @@ bool LoadPackedBMP(void *bmi, Bitmap *bmp, PaletteEntry *pe){
 	return true;
 }
 bool SaveBMP(const char *name, Bitmap *bmp, PaletteEntry *pe, bool noflip){
-	FILE *f;
-	if(f = fopen(name, "wb")){
+	FILE *f = fopen(name, "wb");
+	if(f){
 		bool t = SaveBMP(f, bmp, pe, noflip);
 		fclose(f);
 		return t;
@@ -476,7 +476,8 @@ bool Bitmap::To32Bit(PaletteEntry *pe){
 	if(data && width > 0 && height > 0 && (bpp == 8 || bpp == 24)){
 		int NewPitch = CalcPitch(width, 32);
 		unsigned char *newdata, *tdata, *tnewdata;
-		if(newdata = (unsigned char*)malloc(CalcLength(width, height, 32))){
+		newdata = (unsigned char*)malloc(CalcLength(width, height, 32));
+		if(newdata){
 			for(int y = 0; y < height; y++){
 				tdata = (data + y * pitch);
 				tnewdata = (newdata + y * NewPitch);
@@ -541,8 +542,8 @@ bool Bitmap::RotateLeft90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 		int NewPitch = (NewWidth + 3) & (~3);
 	//	if(NewWidth % 4 != 0) NewPitch = NewWidth + 4 - NewWidth % 4;
 	//		else NewPitch = NewWidth;
-		unsigned char *newdata;
-		if(newdata = (unsigned char*)malloc(NewPitch * NewHeight)){
+		unsigned char *newdata = (unsigned char*)malloc(NewPitch * NewHeight);
+		if(newdata ){
 			for(int y = 0; y < NewHeight; y++){
 				for(int x = 0; x < NewWidth; x++){
 					*(newdata + x + y * NewPitch) = *(data + (width - 1) - y + x * pitch);

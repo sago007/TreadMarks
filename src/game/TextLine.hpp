@@ -27,7 +27,7 @@ public:
 	CText() {Buffer=NULL; NumLines=0; Free();}
 	~CText() {Free();}
 	bool Free();
-	int Load(char *file);
+	int Load(const char *file);
 	char *Get(int id);
 
 };

@@ -174,13 +174,16 @@ bool GenericBuffer::PollEvent(sf::Event& sfmlEvent)
 	{
 		switch(sfmlEvent.type)
 		{
-		case sf::Event::LostFocus:
-			bFocused = false;
-			break;
-		case sf::Event::GainedFocus:
-			bFocused = true;
-			break;
+			case sf::Event::LostFocus:
+				bFocused = false;
+				break;
+			case sf::Event::GainedFocus:
+				bFocused = true;
+				break;
+			default:
+				break;
 		}
+		
 
 		return true;
 	}

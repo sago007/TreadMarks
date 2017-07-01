@@ -109,7 +109,8 @@ public:
 		//	if(linkfarm = new EntityLink[maxents]){
 		//		nlinkfarm = maxents;
 		//	if(bucket = new EntityLink*[bucketw * bucketh]){
-			if(bucket = new EntityBucketNode[bucketw * bucketh]){
+			bucket = new EntityBucketNode[bucketw * bucketh];
+			if(bucket){
 				ClearBuckets();
 				return true;
 			}
