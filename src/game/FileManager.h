@@ -22,6 +22,8 @@
 #include <cstdio>
 #include "CStr.h"
 #include "Find.h"
+#include <string>
+#include <map>
 
 #define FILE_STACK_SIZE 32
 
@@ -40,6 +42,7 @@ private:
 	CStr FileNameStack[FILE_STACK_SIZE];
 	uint32_t FileOffsetStack[FILE_STACK_SIZE];
 	int nFileStack;
+	std::map<std::string, std::string> LowerCaseToCaseSensitive;
 public:
 	//Access members.
 	FileManager();

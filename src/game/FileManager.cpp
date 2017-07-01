@@ -22,6 +22,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
+#include <map>
+#include <experimental/filesystem>
 
 FileManager::FileManager(){
 	f = NULL;
@@ -32,6 +34,7 @@ FileManager::~FileManager(){
 //	Close();
 	while(PopFile());	//Clear file stack.
 	Close();
+	LowerCaseToCaseSensitive.clear();
 	ClearSearchDirs();
 }
 bool FileManager::PushFile(){
@@ -59,8 +62,15 @@ bool FileManager::PopFile(){
 	return false;
 }
 void FileManager::ClearSearchDirs(){	//Empties the search dir and packed file list.
+	LowerCaseToCaseSensitive.clear();
 	SearchDirHead.DeleteList();
 	PackedFileHead.DeleteList();
+}
+
+static void toLowerCase (std::string& inout) {
+	for (size_t i = 0; i< inout.length(); ++i) {
+		inout[i] = tolower(inout[i]);
+	}
 }
 int FileManager::AddSearchDir(const char *dir){	//Adds a directory to the search path.
 	if(dir && strlen(dir) > 0){
@@ -68,7 +78,20 @@ int FileManager::AddSearchDir(const char *dir){	//Adds a directory to the search
 		char end = dir[strlen(dir) - 1];
 		if(end != '/' && end != '\\') t = CStr(dir) + "/";
 		else t = dir;
-		fprintf(stderr, "Added: %s\n", dir);
+		try {
+			for(auto& p: std::experimental::filesystem::recursive_directory_iterator(t.get())) {
+				std::string thePath = p.path().c_str();
+				std::size_t pos = thePath.find("/");
+				thePath = thePath.substr(pos+1);
+				std::string lowercase = thePath;
+				toLowerCase(lowercase);
+				LowerCaseToCaseSensitive[lowercase] = thePath;
+				//fprintf(stderr, "added: %s - %s\n", thePath.c_str(), lowercase.c_str());
+			}
+		} catch (...) {
+			//As filesystem is still experimental it is hard to know the exact exception that will be thrown if not existsing.
+		}
+		fprintf(stderr, "Scanned: %s\n", t.get());
 		if(SearchDirHead.AddItem(new CStr(t))) return 1;
 	}
 	return 0;
@@ -77,23 +100,32 @@ int FileManager::FindPackedFiles(){	//Scans for packed files in current search d
 	//NOT IMPLEMENTED YET!!!
 	return 0;
 }
-FILE *FileManager::Open(const char *name){	//The returned pointer is for convenience only!  DO NOT fclose the file stream!
+FILE *FileManager::Open(const char *in_name){	//The returned pointer is for convenience only!  DO NOT fclose the file stream!
 	Close();
 	CStrList *cl = &SearchDirHead;
-	if(name && strlen(name) > 0){
-		while((cl != NULL) && (cl->Data != NULL) && (NULL == (f = ::fopen(*cl->Data + name, "rb")))){
+	std::string org_name = in_name? in_name : "";
+	std::string name = org_name;
+	toLowerCase(name);
+	name = LowerCaseToCaseSensitive[name];
+	//fprintf(stderr, "Looking for: %s, %s\n",name.c_str(), org_name.c_str());
+	if (name.length() == 0 && org_name.length()> 0) {
+		//If the folder has not been scanned then try the original name
+		name = org_name;
+	}
+	if(name.length() > 0){
+		while((cl != NULL) && (cl->Data != NULL) && (NULL == (f = ::fopen(*cl->Data + name.c_str(), "rb")))){
 			//std::string s = std::string(*cl->Data) + name;
 			cl = cl->NextLink();
 			//fprintf(stderr, "Failed to find: %s\n",s.c_str());
 		}
 		if(f){
-			FileName = *cl->Data + name;
+			FileName = *cl->Data + name.c_str();
 			FileOffset = 0;
 		}
 	}
-	if(f == NULL && name && strlen(name) > 0){
-		OutputDebugLog("File Not Found in search path: \"" + CStr(name) + "\"\n");
-		fprintf(stderr, "File Not Found in search path: %s\n", name);
+	if(f == NULL && name.length() > 0){
+		OutputDebugLog("File Not Found in search path: \"" + CStr(name.c_str()) + "\"\n");
+		fprintf(stderr, "File Not Found in search path: %s\n", name.c_str());
 	}
 	return f;
 }
