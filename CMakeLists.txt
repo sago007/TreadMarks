@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.0.2)
 
 SET(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/out" CACHE PATH "")
 
@@ -63,4 +63,4 @@ IF(BUILD_MASTER)
   ADD_SUBDIRECTORY("src/tmmaster")
 ENDIF()
 
-ADD_SUBDIRECTORY("src/installer")
+#ADD_SUBDIRECTORY("src/installer")
