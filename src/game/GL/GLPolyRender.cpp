@@ -1251,13 +1251,6 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 									p2 += 1;
 								}
 							}
-							unsigned char pal[256][4];
-							for(int i = 0; i < 256; i++){
-								pal[i][0] = tbmp8.pe[i].peRed;
-								pal[i][1] = tbmp8.pe[i].peGreen;
-								pal[i][2] = tbmp8.pe[i].peBlue;
-								pal[i][3] = (unsigned char)(alphaaccum[i] / std::max(1, alphacount[i]));
-							}
 							glTexImage2D(GL_TEXTURE_2D, level, GL_R3_G3_B2, tbmp1.Width(), tbmp1.Height(), 0,
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
 							int ii = glGetError();

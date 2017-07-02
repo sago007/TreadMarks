@@ -72,9 +72,9 @@ struct LodTree{
 //Holds an array of LodTree structures, usually to cover the entire physical map.
 struct LodTreeMap{
 	static LodTree dummy;
-	int w, h;
-	LodTree *trees;
-	LodTreeMap() : trees(0), w(0), h(0) {};
+	int w= 0, h = 0;
+	LodTree *trees = nullptr;
+	LodTreeMap() {};
 	bool Init(int W, int H){
 		if(W > 0 && H > 0){
 			Free();

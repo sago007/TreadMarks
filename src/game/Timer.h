@@ -22,9 +22,11 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <stdint.h>
+
 class Timer{
 private:
-	unsigned int tstart, tticks, tnow;
+	uint32_t tstart, tticks, tnow;
 	bool Started;
 
 public:

@@ -1752,13 +1752,19 @@ bool CTankGame::DoFrame(){
 			ServerEntryEx *se2 = (ServerEntryEx*)se->NextLink();
 			if(se2){
 				switch(GameState.SortMode){
-				case MSM_Name : if(strcmp(se->Name, se2->Name) > 0) se->ShiftItemDown(); break;
-				case MSM_Map : if(strcmp(FileNameOnly(se->Map), FileNameOnly(se2->Map)) > 0) se->ShiftItemDown(); break;
-				case MSM_Mode : if(se->GameMode > se2->GameMode) se->ShiftItemDown(); break;
-				case MSM_Time : if(se->TimeInGame > se2->TimeInGame) se->ShiftItemDown(); break;
-				case MSM_Players : if(se->Clients < se2->Clients) se->ShiftItemDown(); break;
+				case MSM_Name : if(strcmp(se->Name, se2->Name) > 0) se->ShiftItemDown(); 
+					break;
+				case MSM_Map : if(strcmp(FileNameOnly(se->Map), FileNameOnly(se2->Map)) > 0) se->ShiftItemDown(); 
+					break;
+				case MSM_Mode : if(se->GameMode > se2->GameMode) se->ShiftItemDown(); 
+					break;
+				case MSM_Time : if(se->TimeInGame > se2->TimeInGame) se->ShiftItemDown(); 
+					break;
+				case MSM_Players : if(se->Clients < se2->Clients) se->ShiftItemDown(); 
+					break;
 				case MSM_Ping : if((se->PingTime / MAX(1, se->PingCount) > se2->PingTime / MAX(1, se2->PingCount) ||
-									se->PingTime <= 0) && se2->PingTime > 0) se->ShiftItemDown(); break;
+									se->PingTime <= 0) && se2->PingTime > 0) se->ShiftItemDown(); 
+					break;
 				}
 			}
 		}
@@ -2309,10 +2315,6 @@ void CTankGame::DoSfmlEvents()
 				}
 				else
 				{
-					static bool bNumLock = false;
-					static bool bScrollLock = false;
-					static bool bCapsLock = false;
-
 					CStr key;
 					key = KeyNameText(sfmlEvent.key.code);
 

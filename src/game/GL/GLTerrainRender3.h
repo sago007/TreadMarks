@@ -19,7 +19,7 @@
 #include "../Render.h"
 #include "GLTerrain.h"
 
-#define IHEIGHT_NORENDER 0xffffffff
+#define IHEIGHT_NORENDER -1
 
 #define BINTRIPOOL 25000
 #define BINTRISAFE 24000
@@ -35,7 +35,7 @@ public:
 	float SplitVertHeight;	//Split vertex height.
 	union{
 		float height;
-		int iheight;
+		int32_t iheight;
 	};
 	unsigned int iIndex; // index into vertex array
 	void Null(){
@@ -145,7 +145,7 @@ private:
 	int			FanCount;
 	int			UseMT;
 	union
-	{	int FanStack[200];
+	{	int32_t FanStack[200];
 		float FanStackf[200];
 	};
 

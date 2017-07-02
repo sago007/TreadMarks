@@ -183,8 +183,6 @@ int CJoyInput::GetNumberOfControllers( void )
 
 void CJoyInput::Update(void)
 {
-	bool	bError = false;
-
 	if(idJoystick != -1)
 	{
 		memcpy(LastButtons, m_rController.aButtons, sizeof(LastButtons));

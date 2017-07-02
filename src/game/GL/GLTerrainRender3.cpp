@@ -138,10 +138,10 @@ void BinaryTriangleR3::TestSplit(LodTree *lod, int variance, int LimitLod, int l
 };
 
 //NOTE: This function, normally, ROUNDS TO NEAREST!!!
-inline long FloatToLong(float f) { // relies on IEEE format for float
+inline int32_t FloatToLong(float f) { // relies on IEEE format for float
 	f += -0.499999f;	//This change makes it CHOP TO LOWER!!
 	f += (3 << 22);
-	return ((*(long*)&f)&0x007fffff) - 0x00400000;
+	return ((*(int32_t*)&f)&0x007fffff) - 0x00400000;
 }
 
 void BinaryTriangleR3::TestSplitZ(int level, int LimitLod, int index, float cz1, float cz2, float cz3, LodTree *lod, BinTriPool *pool)

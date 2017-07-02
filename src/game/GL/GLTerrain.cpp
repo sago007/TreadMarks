@@ -196,7 +196,7 @@ int Terrain::Redownload(int px, int py){
 		ts = (unsigned char*)(data32 + ys * Width() + xs);
 		for(int y = ys; y < ys + br.h; y++){
 		//	memcpy(td, ts, ((uint32_t)br.w) <<2);
-			for(int t = 0; t < ((uint32_t)br.w); t++) ((uint32_t*)td)[t] = ((uint32_t*)ts)[t];
+			for(uint32_t t = 0; t < ((uint32_t)br.w); t++) ((uint32_t*)td)[t] = ((uint32_t*)ts)[t];
 			ts += Width() <<2;
 			td += ((uint32_t)br.w) <<2;
 		}

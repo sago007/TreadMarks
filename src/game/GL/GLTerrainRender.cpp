@@ -58,7 +58,7 @@ void GLViewplane(float w, float h, float view, float n, float f){
 //								Actual Terrain Rendering starts here!
 //************************************************************************************
 
-#define IHEIGHT_NORENDER 0xffffffff
+#define IHEIGHT_NORENDER -1
 
 struct LodTree;
 
@@ -67,9 +67,9 @@ struct BinaryTriangle{
 	float SplitVertHeight;	//Split vertex height.
 	union{
 		float height;
-		int iheight;
+		int32_t iheight;
 	};
-	int dumm1;//, dummy2;	//Bring total size up to 32 bytes.
+	int32_t dumm1;//, dummy2;	//Bring total size up to 32 bytes.
 	void Null(){
 		LeftNeighbor = 0;
 		RightNeighbor = 0;
@@ -80,14 +80,14 @@ struct BinaryTriangle{
 		iheight = 0;
 	};
 private:
-	int Split2();	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
+	int32_t Split2();	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
 public:
 	void Split();
-	void TestSplit(LodTree *lod, int variance, int level, int index);
-	void TestSplitZ(int level, int index,
+	void TestSplit(LodTree *lod, int32_t variance, int32_t level, int32_t index);
+	void TestSplitZ(int32_t level, int32_t index,
 					float cz1, float cz2, float cz3);
-	void TestSplitClip(int level, int index, float radius,
-						int x1, int y1, int x2, int y2, int x3, int y3);
+	void TestSplitClip(int32_t level, int32_t index, float radius,
+						int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3);
 };
 
 #define BINTRIPOOL 25000
@@ -97,7 +97,7 @@ public:
 
 static BinaryTriangle RealBinTriPool[BINTRIPOOL + 1];
 //static BinaryTriangle *BinTriPool;
-static int NextBinTriPool = 0;
+static int32_t NextBinTriPool = 0;
 
 static Terrain *curmap;
 
@@ -106,10 +106,10 @@ static Terrain *curmap;
 inline void ResetBinTriPool(){
 	NextBinTriPool = 0;
 }
-inline int AvailBinTris(){
+inline int32_t AvailBinTris(){
 	return BINTRIPOOL - NextBinTriPool;
 }
-inline int ElectiveSplitSafe(){
+inline int32_t ElectiveSplitSafe(){
 	return NextBinTriPool < BINTRISAFE;
 }
 inline BinaryTriangle *AllocBinTri(){
@@ -124,7 +124,7 @@ inline void FreeBinTri(BinaryTriangle *tri){
 	return;
 }
 
-inline int BinaryTriangle::Split2(){//float propoh){	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
+inline int32_t BinaryTriangle::Split2(){//float propoh){	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
 	if(AvailBinTris() >= 2){
 		LeftChild = AllocBinTri();
 		LeftChild->SplitVertHeight = 0.5f;	//Pass on T value for vert morph.
@@ -179,15 +179,15 @@ static float lclip[3];
 static float rclip[3];
 static float zclip[3];
 
-static int LimitLod = 0;
+static int32_t LimitLod = 0;
 
 //Splits binary tri only if variance greater than parameter.
 //inline
-void BinaryTriangle::TestSplit(LodTree *lod, int variance, int level, int index){
+void BinaryTriangle::TestSplit(LodTree *lod, int32_t variance, int32_t level, int32_t index){
 	if(lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index] > variance){
 		if(LeftChild == 0) Split();	//Don't split if already split!
 		if(level < (MaxLodDepth - 1) - LimitLod){
-			int index2 = index;
+			int32_t index2 = index;
 			if(level < LodTreeDepth - 1){
 				index = index <<1;
 				index2 = index + 1;
@@ -204,17 +204,17 @@ static LodTree *lod = 0;
 static float variance = 0.0f;
 
 //NOTE: This function, normally, ROUNDS TO NEAREST!!!
-inline long FloatToLong(float f) { // relies on IEEE format for float
+inline int32_t FloatToLong(float f) { // relies on IEEE format for float
 	f += -0.499999f;	//This change makes it CHOP TO LOWER!!
 	f += (3 << 22);
-	return ((*(long*)&f)&0x007fffff) - 0x00400000;
+	return ((*(int32_t*)&f)&0x007fffff) - 0x00400000;
 }
 
-void BinaryTriangle::TestSplitZ(int level, int index, float cz1, float cz2, float cz3){
+void BinaryTriangle::TestSplitZ(int32_t level, int32_t index, float cz1, float cz2, float cz3){
 	float avgcz = (cz1 + cz2) * 0.5f;
 	//CameraZs will be pre-multiplied by variance now.
-	int iv = FloatToLong(avgcz);
-	int vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
+	int32_t iv = FloatToLong(avgcz);
+	int32_t vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
 	//Brute force method first...
 	if(vd > iv){
 		//
@@ -223,7 +223,7 @@ void BinaryTriangle::TestSplitZ(int level, int index, float cz1, float cz2, floa
 		//
 		if(LeftChild == 0 && ElectiveSplitSafe()) Split();	//Don't split if already split!
 		if(level < (MaxLodDepth - 1) - LimitLod){
-			int index2 = index;
+			int32_t index2 = index;
 			if(level < LodTreeDepth - 1){
 				index = index <<1;
 				index2 = index + 1;
@@ -240,8 +240,8 @@ void BinaryTriangle::TestSplitZ(int level, int index, float cz1, float cz2, floa
 	if(RightChild) RightChild->SplitVertHeight = SplitVertHeight;
 };
 
-void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, int y1, int x2, int y2, int x3, int y3){
-	int avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
+void BinaryTriangle::TestSplitClip(int32_t level, int32_t index, float radius, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3){
+	int32_t avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
 	float t = (float)(avgx) * lclip[0] + (float)(-avgy) * lclip[1] - lclip[2];
 	float t2 = (float)(avgx) * rclip[0] + (float)(-avgy) * rclip[1] - rclip[2];
 	if(t < -radius || t2 < -radius){	//Clipped totally.
@@ -274,8 +274,8 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 		//this tri may not need to be split, do a normal, simpler split test first (basically the good bits of old testsplitz)
 		//and only do dot products if split and need to test children.
 		float avgcz = ((float)(avgx) * zclip[0] + (float)(-avgy) * zclip[1] - zclip[2]) * variance;
-		int iv = FloatToLong(avgcz);
-		int vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
+		int32_t iv = FloatToLong(avgcz);
+		int32_t vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
 		//
 		if(vd > iv){
 			//
@@ -284,7 +284,7 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 			//
 			if(LeftChild == 0 && ElectiveSplitSafe()) Split();
 			if(level < (MaxLodDepth - 1) - LimitLod){
-				int index2 = index;
+				int32_t index2 = index;
 				if(level < LodTreeDepth - 1){
 					index = index <<1;
 					index2 = index + 1;
@@ -306,8 +306,8 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 	}else{	//Halfway clipped.
 		float t = (float)(avgx) * zclip[0] + (float)(-avgy) * zclip[1] - zclip[2];
 		float v = ((float)variance * t);	//Pre-mulled now.
-		int iv = FloatToLong(v);
-		int vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
+		int32_t iv = FloatToLong(v);
+		int32_t vd = lod->lodtree[LODTREEOFF(std::min(level, LodTreeDepth - 1)) + index];// - iv;
 		if(vd > iv){
 			//
 			if(vd - iv > 2) SplitVertHeight = 1.0f;
@@ -315,7 +315,7 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 			//
 			if(LeftChild == 0 && ElectiveSplitSafe()) Split();
 			if(level < (MaxLodDepth - 1) - LimitLod){
-				int index2 = index;
+				int32_t index2 = index;
 				if(level < LodTreeDepth - 1){
 					index = index <<1;
 					index2 = index + 1;
@@ -336,7 +336,7 @@ void BinaryTriangle::TestSplitClip(int level, int index, float radius, int x1, i
 
 //A section of world for rendering, may point to wrapped terrain off-map.
 struct MapPatch{
-	int x, y;	//Coordinates in patch grid.
+	int32_t x, y;	//Coordinates in patch grid.
 	uint32_t id;
 	BinaryTriangle ul, dr;
 	LodTree *lodul, *loddr;
@@ -344,11 +344,11 @@ struct MapPatch{
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	MapPatch(int X, int Y, uint32_t ID) : x(X), y(Y), id(ID) {
+	MapPatch(int32_t X, int32_t Y, uint32_t ID) : x(X), y(Y), id(ID) {
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	void SetCoords(int X, int Y, uint32_t ID){
+	void SetCoords(int32_t X, int32_t Y, uint32_t ID){
 		x = X;
 		y = Y;
 		id = ID;
@@ -367,9 +367,9 @@ struct MapPatch{
 			p->dr.LeftNeighbor = &ul;
 		}
 	};
-	void Split(float variance){//, int scale
-		int x1 = x * TexSize, y1 = y * TexSize;
-		int x2 = x1 + TexSize, y2 = y1 + TexSize;
+	void Split(float variance){//, int32_t scale
+		int32_t x1 = x * TexSize, y1 = y * TexSize;
+		int32_t x2 = x1 + TexSize, y2 = y1 + TexSize;
 		float rad = sqrtf((float)(SQUARE(TexSize >>1) + SQUARE(TexSize >>1)));
 		//
 		::variance = variance * 0.01f;
@@ -387,16 +387,16 @@ static float texscalex, texscaley, texaddx, texaddy;
 static float texoffx2, texoffy2, texscalex2, texscaley2;
 
 //Outputs one terrain vertex at requested map x and y coords.
-inline void BinTriVert(int x, int y){
+inline void BinTriVert(int32_t x, int32_t y){
 	glTexCoord2f(((float)x - texoffx) * texscalex + texaddx, ((float)y - texoffy) * texscaley + texaddy);
 	glVertex3f(x, ((float)curmap->GetHwrap(x, y) * 0.25f), y);
 }
-static int PolyCount = 0;
+static int32_t PolyCount = 0;
 
 //Recursive function to render all binary triangles descending from a root triangle.
-static void RenderBinTri(BinaryTriangle *btri, int x1, int y1, int x2, int y2, int x3, int y3){
+static void RenderBinTri(BinaryTriangle *btri, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3){
 	if(btri->LeftChild && btri->RightChild){
-		int avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
+		int32_t avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
 		RenderBinTri(btri->LeftChild, x3, y3, x1, y1, avgx, avgy);
 		RenderBinTri(btri->RightChild, x2, y2, x3, y3, avgx, avgy);// <<1;
 	}else{
@@ -408,12 +408,7 @@ static void RenderBinTri(BinaryTriangle *btri, int x1, int y1, int x2, int y2, i
 		PolyCount++;
 	}
 }
-static void CDECL FakeglTexCoord2f(float a, float b){
-	a += b;
-}
-static void CDECL FakeglVertex3f(float a, float b, float c){
-	a += b - c;
-}
+
 inline void BinTriVert3(float x, float y, float h){
 	glTexCoord2f((x - texoffx) * texscalex + texaddx, (y - texoffy) * texscaley + texaddy);
 	glVertex3f(x, h, y);
@@ -424,13 +419,13 @@ inline void BinTriVert3MT(float x, float y, float h){
 	glVertex3f(x, h, y);
 }
 static union{
-int FanStack[200];
+int32_t FanStack[200];
 float FanStackf[200];
 };
 
-static int nFanStack = 0;
-static int FanCount = 0;
-static int UseMT = 0;
+static int32_t nFanStack = 0;
+static int32_t FanCount = 0;
+static int32_t UseMT = 0;
 
 inline void InitFanStack(){
 	nFanStack = 0;
@@ -443,11 +438,11 @@ inline void FlushFanStack(){
 		glBegin(GL_TRIANGLE_FAN);
 		//
 		if(UseMT){
-			for(int n = 0; n < nFanStack; n += 3){
+			for(int32_t n = 0; n < nFanStack; n += 3){
 				BinTriVert3MT(FanStack[n], FanStack[n + 1], FanStackf[n + 2]);
 			}
 		}else{
-			for(int n = 0; n < nFanStack; n += 3){
+			for(int32_t n = 0; n < nFanStack; n += 3){
 				BinTriVert3(FanStack[n], FanStack[n + 1], FanStackf[n + 2]);
 			}
 		}
@@ -458,13 +453,13 @@ inline void FlushFanStack(){
 		FanCount++;
 	}
 }
-inline void AddFanPoint(int x, int y, float h){
+inline void AddFanPoint(int32_t x, int32_t y, float h){
 	FanStack[nFanStack] = x;
 	FanStack[nFanStack + 1] = y;
 	FanStackf[nFanStack + 2] = h;
 	nFanStack += 3;
 }
-inline void AddFanPoint(int x1, int y1, float h1, int x2, int y2, float h2, int x3, int y3, float h3){
+inline void AddFanPoint(int32_t x1, int32_t y1, float h1, int32_t x2, int32_t y2, float h2, int32_t x3, int32_t y3, float h3){
 	FanStack[nFanStack] = x1;
 	FanStack[nFanStack + 1] = y1;
 	FanStackf[nFanStack + 2] = h1;
@@ -477,9 +472,9 @@ inline void AddFanPoint(int x1, int y1, float h1, int x2, int y2, float h2, int 
 	nFanStack += 9;
 }
 
-void RenderBinTriFan(BinaryTriangle *btri, int x1, int y1, int x2, int y2, int x3, int y3, int sense, float h1, float h2, float h3){
+void RenderBinTriFan(BinaryTriangle *btri, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, int32_t sense, float h1, float h2, float h3){
 	if(btri->LeftChild && btri->RightChild){
-		int avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
+		int32_t avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
 		float th;
 		if(btri->iheight){
 			th = btri->height;
@@ -508,8 +503,8 @@ void RenderBinTriFan(BinaryTriangle *btri, int x1, int y1, int x2, int y2, int x
 		PolyCount++;
 		if(nFanStack > 0){
 #define HASH(x, y) (((x) <<16) ^ (y))
-			int fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
-			int fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
+			int32_t fanfoo = HASH(FanStack[0], FanStack[1]);//(FanStack[0] <<16) ^ FanStack[1];
+			int32_t fanfoo2 = HASH(FanStack[nFanStack - 3], FanStack[nFanStack - 2]);//(FanStack[nFanStack - 2] <<16) ^ FanStack[nFanStack - 1];
 			if(((fanfoo - HASH(x1, y1)) | (fanfoo2 - HASH(x2, y2))) == 0){
 				AddFanPoint(x3, y3, h3);
 				return;
@@ -530,15 +525,15 @@ void RenderBinTriFan(BinaryTriangle *btri, int x1, int y1, int x2, int y2, int x
 }
 
 static Timer gltmr;
-static int TerrainFrame = 0;
+static int32_t TerrainFrame = 0;
 
 static float CurQuality = 0.1f;
-static int CurBinTris = 1;
+static int32_t CurBinTris = 1;
 
 static MapPatch *patches = 0;
-static int npatches = 0;
+static int32_t npatches = 0;
 
-bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float quality, int ms){
+bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, float quality, int32_t ms){
 	//
 	//
 	if((flags & GLREND_LOCKPATCHES) && (patches == 0 || npatches <= 0)){
@@ -612,8 +607,8 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 				//
 				glBegin(GL_QUADS);
 				glColor4f(1, 1, 1, 1);
-				for(int y = 0; y < 4; y++){
-					for(int x = 0; x < 3; x++){
+				for(int32_t y = 0; y < 4; y++){
+					for(int32_t x = 0; x < 3; x++){
 						xf = -xvw * 3.0f + x * xvw * 2.0f + xoff * xvw * 2.0f;
 						yf = yvw * 4.0f + (-y * yvw * 2.0f) + (-yoff * yvw * 2.0f);
 						fx = (((int)xdiv & 1) ^ (x & 1)) ? 1.0f - halfpixel : halfpixel;
@@ -660,12 +655,12 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 			//Fix clipping on pitch changes.
 			needang += fabsf(cam->a) * 0.5f;
 			//
-			for(int i = 0; i < 6; i++){
+			for(int32_t i = 0; i < 6; i++){
 				if(SkyBox[i] && SkyBox[i]->id && (i >= 4 || fabsf(NormRot((PI / 2.0f * (float)i) - camang)) < needang)){
 					glBindTexture(GL_TEXTURE_2D, SkyBox[i]->id);
 					//
 					//Use offsets based on actual size of texture reported by driver.
-					int w = 1, h = 1;
+					int32_t w = 1, h = 1;
 					glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
 					glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
 				//	zero = 1.0f / std::max(1.0f, (float)w * 0.999f);	//Little bigger "zero" to avoid seams.
@@ -676,7 +671,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 					yone = 1.0f - yzero;
 					//
 					glBegin(GL_QUADS);
-					for(int n = 0; n < (i < 4 ? 2 : 1); n++){
+					for(int32_t n = 0; n < (i < 4 ? 2 : 1); n++){
 						float s = (n == 0 ? 1.0f : -1.0f);
 						glTexCoord2f(xzero, yzero);
 						glVertex3f(vcoords[i][0][0], vcoords[i][0][1] * s, vcoords[i][0][2]);
@@ -733,8 +728,8 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 		glPolygonMode(GL_FRONT, GL_FILL);
 	}
 	//
-	int TexPerMapW = map->Width() / TexSize;
-	int TexPerMapH = map->Height() / TexSize;
+	int32_t TexPerMapW = map->Width() / TexSize;
+	int32_t TexPerMapH = map->Height() / TexSize;
 	//
 	float tv[2];
     float bv[2];
@@ -763,12 +758,12 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 		ResetBinTriPool();
 	}
 	//
-	int x, y, x1, y1, n = 0;
+	int32_t x, y, x1, y1, n = 0;
 	//
 	gltmr.Start();
 	//
-	int xs = floor(cam->x / (float)TexSize), ys = floor(-cam->z / (float)TexSize);
-	int psize = viewdist / TexSize + 1;
+	int32_t xs = floor(cam->x / (float)TexSize), ys = floor(-cam->z / (float)TexSize);
+	int32_t psize = viewdist / TexSize + 1;
 	if((flags & GLREND_LOCKPATCHES) == 0){
 		npatches = SQUARE(psize * 2 + 1);
 		//
@@ -798,7 +793,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 	}
 	//
 	float InputQuality = quality;
-	int triwant = (float)BINTRIMAX * quality;
+	int32_t triwant = (float)BINTRIMAX * quality;
 	float TQuality = CurQuality * (((float)triwant / (float)BINTRIMAX) / ((float)CurBinTris / (float)BINTRIMAX));
 	//Trying triangle-count pegging scheme.
 	float DQuality = (TQuality - CurQuality) * 0.05f;	//Filter changes a little.
@@ -818,7 +813,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 		}
 	}
 	//
-	int splittime = gltmr.Check(1000);
+	int32_t splittime = gltmr.Check(1000);
 	//
 	gltmr.Start();
 	//
@@ -879,7 +874,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 		glActiveTexture(GL_TEXTURE0);
 	}else{
 		//
-	for(int mt = 0; mt < ((flags & GLREND_NODETAIL) ? 1 : 2) ; mt++){
+	for(int32_t mt = 0; mt < ((flags & GLREND_NODETAIL) ? 1 : 2) ; mt++){
 		if(mt == 1){
 			if(Detail == 0 || Detail->id == 0){
 				OutputDebugLog("Detail texture not loaded.\n");
@@ -948,7 +943,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int flags, float
 	//
 	//
 	//
-	int drawtime = gltmr.Check(1000);
+	int32_t drawtime = gltmr.Check(1000);
 	//
 	if(TerrainFrame++ % 8 == 0 || drawtime > 250){
 		OutputDebugLog("Lod split time: " + String(splittime) +
@@ -984,7 +979,7 @@ inline void EnvWaterVertex(float x, float y, float z, Vec3 n, Mat3 eb, Vec3 cp){
 	glTexCoord2fv(t);
 	glVertex3fv(v);
 }
-inline void EnvWaterTriR(int level, int x1, int z1, int x2, int z2, int x3, int z3, Vec3 n, Mat3 eb, Vec3 cp){
+inline void EnvWaterTriR(int32_t level, int32_t x1, int32_t z1, int32_t x2, int32_t z2, int32_t x3, int32_t z3, Vec3 n, Mat3 eb, Vec3 cp){
 	if(level <= 0){
 		EnvWaterVertex(x1, WATERHEIGHT, z1, n, eb, cp);
 		EnvWaterVertex(x2, WATERHEIGHT, z2, n, eb, cp);
@@ -994,7 +989,7 @@ inline void EnvWaterTriR(int level, int x1, int z1, int x2, int z2, int x3, int 
 	EnvWaterTriR(level - 1, x3, z3, x1, z1, (x1 + x2) >>1, (z1 + z2) >>1, n, eb, cp);
 	EnvWaterTriR(level - 1, x2, z2, x3, z3, (x1 + x2) >>1, (z1 + z2) >>1, n, eb, cp);
 }
-bool GLRenderEngine::GLRenderWater(Terrain *map, Camera *cam, int flags, float quality){
+bool GLRenderEngine::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, float quality){
 	if(!patches) return false;
 	if(!map || !cam){
 		delete [] patches;	//should duplicate cleanup code here...
@@ -1054,10 +1049,10 @@ bool GLRenderEngine::GLRenderWater(Terrain *map, Camera *cam, int flags, float q
 		}else{
 			glColor4f(0, 0.3f, 0.3f, 0.5f);
 		}
-		for(int n = 0; n < npatches; n++){
+		for(int32_t n = 0; n < npatches; n++){
 			if(patches[n].id > 0){
 				if(patches[n].lodul->waterflag){
-					int x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
+					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					glTexCoord2f(0.0f, iscale);
 					glVertex3f(x1, WATERHEIGHT, y1 + TexSize);
 					glTexCoord2f(iscale, 0.0f);
@@ -1066,7 +1061,7 @@ bool GLRenderEngine::GLRenderWater(Terrain *map, Camera *cam, int flags, float q
 					glVertex3f(x1, WATERHEIGHT, y1);
 				}
 				if(patches[n].loddr->waterflag){
-					int x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
+					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					glTexCoord2f(0.0f, iscale);
 					glVertex3f(x1, WATERHEIGHT, y1 + TexSize);
 					glTexCoord2f(iscale, iscale);
@@ -1095,14 +1090,14 @@ bool GLRenderEngine::GLRenderWater(Terrain *map, Camera *cam, int flags, float q
 		glBegin(GL_TRIANGLES);
 		glColor4f(1.0f, 1.0f, 1.0f, WaterAlpha * 0.5f);
 		glColor4f(1.0f, 1.0f, 1.0f, WaterAlpha * ReflectAmount);
-		for(int n = 0; n < npatches; n++){
+		for(int32_t n = 0; n < npatches; n++){
 			if(patches[n].id > 0){
 				if(patches[n].lodul->waterflag){
-					int x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
+					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					EnvWaterTriR(WaterTessLevel, x1, y1 + TexSize, x1 + TexSize, y1, x1, y1, nr, id, cm);
 				}
 				if(patches[n].loddr->waterflag){
-					int x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
+					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					EnvWaterTriR(WaterTessLevel, x1 + TexSize, y1, x1, y1 + TexSize, x1 + TexSize, y1 + TexSize, nr, id, cm);
 				}
 			}

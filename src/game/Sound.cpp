@@ -94,7 +94,7 @@ void Sound::PlayBuffer(int num, float pri)
 	float fLowestPriority = std::numeric_limits<float>::infinity();
 	int iLowestVoice = -1;
 
-	for(int i = 0; iLastVoice == -1 && i < aVoices.size(); i++)
+	for(int i = 0; iLastVoice == -1 && i < (int)aVoices.size(); i++)
 	{
 		if(aVoices[i].voice.getStatus() == sf::Sound::Stopped)
 		{
@@ -134,7 +134,7 @@ void Sound::PlayBuffer(int num, float pri)
 //Stops one voice.
 void Sound::Stop(int v)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		aVoices[v].voice.stop();
 }
 
@@ -148,7 +148,7 @@ void Sound::StopAll()
 //Returns nonzero if voice is playing, zero if stopped or bad voice num.
 bool Sound::GetVoiceStatus(int v)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 	{
 		return aVoices[v].voice.getStatus() == sf::Sound::Playing;
 	}
@@ -159,7 +159,7 @@ bool Sound::GetVoiceStatus(int v)
 //Returns the wave ID last played on a voice.
 int Sound::GetVoiceWave(int v)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 	{
 		return aVoices[v].iBufferId;
 	}
@@ -237,37 +237,37 @@ void Sound::SetListenerVel(Vec3 vel)
 
 void Sound::SetVoicePos(int v, Vec3 pos)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		CopyVec3(pos, aVoices[v].vPos);
 }
 
 void Sound::SetVoiceVel(int v, Vec3 vel)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		CopyVec3(vel, aVoices[v].vVel);
 }
 
 void Sound::SetVoicePriority(int v, float pri)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		aVoices[v].fPriority = pri;
 }
 
 void Sound::SetVoiceGain(int v, float gain)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		aVoices[v].fGain = gain;
 }
 
 void Sound::SetVoicePitch(int v, float pitch)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 		aVoices[v].fPitchScale = pitch;
 }
 
 void Sound::SetVoiceDistanceScale(int v, float minscale, float maxscale)
 {
-	if(v >= 0 && v < aVoices.size())
+	if(v >= 0 && v < (int)aVoices.size())
 	{
 		aVoices[v].fMaxDistScale = maxscale;
 		aVoices[v].fMinDistScale = minscale;
@@ -276,7 +276,7 @@ void Sound::SetVoiceDistanceScale(int v, float minscale, float maxscale)
 
 void Sound::SetVoice3D(int voice, Vec3 pos, Vec3 vel, float gain, float pitch, float pri)
 {
-	if(voice >= 0 && voice < aVoices.size())
+	if(voice >= 0 && voice < (int)aVoices.size())
 	{
 		aVoices[voice].b2DVoice = false;
 		SetVoicePos(voice, pos);
@@ -289,7 +289,7 @@ void Sound::SetVoice3D(int voice, Vec3 pos, Vec3 vel, float gain, float pitch, f
 
 void Sound::SetVoice2D(int voice)
 {
-	if(voice >= 0 && voice < aVoices.size())
+	if(voice >= 0 && voice < (int)aVoices.size())
 	{
 		aVoices[voice].voice.setPosition(0, 0, 0);
 		aVoices[voice].voice.setPitch(1.0f);

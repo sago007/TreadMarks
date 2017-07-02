@@ -24,9 +24,15 @@
 using namespace std;
 
 void Mesh::Free(){
-	if(Vertex) delete [] Vertex;  Vertex = NULL;  nVertex = 0;
-	if(Poly) delete [] Poly;  Poly = NULL;  nPoly = 0;
-	if(VertNorm) delete [] VertNorm;  VertNorm = NULL;  nVertNorm = 0;
+	if(Vertex) delete [] Vertex;
+	Vertex = NULL;
+	nVertex = 0;
+	if(Poly) delete [] Poly;
+	Poly = NULL;
+	nPoly = 0;
+	if(VertNorm) delete [] VertNorm;
+	VertNorm = NULL;
+	nVertNorm = 0;
 	NextLOD = NULL;
 }
 bool Mesh::Init(int V, int P){

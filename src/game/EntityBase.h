@@ -403,15 +403,15 @@ public:
 public:
 	EntityGod(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityGod();
-	bool Think();
-	void DeliverPacket(const unsigned char *data, int len);
+	bool Think() override;
+	void DeliverPacket(const unsigned char *data, int len) override;
 //	bool SetFloat(int type, float attr);
-	bool SetInt(int type, int attr);
-	bool SetString(int type, const char *s);
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	CStr QueryString(int type);
-	EntityGroup Group(){ return GROUP_ACTOR; };//GROUP_OMNIPOTENT
+	bool SetInt(int type, int attr) override;
+	bool SetString(int type, const char *s) override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	CStr QueryString(int type) override;
+	EntityGroup Group() override{ return GROUP_ACTOR; };//GROUP_OMNIPOTENT
 };
 
 
@@ -440,7 +440,7 @@ public:
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	bool CacheResources();
 	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	void UnlinkResources() override;
 private:
 	void ReadCfg(ConfigFile *cfg);
 };
@@ -452,12 +452,12 @@ public:
 public:
 	EntitySkyplane(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntitySkyplane(){ };
-	bool Think();
-	bool SetInt(int type, int val);//{ Active = val; return 1; };
-	int QueryInt(int type);//{ return Active; };
-	float QueryFloat(int type);
-	CStr QueryString(int type);
-	EntityGroup Group(){ return GROUP_ACTOR; };
+	bool Think() override;
+	bool SetInt(int type, int val) override;//{ Active = val; return 1; };
+	int QueryInt(int type) override;//{ return Active; };
+	float QueryFloat(int type) override;
+	CStr QueryString(int type) override;
+	EntityGroup Group() override{ return GROUP_ACTOR; };
 };
 //***************************************************************
 //             SkyBox Entity, version of SkyPlane, 6 sided sky-cube.

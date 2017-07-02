@@ -779,7 +779,6 @@ bool Bitmap::Blit(void *vdest, int dw, int dh, int dp, int dx, int dy,
 				 int sx, int sy, int sw, int sh, bool trans){
 	unsigned char *dest = (unsigned char*)vdest;
 	if(data && dest && dw > 0 && dh > 0){
-		int t = 0;
 		//Initial values for rectangle to blit from Bitmap.
 		int inx = sx;//std::min(std::max(sx, 0), width);
 		int iny = sy;//std::min(std::max(sy, 0), height);
@@ -1118,8 +1117,10 @@ bool Bitmap::AnalyzeLines(){	//8bit ONLY at the moment!
 }
 void Bitmap::FreeAnalyze(){
 	nLines = 0;
-	if(LineLeft) delete [] LineLeft; LineLeft = NULL;
-	if(LineRight) delete [] LineRight; LineRight = NULL;
+	if(LineLeft) delete [] LineLeft; 
+	LineLeft = NULL;
+	if(LineRight) delete [] LineRight; 
+	LineRight = NULL;
 }
 
 bool ImageSet::LoadSet(const char *n){

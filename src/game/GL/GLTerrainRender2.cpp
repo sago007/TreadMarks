@@ -98,7 +98,7 @@ struct Tri2D{
 Tri2D TriStack[MAXTRISTACK];
 */
 
-#define IHEIGHT_NORENDER 0xffffffff
+#define IHEIGHT_NORENDER -1
 
 struct LodTree;
 
@@ -143,7 +143,6 @@ public:
 #define BINTRIMAX  20000
 //Should be even multiple of 4.
 
-static BinaryTriangle2 RealBinTriPool[BINTRIPOOL + 1];
 static BinaryTriangle2 *BinTriPool;// = &RealBinTriPool[0];
 //BinaryTriangle2 BinTriPool[BINTRIPOOL + 1];
 static int NextBinTriPool = 1;
@@ -282,10 +281,10 @@ static LodTree *lod = 0;
 static float variance = 0.0f;
 
 //NOTE: This function, normally, ROUNDS TO NEAREST!!!
-inline long FloatToLong(float f) { // relies on IEEE format for float
+inline int32_t FloatToLong(float f) { // relies on IEEE format for float
 	f += -0.499999f;	//This change makes it CHOP TO LOWER!!
 	f += (3 << 22);
-	return ((*(long*)&f)&0x007fffff) - 0x00400000;
+	return ((*(int32_t*)&f)&0x007fffff) - 0x00400000;
 //	return (long)f;
 }
 
@@ -550,31 +549,6 @@ inline void BinTriVert(int x, int y){
 }
 static int PolyCount = 0;
 
-//Recursive function to render all binary triangles descending from a root triangle.
-//static void RenderBinTri(BinaryTriangle2 *btri, int x1, int y1, int x2, int y2, int x3, int y3){
-//	if(btri->cl && btri->cr){
-//		int avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
-//	//	int t =
-//		RenderBinTri(btri->cl, x3, y3, x1, y1, avgx, avgy);
-//	//	if(btri->cr){
-//	//	t |=
-//		RenderBinTri(btri->cr, x2, y2, x3, y3, avgx, avgy);// <<1;
-//	}else{
-//		glBegin(GL_TRIANGLES);	//Really badly unoptimized triangles...
-//		BinTriVert(x1, y1);
-//		BinTriVert(x2, y2);
-//		BinTriVert(x3, y3);
-//		glEnd();
-//		PolyCount++;
-//	//	return 1;
-//	}
-//}
-static void CDECL FakeglTexCoord2f(float a, float b){
-	a += b;
-}
-static void CDECL FakeglVertex3f(float a, float b, float c){
-	a += b - c;
-}
 inline void BinTriVert3(float x, float y, float h){
 	glTexCoord2f((x - texoffx) * texscalex + texaddx, (y - texoffy) * texscaley + texaddy);
 	glVertex3f(x, h, y);

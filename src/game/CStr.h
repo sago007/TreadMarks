@@ -147,9 +147,11 @@ public:
 		if(Next) return Next->AddItem(data);
 		Next = new CStrList(data);
 		if(Next){
-			Next->Prev = this; return Next;
+			Next->Prev = this; 
+			return Next;
 		}else{
-			if(data) delete data; return 0;
+			if(data) delete data; 
+			return 0;
 		}
 	};
 	CStrList *InsertAfter(CStr *data = NULL){
@@ -163,7 +165,8 @@ public:
 			t->Prev = this;
 			return t;
 		}else{
-			if(data) delete data; return 0;
+			if(data) delete data; 
+			return 0;
 		}
 	};
 	CStrList *InsertBefore(CStr *data = NULL){
@@ -177,7 +180,8 @@ public:
 			t->Next = this;
 			return t;
 		}else{
-			if(data) delete data; return 0;
+			if(data) delete data; 
+			return 0;
 		}
 	};
 	void DeleteList(){

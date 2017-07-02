@@ -2031,7 +2031,7 @@ bool VoxelWorld::InitializeEntities(){
 void VoxelWorld::InputTime(int framemsec){
 	vmsec = framemsec;
 	msec += framemsec;
-	ffrac = (float)framemsec / 1000.0f;
+	ffrac = ((float)framemsec) / 1000.0f;
 }
 //This needs to be improved so it only thinks nernies near the camera, etc.
 //

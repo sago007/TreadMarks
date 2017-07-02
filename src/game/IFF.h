@@ -36,8 +36,8 @@
 #ifndef IFF_H
 #define IFF_H
 
-typedef unsigned long ulong;
-typedef unsigned short ushort;
+//typedef unsigned long ulong;
+//typedef unsigned short ushort;
 typedef unsigned char uchar;
 
 //#include "stdio.h"
@@ -51,15 +51,15 @@ class IFF{
 private:
 	FILE *F;
 	bool IsOpen, IsWrite, OwnFile;
-	ulong Start;
-	ulong IFFLength;
-	ulong IFFType;
-	ulong ChunkPos, ChunkLength, ChunkType;
+	uint32_t Start;
+	uint32_t IFFLength;
+	uint32_t IFFType;
+	uint32_t ChunkPos, ChunkLength, ChunkType;
 public:
 	IFF();
 	~IFF();
-	ulong	StringToUlong(const char *c);
-	ulong	Close();	//Returns file length.
+	uint32_t	StringToUlong(const char *c);
+	uint32_t	Close();	//Returns file length.
 	int		Even();	//Aligns read/write pointer on an even boundary, after byte read/writes.
 	int		OpenIn(const char *name, int offset = 0);	//Bool.  Please be using EVEN offsets, danke!
 	int		OpenIn(FILE *f);	//Attempts to read IFF header from current position in passed in stream.  Stream WILL NOT be closed when IFF object is closed!
@@ -67,21 +67,21 @@ public:
 	bool	IsFileOpen(){ return IsOpen; };
 	bool	IsFileRead(){ return !IsWrite; };	//Check the status of the file.
 	bool	IsFileWrite(){ return IsWrite; };
-	ulong	FindChunk(const char *c);	//Finds chunk searching from start of file.  Returns length of data in chunk.
-	ulong	FindChunkNext(const char *c);	//Finds chunk starting after currently found chunk.  Returns length of data in chunk.
+	uint32_t	FindChunk(const char *c);	//Finds chunk searching from start of file.  Returns length of data in chunk.
+	uint32_t	FindChunkNext(const char *c);	//Finds chunk starting after currently found chunk.  Returns length of data in chunk.
 	//A real "NextChunk" would be for iterating through ALL chunks.
 	float	ReadFloat();
 	float	ReadFloat(float *pnt);
 	double	ReadFloat(double *pnt);
-	ulong	ReadLong();
-	ulong	ReadLong(ulong *pnt);
+	uint32_t	ReadLong();
+	uint32_t	ReadLong(uint32_t *pnt);
 	int		ReadLong(int *pnt);
 	ushort	ReadShort();
 	ushort	ReadShort(ushort *pnt);
 	uchar	ReadByte();
 	uchar	ReadByte(uchar *pnt);
-	int		ReadBytes(uchar *p, ulong n);	//The following return boolean values.
-	int		ReadBytes(char *p, ulong n){ return ReadBytes((uchar*)p, n); };	//The following return boolean values.
+	int		ReadBytes(uchar *p, uint32_t n);	//The following return boolean values.
+	int		ReadBytes(char *p, uint32_t n){ return ReadBytes((uchar*)p, n); };	//The following return boolean values.
 	CStr	ReadString();
 	int		ReadString(CStr *str);	//Reads a string of up to 65k into supplied CStr.
 	int		OpenOut(const char *name, const char *type, int offset = 0);	//Please be using EVEN offsets, danke!
@@ -90,11 +90,11 @@ public:
 	int		StartChunk(const char *c);
 	int		EndChunk();	//Writes length of chunk to file.  NEEDED!
 	int		WriteFloat(float v);
-	int		WriteLong(ulong v);
+	int		WriteLong(uint32_t v);
 	int		WriteShort(ushort v);
 	int		WriteByte(uchar v);
-	int		WriteBytes(const uchar *p, ulong n);
-	int		WriteBytes(const char *p, ulong n){ return WriteBytes((uchar*)p, n); };
+	int		WriteBytes(const uchar *p, uint32_t n);
+	int		WriteBytes(const char *p, uint32_t n){ return WriteBytes((uchar*)p, n); };
 	int		WriteString(const char *s);	//Writes a string of up to 65k into file: 2 bytes for len, string, Even().
 };
 

@@ -102,7 +102,7 @@ int IFF::OpenIn(FILE *f){	//On OpenIn, Start points to first real chunk, on Open
 	}
 	return 0;
 }
-ulong IFF::Close(){
+uint32_t IFF::Close(){
 	if(IsOpen){
 		if(IsWrite){
 			IFFLength = ftell(F) - (Start + 8);
@@ -117,7 +117,7 @@ ulong IFF::Close(){
 	return IFFLength + 8;
 }
 float IFF::ReadFloat(){
-	ulong TempL = ReadLong();
+	uint32_t TempL = ReadLong();
 	float TempF = *((float*)(&TempL));
 	return TempF;
 }
@@ -129,14 +129,14 @@ double IFF::ReadFloat(double *pnt){
 	if(pnt) return *pnt = (double)ReadFloat();
 	return 0.0;
 }
-ulong IFF::ReadLong(){
+uint32_t IFF::ReadLong(){
 	uint32_t Temp;
 	if(IsOpen && fread(&Temp, sizeof(Temp), 1, F)){
 		return ntohl(Temp);
 	}
 	return 0;
 }
-ulong IFF::ReadLong(ulong *pnt){
+uint32_t IFF::ReadLong(uint32_t *pnt){
 	if(pnt) return *pnt = ReadLong();
 	return 0;
 }
@@ -144,14 +144,14 @@ int IFF::ReadLong(int *pnt){
 	if(pnt) return *pnt = (int)ReadLong();
 	return 0;
 }
-ushort IFF::ReadShort(){
+uint16_t IFF::ReadShort(){
 	unsigned short Temp;
 	if(IsOpen && fread(&Temp, sizeof(Temp), 1, F)){
 		return ntohs(Temp);
 	}
 	return 0;
 }
-ushort IFF::ReadShort(ushort *pnt){
+uint16_t IFF::ReadShort(uint16_t *pnt){
 	if(pnt) return *pnt = ReadShort();
 	return 0;
 }
@@ -166,7 +166,7 @@ uchar IFF::ReadByte(uchar *pnt){
 	if(pnt) return *pnt = ReadByte();
 	return 0;
 }
-int IFF::ReadBytes(uchar *p, ulong n){
+int IFF::ReadBytes(uchar *p, uint32_t n){
 	if(p && n > 0 && IsOpen && fread(p, n, 1, F)){
 		return 1;
 	}
@@ -194,8 +194,8 @@ int IFF::ReadString(CStr *str){
 	}
 	return 0;
 }
-ulong IFF::FindChunk(const char *c){
-	ulong chunk = StringToUlong(c);
+uint32_t IFF::FindChunk(const char *c){
+	uint32_t chunk = StringToUlong(c);
 	ChunkPos = 0;
 	ChunkType = 1;
 	if(IsOpen){
@@ -215,9 +215,9 @@ ulong IFF::FindChunk(const char *c){
 	ChunkType = 0;
 	return 0;
 }
-ulong IFF::FindChunkNext(const char *c){
+uint32_t IFF::FindChunkNext(const char *c){
 	if(ChunkPos == 0) return FindChunk(c);	//If first chunk call, go to find.
-	ulong chunk = StringToUlong(c);
+	uint32_t chunk = StringToUlong(c);
 	if(IsOpen){
 		fseek(F, ChunkPos + 8 + ChunkLength, SEEK_SET);
 		while(!feof(F) && ChunkType && ChunkPos < Start + IFFLength - 4){
@@ -235,8 +235,8 @@ ulong IFF::FindChunkNext(const char *c){
 	ChunkType = 0;
 	return 0;
 }
-ulong IFF::StringToUlong(const char *sc){
-	ulong Temp = 0;
+uint32_t IFF::StringToUlong(const char *sc){
+	uint32_t Temp = 0;
 	uchar *uc = (uchar*)sc;
 	if(sc && strlen(sc) >= 4){
 		Temp |= *(uc + 0) << 24;
@@ -295,7 +295,7 @@ int IFF::StartChunk(const char *c){
 }
 int IFF::EndChunk(){	//Writes length of chunk to file.  NEEDED!
 	if(IsOpen && IsWrite){
-		ulong tpos;
+		uint32_t tpos;
 		ChunkLength = (tpos = ftell(F)) - (ChunkPos + 8);
 		fseek(F, ChunkPos + 4, SEEK_SET);
 		WriteLong(ChunkLength);
@@ -305,17 +305,17 @@ int IFF::EndChunk(){	//Writes length of chunk to file.  NEEDED!
 	return 0;
 }
 int IFF::WriteFloat(float v){
-	ulong TempL = *((ulong*)(&v));
+	uint32_t TempL = *((uint32_t*)(&v));
 	return WriteLong(TempL);
 }
-int IFF::WriteLong(ulong v){
+int IFF::WriteLong(uint32_t v){
 	v = htonl(v);
 	if(IsOpen && IsWrite){
 		if(fwrite(&v, sizeof(v), 1, F)) return 1;
 	}
 	return 0;
 }
-int IFF::WriteShort(ushort v){
+int IFF::WriteShort(uint16_t v){
 	v = htons(v);
 	if(IsOpen && IsWrite){
 		if(fwrite(&v, sizeof(v), 1, F)) return 1;
@@ -328,7 +328,7 @@ int IFF::WriteByte(uchar v){
 	}
 	return 0;
 }
-int IFF::WriteBytes(const uchar *p, ulong n){
+int IFF::WriteBytes(const uchar *p, uint32_t n){
 	if(IsOpen && IsWrite && p && n > 0){
 		if(fwrite(p, n, 1, F)) return 1;
 	}
@@ -337,8 +337,8 @@ int IFF::WriteBytes(const uchar *p, ulong n){
 int IFF::WriteString(const char *s){	//Writes a string of up to 65k into file: 2 bytes for len, string, Even().
 	if(IsOpen && IsWrite && s){
 		int l = strlen(s);
-		if(WriteShort(std::min((ushort)0xffff, static_cast<unsigned short>(l)))){
-			if(WriteBytes(s, std::min((ushort)0xffff, static_cast<unsigned short>(l))) || l == 0){	//Zero length strings should be ok.
+		if(WriteShort(std::min((uint16_t)0xffff, static_cast<uint16_t>(l)))){
+			if(WriteBytes(s, std::min((uint16_t)0xffff, static_cast<uint16_t>(l))) || l == 0){	//Zero length strings should be ok.
 				Even();
 				return 1;
 			}

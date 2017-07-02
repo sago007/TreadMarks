@@ -79,8 +79,9 @@ private:
 };
 struct Target : public LinklistBase<Target> {
 	EntityGID gid;
-	int lap, nextway, frags, deaths;
+	int lap, nextway, deaths = 0;
 	float waydist, health;
+	int frags;
 	Vec3 pos, rot, vel;
 	int targetok, serverplace;
 	int racetime;

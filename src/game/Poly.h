@@ -276,7 +276,7 @@ public:
 		Texture = img;  Flags = flags;  Opacity = opac;
 		M = m;  BndRad = rad;  LodBias = lod;
 	};
-	MeshObject() : Perturb(0), PerturbX(0), PerturbZ(0), PerturbScale(1) { };
+	MeshObject() : PerturbX(0), PerturbZ(0), PerturbScale(1), Perturb(0) { };
 	void Render(PolyRender *PR);
 	bool Transparent(){
 		if(!(Flags & MESH_BLEND_ADD) && (Opacity >= 1.0f || (Flags & MESH_BLEND_ENVMAP))) return false;

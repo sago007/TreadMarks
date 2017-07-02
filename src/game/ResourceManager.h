@@ -64,7 +64,8 @@ public:
 	bool Dynamic;	//Set for any texture that will be regularly redownloaded.
 	bool Flushable;	//True if image can be freed after download, and is auto-reloadable.
 	ResourceManager *RM;
-	ImageNode(ResourceManager *rm, const char *n, bool mip = false, bool trans = false, AlphaGradType agrad = ALPHAGRAD_NONE) : name(n), MipMap(mip), Trans(trans), AlphaGrad(agrad), SizeBias(0), AlphaGradBias(0.5f), BlackOutX(0), BlackOutY(0), RM(rm), Dynamic(false), Flushable(false), ForceMaxTexRes(0) { };
+	ImageNode(ResourceManager *rm, const char *n, bool mip = false, bool trans = false, AlphaGradType agrad = ALPHAGRAD_NONE) : 
+	   name(n), MipMap(mip), Trans(trans), AlphaGrad(agrad), SizeBias(0), ForceMaxTexRes(0), AlphaGradBias(0.5f), BlackOutX(0), BlackOutY(0), Dynamic(false), Flushable(false), RM(rm) { };
 	ImageNode *Find(const char *n, bool mip, bool trans, AlphaGradType agrad);
 	//ImageNodes will now be differentiated by above parameters as well, as they affect final modifications to image.
 };
