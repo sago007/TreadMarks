@@ -41,6 +41,7 @@
 #include <cmath>
 #include <cfloat>
 #include <limits>
+#include <stdint.h>
 
 #include "macros.h"
 
@@ -71,16 +72,16 @@ typedef float Rot3[3];	//A, B, C rotation angles about X, Y, and Z respectively.
 
 
 //Fast, rounding-mode-don't-care float to long conversion.
-inline int FastFtoL(float f){
+inline int32_t FastFtoL(float f){
 #ifdef WIN32
-		int i;
+		int32_t i;
 		_asm{
 			fld dword ptr [f]
 			fistp dword ptr [i]
 		}
 		return i;
 #else
-        return (int)f;
+        return (int32_t)f;
 #endif
 };
 
@@ -88,8 +89,8 @@ inline int FastFtoL(float f){
 float CDECL fsqrt_inv(float f);
 
 //More random randoms.
-void TMsrandom(int s);
-int TMrandom();
+void TMsrandom(int32_t s);
+int32_t TMrandom();
 
 class CVec3{
 public:
@@ -216,7 +217,7 @@ inline void NormMat3(Mat3 mat){
 	NormMat3(mat, mat);
 };
 inline void LerpMat3(const Mat3 src1, const Mat3 src2, float t, Mat3 dst){
-//	for(int i = 0; i < 3; i++){
+//	for(int32_t i = 0; i < 3; i++){
 	LerpVec3(src1[0], src2[0], t, dst[0]); NormVec3(dst[0]);
 	LerpVec3(src1[1], src2[1], t, dst[1]); NormVec3(dst[1]);
 	LerpVec3(src1[2], src2[2], t, dst[2]); NormVec3(dst[2]);
@@ -307,13 +308,13 @@ inline float NormRot(float r){
 	return 0.0f;
 };
 inline void NormRot3(Rot3 rot){	//Brings rotations into the range 0 to PI * 2.
-	for(int i = 0; i < 3; i++){
+	for(int32_t i = 0; i < 3; i++){
 		rot[i] = NormRot(rot[i]);
 	}
 };
 inline void DeltaRot3(Rot3 rot, const float clamp = PI){	//Normalizes rotation deltas to good values.
 	NormRot3(rot);	//First get in good range.
-	for(int i = 0; i < 3; i++){
+	for(int32_t i = 0; i < 3; i++){
 		if(rot[i] > PI) rot[i] -= PI2;	//Greater than 180 rotation, so go the other way.
 		rot[i] = CLAMP(rot[i], -clamp, clamp);	//Optionally clamp to lower than PI values in each direction.
 	}

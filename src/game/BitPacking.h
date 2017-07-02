@@ -34,51 +34,51 @@
 class BitPackEngine{
 private:
 	unsigned char *data;
-	int maxlen, bitlen, pos;
+	int32_t maxlen, bitlen, pos;
 public:
-	BitPackEngine(char *buffer, int buflength);
-	BitPackEngine(unsigned char *buffer, int buflength);
+	BitPackEngine(char *buffer, int32_t buflength);
+	BitPackEngine(unsigned char *buffer, int32_t buflength);
 	~BitPackEngine();
 public:	//These funcs return 0 for failure and 1 for success.
-	int PackInt(int val, int bits);
-	int PackUInt(int val, int bits);
-	int PackFloatInterval(float val, float min, float max, int bits);
-	int PackFloat(float val, int bits);
-	int PackString(const char *str, int bits);
-	int SkipBits(int bits);
+	int32_t PackInt(int32_t val, int32_t bits);
+	int32_t PackUInt(int32_t val, int32_t bits);
+	int32_t PackFloatInterval(float val, float min, float max, int32_t bits);
+	int32_t PackFloat(float val, int32_t bits);
+	int32_t PackString(const char *str, int32_t bits);
+	int32_t SkipBits(int32_t bits);
 	void Reset();	//Resets packing cursor to start of defined buffer.
 public:
-	int BytesUsed();	//Returns number of bytes used in buffer.
-	int BitsUsed();
+	int32_t BytesUsed();	//Returns number of bytes used in buffer.
+	int32_t BitsUsed();
 	unsigned char *Data(){ return data; };
 };
 
 class BitUnpackEngine{
 private:
 	const unsigned char *data;
-	int maxlen, bitlen, pos;
+	int32_t maxlen, bitlen, pos;
 public:
-	BitUnpackEngine(const char *buffer, int buflength);
-	BitUnpackEngine(const unsigned char *buffer, int buflength);
+	BitUnpackEngine(const char *buffer, int32_t buflength);
+	BitUnpackEngine(const unsigned char *buffer, int32_t buflength);
 	~BitUnpackEngine();
 public:	//These funcs return 0 for failure and 1 for success.
-	int UnpackInt(int &val, int bits);
-	int UnpackUInt(unsigned int &val, int bits);
-	int UnpackUInt(int &val, int bits){  unsigned int v = val;  int ret = UnpackUInt(v, bits);  val = v;  return ret; };
-	int UnpackFloatInterval(float &val, float min, float max, int bits);
-	int UnpackFloat(float &val, int bits);
-	int UnpackString(CStr &strout, int bits);
-	int SkipBits(int bits);
+	int32_t UnpackInt(int32_t &val, int32_t bits);
+	int32_t UnpackUInt(uint32_t &val, int32_t bits);
+	int32_t UnpackUInt(int32_t &val, int32_t bits){  uint32_t v = val;  int32_t ret = UnpackUInt(v, bits);  val = v;  return ret; };
+	int32_t UnpackFloatInterval(float &val, float min, float max, int32_t bits);
+	int32_t UnpackFloat(float &val, int32_t bits);
+	int32_t UnpackString(CStr &strout, int32_t bits);
+	int32_t SkipBits(int32_t bits);
 public:
-	int BytesUsed();	//Returns number of bytes used in buffer.
-	int BitsUsed();
+	int32_t BytesUsed();	//Returns number of bytes used in buffer.
+	int32_t BitsUsed();
 	const unsigned char *Data(){ return data; };
 };
 
 //This is a very simple wrapper for BitPackEngine that lets you instantiate a stack
 //object with a certain amount of buffer space to pack bits into, which can then be
 //cast to a BitPackEngine for passing to another func to e.g. send the data in the buffer.
-template <int LEN> class BitPacker : public BitPackEngine{
+template <int32_t LEN> class BitPacker : public BitPackEngine{
 private:
 	unsigned char buf[LEN];
 public:

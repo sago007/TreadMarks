@@ -36,14 +36,14 @@ struct VehicleStateLump{
 	Mat3 RotM, RotVelM;
 	Vec3 Pos, Vel;
 	float LAccel, RAccel;
-//	unsigned int TimeStamp;
-	int Flags;
-	int InGroundBits;
+//	unsigned int32_t TimeStamp;
+	int32_t Flags;
+	int32_t InGroundBits;
 	float TurRot, TurRotVel;
 	VehicleStateLump(){
 		ClearVec3(Pos);
 		ClearVec3(Vel);
-		for(int i = 0; i < 3; i++){
+		for(int32_t i = 0; i < 3; i++){
 			ClearVec3(RotM[i]);
 			ClearVec3(RotVelM[i]);
 		}
@@ -56,16 +56,16 @@ struct VehicleStateLump{
 	void Set(Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel, float trot){//, float tsteer){
 		if(pos) CopyVec3(pos, Pos);
 		if(vel) CopyVec3(vel, Vel);
-		if(rot) for(int i = 0; i < 3; i++) CopyVec3(rot[i], RotM[i]);
-		if(rotvel) for(int i = 0; i < 3; i++) CopyVec3(rotvel[i], RotVelM[i]);
+		if(rot) for(int32_t i = 0; i < 3; i++) CopyVec3(rot[i], RotM[i]);
+		if(rotvel) for(int32_t i = 0; i < 3; i++) CopyVec3(rotvel[i], RotVelM[i]);
 	//	TurSteer = tsteer;
 		TurRot = trot;
 	};
 	void Get(Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel, float *trot){//, float &tsteer){
 		if(pos) CopyVec3(Pos, pos);
 		if(vel) CopyVec3(Vel, vel);
-		if(rot) for(int i = 0; i < 3; i++) CopyVec3(RotM[i], rot[i]);
-		if(rotvel) for(int i = 0; i < 3; i++) CopyVec3(RotVelM[i], rotvel[i]);
+		if(rot) for(int32_t i = 0; i < 3; i++) CopyVec3(RotM[i], rot[i]);
+		if(rotvel) for(int32_t i = 0; i < 3; i++) CopyVec3(RotVelM[i], rotvel[i]);
 		*trot = TurRot;
 	//	tsteer = TurSteer;
 	};
@@ -78,15 +78,15 @@ class Vehicle{
 public:
 	//New, network prediction history buffer...
 	VehicleStateLump History[HISTORY_SIZE];
-	int CurrentLump;
-	unsigned int CurrentTime;
+	int32_t CurrentLump;
+	uint32_t CurrentTime;
 	//
 public:	//History based functions.
-	void SetCurrentTime(unsigned int time);
-	int SetControlInput(unsigned int time, float laccel, float raccel, float turrotvel);
-	int SetAuthoritativeState(unsigned int time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
-		float laccel, float raccel, float turrot, float turrotvel, int ingbits);
-	int PredictCurrentTime(Vec3 posout, Rot3 rotout, Vec3 velout, float *turrot, Terrain *map);
+	void SetCurrentTime(uint32_t time);
+	int32_t SetControlInput(uint32_t time, float laccel, float raccel, float turrotvel);
+	int32_t SetAuthoritativeState(uint32_t time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
+		float laccel, float raccel, float turrot, float turrotvel, int32_t ingbits);
+	int32_t PredictCurrentTime(Vec3 posout, Rot3 rotout, Vec3 velout, float *turrot, Terrain *map);
 	//
 	//
 	float LTurRot, TurRot;//, TurRotVel;
@@ -94,7 +94,7 @@ public:	//History based functions.
 //	Object Body, Wheel[4];
 //	Vector LPos, Pos, LPosD, PosD;
 //	Rotation LRot, Rot, LRotD, RotD;
-	int Type;
+	int32_t Type;
 	CVec3 LPos, Pos;
 	CVec3 Vel;
 //	Vec3 LPosD, PosD;
@@ -103,7 +103,7 @@ public:	//History based functions.
 	//
 	CVec3 NPos, NVel;
 	Mat3 NRotM, NRotVelM;
-	int UseNetworkNext;
+	int32_t UseNetworkNext;
 	//Testing, Next Network Values.
 	//
 //	float Gravity,
@@ -111,8 +111,8 @@ public:	//History based functions.
 	Vec3 Gravity;
 	float SteerSpeed, AccelSpeed, MaxSpeed;
 //	Pnt3 lwv[10];
-//	int Wheels, WheelPoints;
-//	int ResetLwv;
+//	int32_t Wheels, WheelPoints;
+//	int32_t ResetLwv;
 	bool ConstrainRot;
 	CVec3 BndMin, BndMax;
 	//
@@ -121,20 +121,20 @@ public:	//History based functions.
 //	float ForwardVel, ForwardDot;
 	//
 //	double LastThinkTime;
-	unsigned int LastThinkTime;
+	uint32_t LastThinkTime;
 	float Fraction;
-	int FractionMS;
+	int32_t FractionMS;
 	//
 	CVec3 WP[MAXWHEELPOINTS];
 	CVec3 LastWP[MAXWHEELPOINTS];
-	CVec3 AccelWP[MAXWHEELPOINTS];	//Holds the vehicle-relative meters per second accelerations of each wheel point for this tick.
+	CVec3 AccelWP[MAXWHEELPOINTS];	//Holds the vehicle-relative meters per second accelerations of each wheel point32_t for this tick.
 	bool InGround[MAXWHEELPOINTS];
-	int InGroundTotal;
+	int32_t InGroundTotal;
 	float LinearVelocity;
-	int InGroundBits;
+	int32_t InGroundBits;
 	//
-	int WheelPoints, GroundWheelPoints;
-	int BackLeft, BackRight, FrontLeft, FrontRight;	//Indexes into WP arrays.
+	int32_t WheelPoints, GroundWheelPoints;
+	int32_t BackLeft, BackRight, FrontLeft, FrontRight;	//Indexes into WP arrays.
 	//
 	CVec3 AddAccelWP[MAXWHEELPOINTS];
 	CVec3 AddAccel;	//Vehicular external velocity change.
@@ -142,13 +142,13 @@ public:	//History based functions.
 private:
 public:
 	Vehicle();
-	Vehicle(float grav, float fric, bool conrot, int type, float frac);
+	Vehicle(float grav, float fric, bool conrot, int32_t type, float frac);
 	~Vehicle();
 	void oldThink(float Steer, float Accel, float Brake, float Scale, Terrain *terr);
-	void Init(float grav, float fric, bool conrot, int type, float frac);
+	void Init(float grav, float fric, bool conrot, int32_t type, float frac);
 	void SetGravity(Vec3 grav);
 	void SetFriction(float fric);
-	void Think(float LeftAccel, float RightAccel, unsigned int clocktime, Vec3 pos, Rot3 rot, Vec3 vel,
+	void Think(float LeftAccel, float RightAccel, uint32_t clocktime, Vec3 pos, Rot3 rot, Vec3 vel,
 		float *turrot, float turrotvel, Terrain *map);
 	void Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain *map);
 	void SetPos(Vec3 pos);

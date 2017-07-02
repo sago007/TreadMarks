@@ -62,13 +62,13 @@ private:
 //	EntityLink *linkfarm;
 //	EntityLink **bucket;
 	EntityBucketNode *bucket;
-	int bucketw, bucketh;	//number of buckets in x and y.
-	int shiftw, shifth;
-	int shiftx, shifty;	//pow2 size of each bucket.
-	int halfx, halfy;
-//	int nlinkfarm;
-//	int link;
-	bool AddEnt(int b, EntityBucketNode *bn){//EntityBase *ent){	//Does not sanity check bucket number.
+	int32_t bucketw, bucketh;	//number of buckets in x and y.
+	int32_t shiftw, shifth;
+	int32_t shiftx, shifty;	//pow2 size of each bucket.
+	int32_t halfx, halfy;
+//	int32_t nlinkfarm;
+//	int32_t link;
+	bool AddEnt(int32_t b, EntityBucketNode *bn){//EntityBase *ent){	//Does not sanity check bucket number.
 	//	if(link < nlinkfarm && ent){
 	//		linkfarm[link].ent = ent;
 	//		linkfarm[link].next = bucket[b];
@@ -94,7 +94,7 @@ public:
 	~EntityBucket(){
 		Free();
 	};
-	bool InitBuckets(int w, int h, int x, int y){//, int maxents){	//Init two dimensional buckets.
+	bool InitBuckets(int32_t w, int32_t h, int32_t x, int32_t y){//, int32_t maxents){	//Init two dimensional buckets.
 		Free();
 		shiftw = HiBit(w);
 		shifth = HiBit(h);
@@ -119,49 +119,49 @@ public:
 		Free();
 		return false;
 	};
-	bool InitBuckets(int n){//, int maxents){	//Init one dimensional bucket array.
+	bool InitBuckets(int32_t n){//, int32_t maxents){	//Init one dimensional bucket array.
 		return InitBuckets(n, 1, 1, 1);//, maxents);
 	};
 	void ClearBuckets(){	//We are using pool-allocated link objects, so no need to delete them!
 		//No were not, now we're using link objects created and deleted externally.
-		for(int b = 0; b < bucketw * bucketh; b++) bucket[b].UnlinkItem();
+		for(int32_t b = 0; b < bucketw * bucketh; b++) bucket[b].UnlinkItem();
 			//bucket[b] = NULL;
 	//	link = 0;
 	};
-	int WhichBucket(int x, int y){
+	int32_t WhichBucket(int32_t x, int32_t y){
 		return ((x >> shiftx) & (bucketw - 1)) + (((y >> shifty) & (bucketh - 1)) << shiftw);
 	};
-	int WhichBucket(int x, int y, int quad){	//Returns one of the 4 buckets in a box-filter pattern around the wanted point.
+	int32_t WhichBucket(int32_t x, int32_t y, int32_t quad){	//Returns one of the 4 buckets in a box-filter pattern around the wanted point.
 		return ((((x - halfx) >> shiftx) + (quad & 1)) & (bucketw - 1)) +
 			(((((y - halfy) >> shifty) + (quad >> 1)) & (bucketh - 1)) << shiftw);
 	};
-	bool AddEntity(EntityBucketNode *bn, int x, int y){//EntityBase *ent, int x, int y){	//Two dimensional bucket add.
+	bool AddEntity(EntityBucketNode *bn, int32_t x, int32_t y){//EntityBase *ent, int32_t x, int32_t y){	//Two dimensional bucket add.
 		return AddEnt(WhichBucket(x, y), bn);//ent);
 	};
-//	bool AddEntity(EntityBucketNode *bn, int x, int y, int w, int h){	//Two-dimensional with size, so possible multiple-bucket add.
-//		int w2 = w >>1;	//Add bucket entries at all four corners of bound, if necessary.
-//		int h2 = h >>1;
-//		int b1 = WhichBucket(x - w2, y - h2);	//UL
-//		int b2 = WhichBucket(x + w2, y - h2);	//UR
-//		int b3 = WhichBucket(x - w2, y + h2);	//DL
-//		int b4 = WhichBucket(x + w2, y + h2);	//DR
+//	bool AddEntity(EntityBucketNode *bn, int32_t x, int32_t y, int32_t w, int32_t h){	//Two-dimensional with size, so possible multiple-bucket add.
+//		int32_t w2 = w >>1;	//Add bucket entries at all four corners of bound, if necessary.
+//		int32_t h2 = h >>1;
+//		int32_t b1 = WhichBucket(x - w2, y - h2);	//UL
+//		int32_t b2 = WhichBucket(x + w2, y - h2);	//UR
+//		int32_t b3 = WhichBucket(x - w2, y + h2);	//DL
+//		int32_t b4 = WhichBucket(x + w2, y + h2);	//DR
 //		if(b2 != b1) AddEnt(b2, ent);	//UR not UL?
 //		if(b3 != b1) AddEnt(b3, ent);	//DL not UL?
 //		if(b4 != b2 && b4 != b3) AddEnt(b4, ent);	//DR not DL or UR?
 //		return AddEnt(b1, ent);	//Add UL regardless.
 //	};
-	bool AddEntity(EntityBucketNode *bn, int n){	//EntityBase *ent, int n){	//One dimensional add-entity.
+	bool AddEntity(EntityBucketNode *bn, int32_t n){	//EntityBase *ent, int32_t n){	//One dimensional add-entity.
 		return AddEnt(n & (bucketw - 1), bn);//ent);
 	};
-	EntityBucketNode *GetBucket(int x, int y){
+	EntityBucketNode *GetBucket(int32_t x, int32_t y){
 		if(bucket) return bucket[WhichBucket(x, y)].NextLink();
 		return NULL;
 	};
-	EntityBucketNode *GetBucket(int x, int y, int quad){
+	EntityBucketNode *GetBucket(int32_t x, int32_t y, int32_t quad){
 		if(bucket) return bucket[WhichBucket(x, y, quad)].NextLink();
 		return NULL;
 	};
-	EntityBucketNode *GetBucket(int n){
+	EntityBucketNode *GetBucket(int32_t n){
 		if(bucket) return bucket[n & (bucketw - 1)].NextLink();
 		return NULL;
 	};
@@ -170,7 +170,7 @@ public:
 	//	linkfarm = NULL;
 	//	if(bucket) delete [] bucket;
 		if(bucket){
-			for(int n = 0; n < bucketw * bucketh; n++){
+			for(int32_t n = 0; n < bucketw * bucketh; n++){
 				bucket[n].UnlinkItem();
 			}
 			delete [] bucket;
@@ -227,10 +227,10 @@ public:
 //Crater propogation.
 
 struct CraterEntry : public LinklistBase<CraterEntry>{
-	int x, y;
+	int32_t x, y;
 	float r, d, scorch;
 	CraterEntry(){ };
-	CraterEntry(int X, int Y, float R, float D, float Scorch) : x(X), y(Y), r(R), d(D), scorch(Scorch) { };
+	CraterEntry(int32_t X, int32_t Y, float R, float D, float Scorch) : x(X), y(Y), r(R), d(D), scorch(Scorch) { };
 	~CraterEntry(){ };
 };
 
@@ -252,10 +252,10 @@ public:
 	EntityGID ClientEnt;
 	ClassHash EntType;
 	CStr ClientName;
-	int ClientRate;
+	int32_t ClientRate;
 	bool Connected;
 	CraterEntry *LastCraterSent;
-	int TeamID;
+	int32_t TeamID;
 	//TODO:  Actually receive this from client and set it in tank.  Not done yet!!!
 };
 
@@ -276,10 +276,10 @@ class ConfigFileList : public ConfigFile, public LinklistBase<ConfigFileList> {
 public:
 	CStr cname, tname;
 	ClassHash thash;
-	unsigned int ClientChecksum[MAX_CLIENTS];	//For use on server, for checksum replies returned from clients.  Must match to not have to send back config data.
-	int ServerSynch;	//Should the server check checksums on this entity type and send to clients?  (No, for meaningless entities such as GUI.)
+	uint32_t ClientChecksum[MAX_CLIENTS];	//For use on server, for checksum replies returned from clients.  Must match to not have to send back config data.
+	int32_t ServerSynch;	//Should the server check checksums on this entity type and send to clients?  (No, for meaningless entities such as GUI.)
 	ConfigFileList(){
-		for(int i = 0; i < MAX_CLIENTS; i++) ClientChecksum[i] = 0;
+		for(int32_t i = 0; i < MAX_CLIENTS; i++) ClientChecksum[i] = 0;
 		ServerSynch = 1;
 		thash = 0;
 	};
@@ -310,35 +310,35 @@ public:
 class InputFIFOEntry{
 public:
 	CStr name;
-	int type;
+	int32_t type;
 	float extra;
 public:
-	InputFIFOEntry(const char *n, int t, float e) : name(n), type(t), extra(e) {};
+	InputFIFOEntry(const char *n, int32_t t, float e) : name(n), type(t), extra(e) {};
 	InputFIFOEntry() : type(0), extra(0) {};
-	void Set(const char *n, int t, float e = 0.0f){
+	void Set(const char *n, int32_t t, float e = 0.0f){
 		name = n;
 		type = t;
 		extra = e;
 	};
-	void Get(CStr &n, int &t, float &e){
+	void Get(CStr &n, int32_t &t, float &e){
 		n = name;
 		t = type;
 		e = extra;
 	};
 };
 
-template <int D> class InputFIFO{
+template <int32_t D> class InputFIFO{
 private:
 	InputFIFOEntry fifo[D];
-	int nextin, nextout;
+	int32_t nextin, nextout;
 public:
 	InputFIFO() : nextin(0), nextout(0) {};
-	bool Set(const char *n, int t, float e = 0.0f){
+	bool Set(const char *n, int32_t t, float e = 0.0f){
 		fifo[nextin].Set(n, t, e);
 		nextin = (nextin + 1) % D;
 		return true;
 	};
-	bool Get(CStr &n, int &t, float &e){
+	bool Get(CStr &n, int32_t &t, float &e){
 		if(nextout != nextin){
 			fifo[nextout].Get(n, t, e);
 			nextout = (nextout + 1) % D;
@@ -371,8 +371,8 @@ private:
 public:	//Callback functions inherited from PPC above.
 	virtual void Connect(ClientID source);
 	virtual void Disconnect(ClientID source, NetworkError ne);
-	virtual void PacketReceived(ClientID source, const char *data, int len);
-	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int len);
+	virtual void PacketReceived(ClientID source, const char *data, int32_t len);
+	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int32_t len);
 public:
 	FileManager FM;
 	Terrain Map;
@@ -385,7 +385,7 @@ public:
 	GLRenderEngine3 GLVoxelRend3;
 #endif
 	//
-	int SelectTerrainDriver(int driver = -1);	//-1 causes a cycling.
+	int32_t SelectTerrainDriver(int32_t driver = -1);	//-1 causes a cycling.
 	//
 	//
 #ifndef HEADLESS
@@ -420,16 +420,16 @@ public:
 	//
 	ClassHash DefClientEntType;	//The default client entity type if asked for type is invalid.
 	//
-	int EntitiesToSynch;	//readable status variables for when client is receiving entity synchs.
-	int EntitiesSynched;
+	int32_t EntitiesToSynch;	//readable status variables for when client is receiving entity synchs.
+	int32_t EntitiesSynched;
 	//
 public:
 	void PulseNetwork(PacketProcessorCallback *usercallback = NULL);
-	bool BeginClientConnect(const char *address, short serverport, short clientport, EntityTypeBase *enttype, const char *clientname, int clientrate);
+	bool BeginClientConnect(const char *address, short serverport, short clientport, EntityTypeBase *enttype, const char *clientname, int32_t clientrate);
 	ClientStatus GetStatus(){ return Status; };
-	bool InitServer(short port, int maxclients);
-	bool SendClientInfo(EntityTypeBase *enttype = NULL, const char *clientname = NULL, int clientrate = 0);	//Resends client entity type, name, and/or rate to server.
-	int CountClients();
+	bool InitServer(short port, int32_t maxclients);
+	bool SendClientInfo(EntityTypeBase *enttype = NULL, const char *clientname = NULL, int32_t clientrate = 0);	//Resends client entity type, name, and/or rate to server.
+	int32_t CountClients();
 private:
 	bool PrivSendClientInfo(bool firsttime);
 public:
@@ -438,16 +438,16 @@ public:
 #define STATUS_PRI_PLAYER	1
 #define STATUS_PRI_CHAT		2
 #define STATUS_PRI_NETWORK	3
-	bool StatusMessage(const char *text, int pri = 0, ClientID dest = CLIENTID_BROADCAST, unsigned int teamid = TEAMID_NONE, bool localdisplay = true);
+	bool StatusMessage(const char *text, int32_t pri = 0, ClientID dest = CLIENTID_BROADCAST, uint32_t teamid = TEAMID_NONE, bool localdisplay = true);
 		//Tells the local GOD entity to display a status message, and optionally sends to clients if on server.
-	int ChatMessage(const char *text, unsigned int teamid = TEAMID_NONE);	//Sends a chat message to the server, who sends it on to clients.
+	int32_t ChatMessage(const char *text, uint32_t teamid = TEAMID_NONE);	//Sends a chat message to the server, who sends it on to clients.
 public:
 	VoxelWorld();
 	~VoxelWorld();
 	bool LoadEntityClasses();	//Be careful using this, as any entities alive through the change will have bad entity type pointers!
 	bool RefreshEntityClasses();	//Deletes and rebuilds entity types from config file list.  Make SURE all entities are deleted and all entity classes are resource unlinked before calling this!!!
-	int CountEntities(int group);
-	int CountEntities(){ return CountEntities(-1); };
+	int32_t CountEntities(int32_t group);
+	int32_t CountEntities(){ return CountEntities(-1); };
 	bool ClearEntities();
 	bool LoadEntities(IFF *iff);
 	bool AppendEntities(IFF *iff);
@@ -455,13 +455,13 @@ public:
 	bool InitializeEntities();	//Sets up collision buckets and such.  Use after main entities added.
 	//Now it is used internally BEFORE entities are loaded...  Hmm.
 	//
-	int Crater(int cx, int cy, float radius, float depth, float scorch);	//Propogates to clients.
-	int TreadMark(float val, int x, int y, int dx, int dy);	//Does not propogate (non-authoritative second order effect, just coloring).
-	int AreCratersUpdating(){ return CraterUpdateFlag; };	//Use this to detect when large numbers of craters are being updated.
+	int32_t Crater(int32_t cx, int32_t cy, float radius, float depth, float scorch);	//Propogates to clients.
+	int32_t TreadMark(float val, int32_t x, int32_t y, int32_t dx, int32_t dy);	//Does not propogate (non-authoritative second order effect, just coloring).
+	int32_t AreCratersUpdating(){ return CraterUpdateFlag; };	//Use this to detect when large numbers of craters are being updated.
 	//
 	EntityTypeBase *FindEntityType(const char *Class, const char *Type);
 	EntityTypeBase *FindEntityType(ClassHash hash);
-	int EnumEntityTypes(const char *Class, EntityTypeBase **ret, int cookie);	//Enumerates all Types within a Class.  Pass in 0 to begin, then the value returned from then on, until 0 is returned.  Null class string specifies ALL classes.
+	int32_t EnumEntityTypes(const char *Class, EntityTypeBase **ret, int32_t cookie);	//Enumerates all Types within a Class.  Pass in 0 to begin, then the value returned from then on, until 0 is returned.  Null class string specifies ALL classes.
 	//
 #define ADDENTITY_NORMAL	0x00
 #define ADDENTITY_FORCENET	0x01
@@ -471,11 +471,11 @@ public:
 //Causes creation to NOT be skipped by distant entity packet priorities.
 	//
 	EntityBase *AddEntity(const char *Class, const char *Type,
-		Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags);
+		Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags);
 	EntityBase *AddEntity(ClassHash hash,
-		Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags);
+		Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags);
 	EntityBase *AddEntity(EntityTypeBase *et,
-		Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags);
+		Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags);
 	//Adds an entity to the list and returns a pointer to it.  Do NOT hold pointer for long.
 	EntityBase *GetEntity(EntityGID gid);	//Retrieves an entity pointer by GID number.  Don't hold long, unless entity guaranteed to stay alive.
 	bool RemoveEntity(EntityBase *ent);	//Removes an entity.
@@ -483,11 +483,11 @@ public:
 	bool CheckCollision(EntityBase *ent, EntityGroup maxgroup);
 	EntityBase *NextCollider(Vec3 returnpnt = NULL);
 	//
-	int AddGIDBucket(EntityBucketNode *bn, EntityGID gid);
+	int32_t AddGIDBucket(EntityBucketNode *bn, EntityGID gid);
 	bool AddPosBucket(EntityBucketNode *bn, Vec3 pos, EntityGroup grp);
 	//
 	bool LoadVoxelWorld(const char *name, bool loadentities = true, bool mirror = false);
-	int ClearVoxelWorld();
+	int32_t ClearVoxelWorld();
 	bool TextureVoxelWorld();
 	bool TextureVoxelWorld32();
 		//Textures from TexIDMap and lightshades in one pass to 32bit color map buffer.
@@ -495,7 +495,7 @@ public:
 	void UndownloadTextures();
 	//
 	bool SaveVoxelWorld(const char *name);
-	int CacheEntityResources();
+	int32_t CacheEntityResources();
 		//Returns entities processed.  Caches resources of entities currently
 		//active in world, and resources of entities they will spawn.
 	bool UnlinkResources();
@@ -508,9 +508,9 @@ public:
 	bool CacheResources(const char *Class, const char *Type);
 		//Caches resources of a specific entity type, mainly used by entity type's
 		//resource caching to cache spawned entity resources.
-	int ThinkEntities(int flags);
+	int32_t ThinkEntities(int32_t flags);
 		//Returns entities processed.  Pass in msecs for this frame.
-	void InputTime(int framemsec);
+	void InputTime(int32_t framemsec);
 		//Sets msecs for upcoming frame, for think entities and such.
 	void BeginningOfTime(){ msec = 0; vmsec = 0; ffrac = 0.0f; msecdiff = 0; };
 		//Resets internal time counter.
@@ -523,58 +523,58 @@ private:
 	bool ForceGroup;
 	uint32_t msec;	//Time stamp for global think.
 	signed long msecdiff;	//When client, difference from current client clock to get server clock.
-	int vmsec;	//Time since last global think ("length" of this think).
+	int32_t vmsec;	//Time since last global think ("length" of this think).
 	float ffrac;
 #define MSDIFF_HISTORY 16
 	signed long msecdiffa[MSDIFF_HISTORY];
-	int msecdiffan;
+	int32_t msecdiffan;
 	//
 #define SYNCH_EVERY 100
 	uint32_t lastsynch;
 #define PING_EVERY 1000
 	uint32_t lastping;
 	//
-	int gamemode;
+	int32_t gamemode;
 	//
 	void SendEntityCreate(ClientID client, EntityBase *e, float transpri = 1.0f);
 	void SendEntityDelete(ClientID client, EntityBase *e);
 	//
 	float PacketPriDist;
-	int ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *data, int len, float priority);
+	int32_t ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *data, int32_t len, float priority);
 	//
-	int CraterUpdateFlag;
+	int32_t CraterUpdateFlag;
 	//
-	int mirrored;
+	int32_t mirrored;
 	//
 public:	//Members to be used by entities while thinking etc.
-	int SetGameMode(int newmode);	//Game-specific mode flags
-	int GameMode(){ return gamemode; };
+	int32_t SetGameMode(int32_t newmode);	//Game-specific mode flags
+	int32_t GameMode(){ return gamemode; };
 	//
-	int Time(){ return msec; };
+	int32_t Time(){ return msec; };
 		//Global millisecond time stamp.
-	int ClientTimeOffset(){ return msecdiff; };
-	int FrameTime(){ return vmsec; };
+	int32_t ClientTimeOffset(){ return msecdiff; };
+	int32_t FrameTime(){ return vmsec; };
 		//Millisecs for current frame.
 	float FrameFrac(){ return ffrac; };
 		//Fraction of a second for current frame.
-	int FrameFlags;
+	int32_t FrameFlags;
 	//
 	void SetPacketPriorityDistance(float range);
 	//
-	int QueueEntityPacket(EntityBase *ent, TransmissionMode tm, BitPackEngine &bpe, float priority = 1.0f);
-	int QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *data, int len, float priority = 1.0f);
+	int32_t QueueEntityPacket(EntityBase *ent, TransmissionMode tm, BitPackEngine &bpe, float priority = 1.0f);
+	int32_t QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *data, int32_t len, float priority = 1.0f);
 	//These functions will send TM_Reliable and TM_Ordered packets no matter what, but TM_Unreliable packets
 	//will be probabilistically sent to clients based on distance between the client's entity and this entity.
 	//Increase priority (up to anything) to encourage every-frame updating for long distances, decrease it to
 	//encourage less packets to be sent.
 	//
-	int PackPosition(BitPackEngine &bpe, const Vec3 pos, int bits);
-	int UnpackPosition(BitUnpackEngine &bpe, Vec3 pos, int bits);
+	int32_t PackPosition(BitPackEngine &bpe, const Vec3 pos, int32_t bits);
+	int32_t UnpackPosition(BitUnpackEngine &bpe, Vec3 pos, int32_t bits);
 	//
 public:
 	EntityBase *FindRegisteredEntity(const char *name);	//Finds a registered entity by name.
-	int RegisterEntity(EntityBase *ent, const char *name);	//Registers a named entity, if name not taken.
-	int UnregisterEntity(EntityBase *ent);
+	int32_t RegisterEntity(EntityBase *ent, const char *name);	//Registers a named entity, if name not taken.
+	int32_t UnregisterEntity(EntityBase *ent);
 private:
 	RegEntList RegEntHead;
 	FileCRCList CRCListHead;
@@ -582,20 +582,20 @@ private:
 	//Will have to flag entity when it is registered, and when entity is deleted, if
 	//flagged as regged, walk regent list looking for it.  Hmm, that would require
 	//closer cooperation with the EntityBase class itself...  Oh well.
-	int nColliders;
+	int32_t nColliders;
 	EntityBase *Colliders[MAX_COLLIDERS];
 	Vec3 ColliderPoints[MAX_COLLIDERS];
 public:
 	void InputMousePos(float x, float y);
-	void InputMouseButton(int but);	//Use these to set mouse state from operating system.
+	void InputMouseButton(int32_t but);	//Use these to set mouse state from operating system.
 	float GetMouseX();
 	float GetMouseY();	//GUI entities use these to access mouse state.
-	int GetMouseButton();
-	void InputMouseClicked(int b);
-	void InputMouseReleased(int b);
+	int32_t GetMouseButton();
+	void InputMouseClicked(int32_t b);
+	void InputMouseReleased(int32_t b);
 	void ClearMouseFlags();
-	int GetMouseClicked();
-	int GetMouseReleased();
+	int32_t GetMouseClicked();
+	int32_t GetMouseReleased();
 	//
 #define VWK_UP		1
 #define VWK_LEFT	2
@@ -605,8 +605,8 @@ public:
 	void SetChar(char c);	//Adds an ascii char to internal buffer.
 	void ClearChar();	//Clears key buffer.
 	char GetChar();	//Used by GUI entities to read a character.
-	void SetChatMode(int mode);
-	int GetChatMode();
+	void SetChatMode(int32_t mode);
+	int32_t GetChatMode();
 	//
 	InputFIFO<32> Ififo;
 	//
@@ -615,19 +615,19 @@ public:
 	void SetActivated(EntityGID gid);
 	EntityGID GetActivated();	//Used by gui entities to set and read input focus.
 public:
-	int NumMajorWayPts;
+	int32_t NumMajorWayPts;
 private:
 	float mousex, mousey;
-	int mousebutton, mouseclicked, mousereleased;
+	int32_t mousebutton, mouseclicked, mousereleased;
 #define KEYBUF 64
 	char keybuf[KEYBUF];
-	int keyin, keyout, chatmode;
+	int32_t keyin, keyout, chatmode;
 	EntityGID guifocus, guiactivated;
 };
 
-int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1,
+int32_t CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1,
 						 Vec3 min2, Vec3 max2, Mat43 mat2, Vec3 returnpnt);
-	//Returns box-1-relative collision point in returnpnt.
+	//Returns box-1-relative collision point32_t in returnpnt.
 
 //Split entities into three groups:  Nernies, Props, and Actors.
 //

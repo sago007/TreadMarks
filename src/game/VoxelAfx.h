@@ -26,6 +26,7 @@
 #define VP 6
 
 #include "pi.h"
+#include <stdint.h>
 
 extern char DbgBuf[];
-extern int DbgBufLen;
+extern int32_t DbgBufLen;

@@ -42,7 +42,7 @@ using namespace std;
 
 #define FORWARDFRIC 0.2f
 
-//const int WheelPoints = 7;
+//const int32_t WheelPoints = 7;
 
 //#define FRAC 0.05f
 //20ths of a second...
@@ -58,12 +58,12 @@ inline float PntDistGroundPlane(float pnty, Vec3 plane){
 Vehicle::Vehicle(){
 	Init(10.0f, 10.0f, true, VEHICLE_CAR, 0.1f);
 }
-Vehicle::Vehicle(float grav, float fric, bool conrot, int type, float frac){
+Vehicle::Vehicle(float grav, float fric, bool conrot, int32_t type, float frac){
 	Init(grav, fric, conrot, type, frac);
 }
 Vehicle::~Vehicle(){
 }
-void Vehicle::Init(float grav, float fric, bool conrot, int type, float frac){
+void Vehicle::Init(float grav, float fric, bool conrot, int32_t type, float frac){
 	//
 //	WheelPoints = 7;
 	//
@@ -95,7 +95,7 @@ void Vehicle::Init(float grav, float fric, bool conrot, int type, float frac){
 	ClearVec3(AddAccel);
 	UseNetworkNext = 0;
 	//
-	FractionMS = (int)(frac * 1000.0f);
+	FractionMS = (int32_t)(frac * 1000.0f);
 	//
 	CurrentLump = 0;
 	CurrentTime = 0;
@@ -121,29 +121,29 @@ void Vehicle::SetFriction(float fric){
 #define PREVLUMP(a) (((a) - 1) & (HISTORY_SIZE - 1))
 //
 void Vehicle::SetCurrentTime(uint32_t time){
-//	int curlump = History[CurrentLump].TimeStamp / FractionMS;
-	int curlump = CurrentTime / FractionMS;
-	int lump = time / FractionMS;
+//	int32_t curlump = History[CurrentLump].TimeStamp / FractionMS;
+	int32_t curlump = CurrentTime / FractionMS;
+	int32_t lump = time / FractionMS;
 	if(abs(curlump - lump) > HISTORY_SIZE || lump < curlump){
-		for(int n = 0; n < HISTORY_SIZE; n++) History[n].Flags = FLAG_NONE;	//Too big.
+		for(int32_t n = 0; n < HISTORY_SIZE; n++) History[n].Flags = FLAG_NONE;	//Too big.
 		CurrentLump = THISLUMP(lump);// % HISTORY_SIZE;
 	//	History[CurrentLump].TimeStamp = time;
 		CurrentTime = time;
 		return;
 	}
-	for(int n = 0; n < lump - curlump; n++){
+	for(int32_t n = 0; n < lump - curlump; n++){
 		CurrentLump = NEXTLUMP(CurrentLump);
 		History[NEXTLUMP(CurrentLump)].Flags = FLAG_NONE;
 	}
 //	History[CurrentLump].TimeStamp = time;
 	CurrentTime = time;
 }
-int Vehicle::SetControlInput(uint32_t time, float laccel, float raccel, float tursteer){
+int32_t Vehicle::SetControlInput(uint32_t time, float laccel, float raccel, float tursteer){
 	//Sets inputs to the bucket AHEAD of normal...  Don't use for server authoritative inputs.
-//	int curlump = History[CurrentLump].TimeStamp / FractionMS;
-	int curlump = CurrentTime / FractionMS;
-	int lump = time / FractionMS;
-	int n = THISLUMP(CurrentLump + (lump - curlump) + 1);
+//	int32_t curlump = History[CurrentLump].TimeStamp / FractionMS;
+	int32_t curlump = CurrentTime / FractionMS;
+	int32_t lump = time / FractionMS;
+	int32_t n = THISLUMP(CurrentLump + (lump - curlump) + 1);
 	History[n].RAccel = raccel;
 	History[n].LAccel = laccel;
 	History[n].Flags |= FLAG_CONTROL;
@@ -151,12 +151,12 @@ int Vehicle::SetControlInput(uint32_t time, float laccel, float raccel, float tu
 //	History[n].TimeStamp = time;
 	return 1;
 }
-int Vehicle::SetAuthoritativeState(uint32_t time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
-								   float laccel, float raccel, float turrot, float tursteer, int ingbits){
-//	int curlump = History[CurrentLump].TimeStamp / FractionMS;
-	int curlump = CurrentTime / FractionMS;
-	int lump = time / FractionMS;
-	int n = THISLUMP(CurrentLump + (lump - curlump) + 0);
+int32_t Vehicle::SetAuthoritativeState(uint32_t time, Vec3 pos, Vec3 vel, Mat3 rot, Mat3 rotvel,
+								   float laccel, float raccel, float turrot, float tursteer, int32_t ingbits){
+//	int32_t curlump = History[CurrentLump].TimeStamp / FractionMS;
+	int32_t curlump = CurrentTime / FractionMS;
+	int32_t lump = time / FractionMS;
+	int32_t n = THISLUMP(CurrentLump + (lump - curlump) + 0);
 	History[n].RAccel = raccel;
 	History[n].LAccel = laccel;
 	History[n].Flags |= FLAG_CONTROL | FLAG_POSROTVEL | FLAG_AUTHORITATIVE;
@@ -166,17 +166,17 @@ int Vehicle::SetAuthoritativeState(uint32_t time, Vec3 pos, Vec3 vel, Mat3 rot, 
 //	History[n].TimeStamp = time;
 //	if(pos) CopyVec3(pos, History[n].Pos);
 //	if(vel) CopyVec3(vel, History[n].Vel);
-//	if(rot) for(int i = 0; i < 3; i++) CopyVec3(rot[i], History[n].RotM[i]);
-//	if(rotvel) for(int i = 0; i < 3; i++) CopyVec3(rotvel[i], History[n].RotVelM[i]);
+//	if(rot) for(int32_t i = 0; i < 3; i++) CopyVec3(rot[i], History[n].RotM[i]);
+//	if(rotvel) for(int32_t i = 0; i < 3; i++) CopyVec3(rotvel[i], History[n].RotVelM[i]);
 	History[n].Set(pos, vel, rot, rotvel, turrot);//, tursteer);
 	History[n].InGroundBits = ingbits;
 	return 1;
 }
 
-int Vehicle::PredictCurrentTime(Vec3 posout, Rot3 rotout, Vec3 velout, float *turrot, Terrain *map){
+int32_t Vehicle::PredictCurrentTime(Vec3 posout, Rot3 rotout, Vec3 velout, float *turrot, Terrain *map){
 	if(!map) return 0;
 	//
-	int lump = CurrentLump, i;
+	int32_t lump = CurrentLump, i;
 	float la = 0.0f, ra = 0.0f;
 	float tursteer = 0.0f;
 	for(i = 0; i < HISTORY_SIZE - 1; i++){	//Go one less than SIZE steps so we don't wrap back to self completely.
@@ -204,7 +204,7 @@ int Vehicle::PredictCurrentTime(Vec3 posout, Rot3 rotout, Vec3 velout, float *tu
 		InGroundBits = History[lump].InGroundBits;
 	}
 	do{
-		int nl = NEXTLUMP(lump);
+		int32_t nl = NEXTLUMP(lump);
 		if(History[nl].Flags & FLAG_CONTROL){
 			la = History[nl].LAccel;
 			ra = History[nl].RAccel;
@@ -258,17 +258,17 @@ void Vehicle::SetVel(Vec3 vel){
 
 void Vehicle::Think(float LeftAccel, float RightAccel, uint32_t clocktime, Vec3 pos, Rot3 rot, Vec3 vel,
 					float *turrot, float turrotvel, Terrain *map){
-	int iter = abs(int(clocktime / FractionMS - LastThinkTime / FractionMS));
+	int32_t iter = abs(int(clocktime / FractionMS - LastThinkTime / FractionMS));
 	LastThinkTime = clocktime;
 	//
 	iter = max(min(10, iter), 0);
-	int lerpnormal = 1;
+	int32_t lerpnormal = 1;
 	//
-	for(int n = 0; n < iter; n++){
+	for(int32_t n = 0; n < iter; n++){
 		if(UseNetworkNext){
 			CopyVec3(NPos, Pos);
 			CopyVec3(NVel, Vel);
-			for(int m = 0; m < 3; m++){
+			for(int32_t m = 0; m < 3; m++){
 				CopyVec3(NRotM[m], RotM[m]);
 				CopyVec3(NRotVelM[m], RotVelM[m]);
 			}
@@ -326,7 +326,7 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 	memcpy(LRotM, RotM, sizeof(RotM));
 	memcpy(LRotVelM, RotVelM, sizeof(RotVelM));
 	//
-	int i;
+	int32_t i;
 
 	//Decompose InGroundBits array.
 	InGroundTotal = 0;
@@ -436,7 +436,7 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 	}
 
 	//Add asked-for additional accelerations, from e.g. collisions.
-	int tAccels = 0;
+	int32_t tAccels = 0;
 	for(i = 0; i < WheelPoints; i++){
 		if(AddAccelWP[i][0] != 0.0 || AddAccelWP[i][1] != 0.0 || AddAccelWP[i][2] != 0.0){
 			tAccels++;
@@ -461,7 +461,7 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 			CVec3 tv1, tv2;
 			SubVec3(WP[i], LastWP[i], tv1);
 			Vec3IMulMat3(tv1, RotM, tv2);	//Vehicle-coords velocity vector.
-			for(int c = 0; c < 3; c++){
+			for(int32_t c = 0; c < 3; c++){
 				if(InGround[i]){
 					float fric2 = fric;
 					if(c == 2 && ((i < 3 && fabsf(LeftAccel) > 0.2f) || (i > 2 && fabsf(RightAccel) > 0.2f)))
@@ -535,14 +535,14 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 				float wheelx = WP[i][0];
 				float wheelz = WP[i][2];
 				float integrate;
-				tpnt[0] = 0;	//Best dist point on ground.  RELATIVE TO GROUND HEIGHT STRAIGHT ABOVE CAR!
+				tpnt[0] = 0;	//Best dist point32_t on ground.  RELATIVE TO GROUND HEIGHT STRAIGHT ABOVE CAR!
 				tpnt[1] = 0;
 				tpnt[2] = 0;
 				if(indist > 0.01f){	//Sanity check, don't bother if in only an eany weeny bit.
 					if(indist > 0.2f) integrate = indist * 0.2f;
 					else integrate = indist * 0.4f;
 					t = indist * 0.7f;
-					int sane = 100;
+					int32_t sane = 100;
 					float y, x;
 					for(y = -t; y <= t; y += integrate){	//Make SURE x and y never land on 0.0, or else add a check for it before normalize!
 						for(x = -t; x <= t; x += integrate){
@@ -583,7 +583,7 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 	ScaleVec3(Pos, 1.0f / (float)WheelPoints);
 	ScaleAddVec3(RotM[1], Offset[1], Pos);	//Add difference in position from wheel base.
 	//
-	//The 6 / 7 is to compensate for the 1 wheel point not at BndMin.y.
+	//The 6 / 7 is to compensate for the 1 wheel point32_t not at BndMin.y.
 	//
 	//Calculate new orientation.
 	Mat3 tm;
@@ -654,7 +654,7 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 	//SANITY CHECK!!!
 	for(i = 0; i < 3; i++){
 		if(Pos[i] == std::numeric_limits<float>::infinity()) CopyVec3(LPos, Pos);
-		for(int j = 0; j < 3; j++){
+		for(int32_t j = 0; j < 3; j++){
 			if(RotM[i][j] == std::numeric_limits<float>::infinity()) CopyVec3(LRotM[i], RotM[i]);
 			if(RotVelM[i][j] == std::numeric_limits<float>::infinity()) CopyVec3(LRotVelM[i], RotVelM[i]);
 		}

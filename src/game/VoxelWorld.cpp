@@ -36,10 +36,10 @@
 void VoxelWorld::SetPacketPriorityDistance(float range){
 	PacketPriDist = std::max(1.0f, range);
 }
-int VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, BitPackEngine &bpe, float priority){
+int32_t VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, BitPackEngine &bpe, float priority){
 	return QueueEntityPacket(ent, tm, (char*)bpe.Data(), bpe.BytesUsed(), priority);
 }
-int VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *data, int len, float priority){
+int32_t VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *data, int32_t len, float priority){
 	static char buf[1024];
 	if(Net.IsServerActive() && ent && data && len > 0 && len + 5 <= 1024){
 		buf[0] = BYTE_HEAD_MSGENT;
@@ -54,7 +54,7 @@ int VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *da
 			//
 			return ProbabilityPacket(ent, tm, buf, len, priority);
 			//
-		//	for(int c = 0; c < MAX_CLIENTS; c++){
+		//	for(int32_t c = 0; c < MAX_CLIENTS; c++){
 		//		if(Clients[c].Connected == false) continue;	//Not connected.
 		//		EntityBase *e = GetEntity(Clients[c].ClientEnt);
 		//		if(!e) continue;	//Entity not found.
@@ -72,8 +72,8 @@ int VoxelWorld::QueueEntityPacket(EntityBase *ent, TransmissionMode tm, char *da
 	}
 	return 0;
 }
-int VoxelWorld::ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *data, int len, float priority){
-	for(int c = 0; c < MAX_CLIENTS; c++){
+int32_t VoxelWorld::ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *data, int32_t len, float priority){
+	for(int32_t c = 0; c < MAX_CLIENTS; c++){
 		if(Clients[c].Connected == false) continue;	//Not connected.
 		EntityBase *e = GetEntity(Clients[c].ClientEnt);
 		if(!e) continue;	//Entity not found.
@@ -81,7 +81,7 @@ int VoxelWorld::ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *da
 		d /= std::max(0.1f, priority * PacketPriDist);	//PacketPriDist is range within updates are every frame.
 	//	d = d * d;	//Square result, so faster falloff with distance.
 		//
-		int pri = 100 - (d * 100.0f);	//Give priority boost to closest packets for Rate dropping.
+		int32_t pri = 100 - (d * 100.0f);	//Give priority boost to closest packets for Rate dropping.
 		//
 		d = std::max(1.0f, d);	//d is now "every d frames, send packet".
 		d = 1.0f / d;	//d now holds probability of packet being sent.
@@ -96,11 +96,11 @@ int VoxelWorld::ProbabilityPacket(EntityBase *ent, TransmissionMode tm, char *da
 //Landscape will get no darker than 32/256ths of normal.
 
 //Special TreadMark making function.
-int VoxelWorld::TreadMark(float val, int x, int y, int dx, int dy){
+int32_t VoxelWorld::TreadMark(float val, int32_t x, int32_t y, int32_t dx, int32_t dy){
 	if(dx == 0 && dy == 0) return 0;
-	int m = (int)(val * 256.0f);
-	int count;
-	int dirtx, dirty, dirtw, dirth;
+	int32_t m = (int32_t)(val * 256.0f);
+	int32_t count;
+	int32_t dirtx, dirty, dirtw, dirth;
 	if(dx < 0) dirtx = x + dx;
 	else dirtx = x;
 	if(dy < 0) dirty = y + dy;
@@ -120,15 +120,15 @@ int VoxelWorld::TreadMark(float val, int x, int y, int dx, int dy){
 		dx = (dx <<8) / count;
 	}
 	//
-	int max_scorch = MAX_SCORCH;
+	int32_t max_scorch = MAX_SCORCH;
 	if(Map.GetScorchEco() >= 0) max_scorch = 0;
 	//
 //	unsigned char r, g, b;
 	while(count--){
-		int ix = x >>8, iy = y >>8;
+		int32_t ix = x >>8, iy = y >>8;
 	//	map.GetRGB(ix, iy, &r, &g, &b);
-	//	map.PutRGB(ix, iy, (((int)r) * m) >>8, (((int)g) * m) >>8, (((int)b) * m) >>8);
-		int tc = (((int)Map.GetCwrap(ix, iy)) * m) >>8;
+	//	map.PutRGB(ix, iy, (((int32_t)r) * m) >>8, (((int32_t)g) * m) >>8, (((int32_t)b) * m) >>8);
+		int32_t tc = (((int32_t)Map.GetCwrap(ix, iy)) * m) >>8;
 		Map.SetCwrap(ix, iy, std::max(tc, max_scorch));
 		x += dx;
 		y += dy;
@@ -139,7 +139,7 @@ int VoxelWorld::TreadMark(float val, int x, int y, int dx, int dy){
 	}
 	return 1;
 }
-int VoxelWorld::Crater(int cx, int cy, float r, float d, float scorch){
+int32_t VoxelWorld::Crater(int32_t cx, int32_t cy, float r, float d, float scorch){
 	//
 	if(Net.IsServerActive()){	//Propagate craters to clients.
 		if(CraterTail){
@@ -158,27 +158,27 @@ int VoxelWorld::Crater(int cx, int cy, float r, float d, float scorch){
 	if(!Map.Width() || !Map.Height()) return 0;	//QuickFix(tm).
 	//
 	//
-	int max_scorch = MAX_SCORCH;
+	int32_t max_scorch = MAX_SCORCH;
 	if(Map.GetScorchEco() >= 0) max_scorch = 0;
 	//
-	int ir = (int)ceil(r);
-	int x1 = cx - ir, x2 = cx + ir, y1 = cy - ir, y2 = cy + ir;
+	int32_t ir = (int32_t)ceil(r);
+	int32_t x1 = cx - ir, x2 = cx + ir, y1 = cy - ir, y2 = cy + ir;
 	float irad = 1.0f / r;
-	for(int y = y1; y < y2; y++){
-		for(int x = x1; x < x2; x++){
+	for(int32_t y = y1; y < y2; y++){
+		for(int32_t x = x1; x < x2; x++){
 			float xd = (x - cx) * irad, yd = (y - cy) * irad;
 			float t = 1.0f - (xd * xd + yd * yd);
 		//	t = std::max(t, 0.0f);
 			if(t > 0.0f){
-				int m = (1.0f - (1.0f - scorch) * t) * 255.0f;
-				int tc = (((int)Map.GetCwrap(x, y)) * m) >>8;
+				int32_t m = (1.0f - (1.0f - scorch) * t) * 255.0f;
+				int32_t tc = (((int32_t)Map.GetCwrap(x, y)) * m) >>8;
 				Map.SetCwrap(x, y, std::max(tc, max_scorch));
-			//	Map.SetHwrap(x, y, Map.GetHwrap(x, y) - (int)(t * d * 4.0f));
+			//	Map.SetHwrap(x, y, Map.GetHwrap(x, y) - (int32_t)(t * d * 4.0f));
 				//Do a low-pass filter at the same time.
 				Map.SetHwrap(x, y,
-					( ((int)Map.GetHwrap(x, y) + (int)Map.GetHwrap(x + 1, y) +
-					(int)Map.GetHwrap(x, y + 1) + (int)Map.GetHwrap(x + 1, y + 1) + 1)	//Add 1 to make results biased a little more fairly towards going up.
-					- (int)(t * d * 16.0f) ) >>2);	//4-sample box filter, then subtract crater * 4 (meters * 16 for qtr-meters), and finally divide total by 4.
+					( ((int32_t)Map.GetHwrap(x, y) + (int32_t)Map.GetHwrap(x + 1, y) +
+					(int32_t)Map.GetHwrap(x, y + 1) + (int32_t)Map.GetHwrap(x + 1, y + 1) + 1)	//Add 1 to make results biased a little more fairly towards going up.
+					- (int32_t)(t * d * 16.0f) ) >>2);	//4-sample box filter, then subtract crater * 4 (meters * 16 for qtr-meters), and finally divide total by 4.
 			}
 		}
 	}
@@ -190,7 +190,7 @@ int VoxelWorld::Crater(int cx, int cy, float r, float d, float scorch){
 	//Let entities know terrain has changed.  Not using Collision Bucket approach, since shrubs and other menial entities will need to know of terrain mods too.
 	float radsquare = r * r, fx = (float)(Map.WrapX(cx)), fy = -(float)(Map.WrapY(cy));
 	EntityBase *ent;
-	for(int i = 0; i < ENTITY_GROUPS; i++){
+	for(int32_t i = 0; i < ENTITY_GROUPS; i++){
 		ent = EntHead[i].NextLink();
 		while(ent){
 			float dx = ent->Position[0] - fx;
@@ -202,15 +202,15 @@ int VoxelWorld::Crater(int cx, int cy, float r, float d, float scorch){
 	//
 	return 1;
 }
-int VoxelWorld::PackPosition(BitPackEngine &bpe, const Vec3 pos, int bits){
+int32_t VoxelWorld::PackPosition(BitPackEngine &bpe, const Vec3 pos, int32_t bits){
 	if(!pos) return 0;
 	Vec3 tv;
 	SubVec3(pos, worldcenter, tv);
-	int largest = 0, i = 0;
-	int tmp;
-	for(i = 0; i < 3; i++) {tmp = abs((int)(tv[i])); if(tmp > largest) largest = tmp;}
+	int32_t largest = 0, i = 0;
+	int32_t tmp;
+	for(i = 0; i < 3; i++) {tmp = abs((int32_t)(tv[i])); if(tmp > largest) largest = tmp;}
 	largest /= 1000;
-	int xtra = 0;
+	int32_t xtra = 0;
 	if(largest > 0) xtra = HiBit(largest) + 1;
 	if(xtra <= 0){
 		bpe.PackUInt(0, 1);
@@ -224,10 +224,10 @@ int VoxelWorld::PackPosition(BitPackEngine &bpe, const Vec3 pos, int bits){
 	}
 	return 1;
 }
-int VoxelWorld::UnpackPosition(BitUnpackEngine &bpe, Vec3 pos, int bits){
+int32_t VoxelWorld::UnpackPosition(BitUnpackEngine &bpe, Vec3 pos, int32_t bits){
 	if(!pos) return 0;
 	Vec3 tv;
-	int i = 0, xtra = 0;
+	int32_t i = 0, xtra = 0;
 	bpe.UnpackUInt(i, 1);
 	if(i) bpe.UnpackUInt(xtra, 6);
 	float rng = (1000 * (1 <<xtra));
@@ -275,18 +275,18 @@ void VoxelWorld::SendEntityCreate(ClientID client, EntityBase *e, float transpri
 	bp.PackUInt(e->GID | ENTITYGID_NETWORK, 32);
 	bp.PackUInt(e->TypePtr->thash, 32);
 	if(flag & CREATEFLAGS_POS){
-	//	for(int i = 0; i < 3; i++){
+	//	for(int32_t i = 0; i < 3; i++){
 	//		bp.PackFloatInterval(e->Position[i] - worldcenter[i], CrRng1, CrRng2, CrBits);
 	//	}
 		PackPosition(bp, e->Position, CrBits);
 	}
 	if(flag & CREATEFLAGS_ROT){
-		for(int i = 0; i < 3; i++){
+		for(int32_t i = 0; i < 3; i++){
 			bp.PackFloatInterval(e->Rotation[i], CrRotRng1, CrRotRng2, CrRotBits);
 		}
 	}
 	if(flag & CREATEFLAGS_VEL){
-		for(int i = 0; i < 3; i++){
+		for(int32_t i = 0; i < 3; i++){
 			bp.PackFloatInterval(e->Velocity[i], CrVelRng1, CrVelRng2, CrVelBits);
 		}
 	}
@@ -296,7 +296,7 @@ void VoxelWorld::SendEntityCreate(ClientID client, EntityBase *e, float transpri
 	if(flag & CREATEFLAGS_FLG){
 		bp.PackUInt(e->Flags, 32);
 	}
-	int d = e->ExtraCreateInfo((unsigned char*)bp.Data() + bp.BytesUsed(), 1024 - bp.BytesUsed());	//Ask entity if it wants to pad buffer with an extra message.
+	int32_t d = e->ExtraCreateInfo((unsigned char*)bp.Data() + bp.BytesUsed(), 1024 - bp.BytesUsed());	//Ask entity if it wants to pad buffer with an extra message.
 	//
 	if(client == CLIENTID_BROADCAST && e->TypePtr->Transitory){
 		//Probabilistically throw out by distance Transitory ForceNetted entities.
@@ -360,7 +360,7 @@ void VoxelWorld::Disconnect(ClientID source, NetworkError ne){
 }
 
 #ifdef ENABLE_CRC_CHECK
-void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
+void VoxelWorld::PacketReceived(ClientID source, const char *data, int32_t len){
 	if(len < 1) return;
 	//Process packets we can...
 	//
@@ -372,7 +372,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_CONNINFO && len >= 75){
 			ClassHash OldEntType = Clients[source].EntType;
 			Clients[source].EntType = RLONG(&data[2]);
-			int OldRate = Clients[source].ClientRate;
+			int32_t OldRate = Clients[source].ClientRate;
 			Clients[source].ClientRate = RLONG(&data[6]);
 			Net.SetClientRate(source, Clients[source].ClientRate);
 			char b[1024];
@@ -391,13 +391,13 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				//
 #ifndef DISABLE_TYPE_SYNCH
 				//First send any entity type files that the client doesn't have or has wrong versions of.
-				int tosend = 0;
+				int32_t tosend = 0;
 				ConfigFileList *cfgl = ConfigListHead.NextLink();
 				for(; cfgl; cfgl = cfgl->NextLink()){	//Count the number we will send.
 					if(cfgl->ClientChecksum[source] != cfgl->GetChecksum() && cfgl->ServerSynch) tosend++;
 				}
 				//Now send 'em.
-				int num = 0;
+				int32_t num = 0;
 				for(cfgl = ConfigListHead.NextLink(); cfgl; cfgl = cfgl->NextLink()){
 					if(cfgl->ClientChecksum[source] != cfgl->GetChecksum() && cfgl->ServerSynch){
 						num++;
@@ -415,7 +415,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 						memout = ZCompress(&mem);
 						uint32_t l = memout.Length();
 						pe.PackUInt(l, 32);
-						for(int i = 0; i < l; i++){
+						for(int32_t i = 0; i < l; i++){
 							pe.PackUInt(*((unsigned char*)memout.Data() + i), 8);
 						}
 						Net.QueueSendClient(source, TM_Ordered, (char*)pe.Data(), pe.BytesUsed());
@@ -520,7 +520,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			WLONG(&b[262], mirrored);	//Send whether map is mirrored or not.
 			Net.QueueSendClient(source, TM_Ordered, b, 266);
 			//
-			int i, count = 0;
+			int32_t i, count = 0;
 			for(i = 0; i < ENTITY_GROUPS; i++){
 				EntityBase *e = EntHead[i].NextLink();
 				while(e){
@@ -559,13 +559,13 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			if(pe.UnpackUInt(length, 32) && length > 0){
 				MemoryBuffer mem(length), memout;
 				if(mem.Data() && mem.Length() >= length){
-					for(int i = 0; i < length; i++){
+					for(int32_t i = 0; i < length; i++){
 						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
 					memout = ZUncompress(&mem);
-					//OutputDebugLog("Uncompressed entity type, compressed " + String((int)mem.Length()) + ", original " + String((int)memout.Length()) + ".\n");
+					//OutputDebugLog("Uncompressed entity type, compressed " + String((int32_t)mem.Length()) + ", original " + String((int32_t)memout.Length()) + ".\n");
 
 					if (memout.Length() > 0) {
 						fl = CRCListHead.FindName((const char *)memout.Data());
@@ -603,7 +603,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_TIMESYNCH && len >= 5){	//This is the client->server version.
-			int ctime = RLONG(&data[1]);
+			int32_t ctime = RLONG(&data[1]);
 			char b[16];
 			b[0] = BYTE_HEAD_TIMESYNCH;
 			WLONG(&b[1], (msec - ctime));
@@ -644,7 +644,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				//CRATER RECEIVE:
 				BitUnpackEngine bp(data, len);
 				bp.SkipBits(8);
-				int x, y;  float r, d, s;
+				int32_t x, y;  float r, d, s;
 				bp.UnpackInt(x, 13);
 				bp.UnpackInt(y, 13);
 				bp.UnpackFloatInterval(r, 0, 256, 11);
@@ -663,7 +663,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			memcpy(b, &data[6], (unsigned char)data[5]);
 			b[(unsigned char)data[5]] = 0;
 			MapFileName = b;
-			int mirror = 0;
+			int32_t mirror = 0;
 			if(len >= 266){
 				mirror = RLONG(&data[262]);
 			}
@@ -691,7 +691,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 #ifndef DISABLE_TYPE_SYNCH
 			//Send client's entity class info before connection info.  8 bytes per entity type.
 			ConfigFileList *cfgl = ConfigListHead.NextLink();
-			int num = 0;
+			int32_t num = 0;
 			BitPacker<256> pe;
 			while(cfgl){
 				if(num == 0){	//Reset header in buffer.
@@ -728,13 +728,13 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			if(pe.UnpackUInt(len, 32) && len > 0){
 				MemoryBuffer mem(len), memout;
 				if(mem.Data() && mem.Length() >= len){
-					for(int i = 0; i < len; i++){
+					for(int32_t i = 0; i < len; i++){
 						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
 					memout = ZUncompress(&mem);
-					OutputDebugLog("Uncompressed entity type, compressed " + String((int)mem.Length()) + ", original " + String((int)memout.Length()) + ".\n");
+					OutputDebugLog("Uncompressed entity type, compressed " + String((int32_t)mem.Length()) + ", original " + String((int32_t)memout.Length()) + ".\n");
 				}
 				//
 				EntitiesToSynch = total;
@@ -838,7 +838,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_DELETEENT && len >= 5){
 			EntityGID gid = RLONG(&data[1]) | ENTITYGID_NETWORK;
 			EntityBase *e = GetEntity(gid);
-	//	OutputDebugLog("*** Got EntityDelete, id " + String((int)gid) + ", eptr " + String((int)e) + ", R_F " + String(REMOVE_FORCE) + "\n");
+	//	OutputDebugLog("*** Got EntityDelete, id " + String((int32_t)gid) + ", eptr " + String((int32_t)e) + ", R_F " + String(REMOVE_FORCE) + "\n");
 			if(e) e->RemoveMe = REMOVE_FORCE;//DeleteItem();
 			//TODO: Should add some handler for if we get a premature delete, to flag ID as already deleted.  Perhaps create dummy entity, and let collision with create bounce it.
 			//ALSO: This won't work if we are for some reason doing a simultaneous client/server relay station...
@@ -847,7 +847,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_CREATEENT){// && len >= 10){
 			BitUnpackEngine bp(data, len);
 			bp.SkipBits(8);
-			int flags = 0;// = data[1];
+			int32_t flags = 0;// = data[1];
 			bp.UnpackUInt(flags, 8);
 			EntityGID gid;// = RLONG(&data[2]) | ENTITYGID_NETWORK;
 			bp.UnpackUInt(gid, 32);
@@ -856,11 +856,11 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			Vec3 pos = {0, 0, 0};
 			Vec3 rot = {0, 0, 0};
 			Vec3 vel = {0, 0, 0};
-			int flg = 0;
-			int id = 0;
-			int d = 10;
+			int32_t flg = 0;
+			int32_t id = 0;
+			int32_t d = 10;
 			if(flags & CREATEFLAGS_POS){// && d + 12 <= len){
-			//	for(int n = 0; n < 3; n++){
+			//	for(int32_t n = 0; n < 3; n++){
 			//	//	pos[n] = RFLOAT(&data[d]);
 			//	//	d += 4;
 			//		bp.UnpackFloatInterval(pos[n], CrRng1, CrRng2, CrBits);
@@ -869,14 +869,14 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				UnpackPosition(bp, pos, CrBits);
 			}
 			if(flags & CREATEFLAGS_ROT){// && d + 12 <= len){
-				for(int n = 0; n < 3; n++){
+				for(int32_t n = 0; n < 3; n++){
 				//	rot[n] = RFLOAT(&data[d]);
 				//	d += 4;
 					bp.UnpackFloatInterval(rot[n], CrRotRng1, CrRotRng2, CrRotBits);
 				}
 			}
 			if(flags & CREATEFLAGS_VEL){// && d + 12 <= len){
-				for(int n = 0; n < 3; n++){
+				for(int32_t n = 0; n < 3; n++){
 				//	vel[n] = RFLOAT(&data[d]);
 				//	d += 4;
 					bp.UnpackFloatInterval(vel[n], CrVelRng1, CrVelRng2, CrVelBits);
@@ -899,17 +899,17 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_TIMESYNCH && len >= 5){	//This is the server->client version.
-			int msd = RLONG(&data[1]);
+			int32_t msd = RLONG(&data[1]);
 			if(abs(msd - msecdiff) > 1000){	//Whack of a jump there, probably first time.
 				msecdiff = msd;
-				for(int n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = msd;
+				for(int32_t n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = msd;
 			}else{	//Filter change.
 				msecdiffa[msecdiffan++] = msd;	//Add current result to history.
 				msecdiffan = msecdiffan % MSDIFF_HISTORY;
 				//
 #define MSDINVALID 0x7fffffff
-				int msmin = 2000000000, msmax = -2000000000;
-				int n;
+				int32_t msmin = 2000000000, msmax = -2000000000;
+				int32_t n;
 				for(n = 0; n < MSDIFF_HISTORY; n++){	//Find min/max.
 					if(msecdiffa[n] > msmax) msmax = msecdiffa[n];
 					if(msecdiffa[n] < msmin) msmin = msecdiffa[n];
@@ -926,7 +926,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				}
 				msecdiff = tot / (double)(MSDIFF_HISTORY - 2);
 				//
-			//	msecdiff = (int)((double)msecdiff * 0.3 + (double)msd * 0.7);
+			//	msecdiff = (int32_t)((double)msecdiff * 0.3 + (double)msd * 0.7);
 			}
 		//	OutputDebugLog("MSECDIFF: " + String(msecdiff) + "  MSD: " + String(msd) + "\n");
 			return;
@@ -938,7 +938,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_STATUSMSG){	//Status message from server to client.
 			BitUnpackEngine pe(data, len);
 			pe.SkipBits(8);
-			int pri = 0;
+			int32_t pri = 0;
 			CStr text;
 			pe.UnpackUInt(pri, 8);
 			pe.UnpackString(text, 7);
@@ -959,14 +959,14 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 }
 #else
 #endif
-void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
+void VoxelWorld::PacketReceived(ClientID source, const char *data, int32_t len){
 	if(len < 1) return;
 	//Process packets we can...
 	if(source < MAX_CLIENTS && Clients[source].Connected){
 		if(data[0] == BYTE_HEAD_CONNINFO && len >= 75){
 			ClassHash OldEntType = Clients[source].EntType;
 			Clients[source].EntType = RLONG(&data[2]);
-			int OldRate = Clients[source].ClientRate;
+			int32_t OldRate = Clients[source].ClientRate;
 			Clients[source].ClientRate = RLONG(&data[6]);
 			Net.SetClientRate(source, Clients[source].ClientRate);
 			char b[1024];
@@ -985,13 +985,13 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				//
 #ifndef DISABLE_TYPE_SYNCH
 				//First send any entity type files that the client doesn't have or has wrong versions of.
-				int tosend = 0;
+				int32_t tosend = 0;
 				ConfigFileList *cfgl = ConfigListHead.NextLink();
 				for(; cfgl; cfgl = cfgl->NextLink()){	//Count the number we will send.
 					if(cfgl->ClientChecksum[source] != cfgl->GetChecksum() && cfgl->ServerSynch) tosend++;
 				}
 				//Now send 'em.
-				int num = 0;
+				int32_t num = 0;
 				for(cfgl = ConfigListHead.NextLink(); cfgl; cfgl = cfgl->NextLink()){
 					if(cfgl->ClientChecksum[source] != cfgl->GetChecksum() && cfgl->ServerSynch){
 						num++;
@@ -1009,7 +1009,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 						memout = ZCompress(&mem);
 						uint32_t l = memout.Length();
 						pe.PackUInt(l, 32);
-						for(int i = 0; i < l; i++){
+						for(int32_t i = 0; i < l; i++){
 							pe.PackUInt(*((unsigned char*)memout.Data() + i), 8);
 						}
 						Net.QueueSendClient(source, TM_Ordered, (char*)pe.Data(), pe.BytesUsed());
@@ -1027,7 +1027,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				WLONG(&b[262], mirrored);	//Send whether map is mirrored or not.
 				Net.QueueSendClient(source, TM_Ordered, b, 266);
 				//
-				int i, count = 0;
+				int32_t i;
 				for(i = 0; i < ENTITY_GROUPS; i++){
 					EntityBase *e = EntHead[i].NextLink();
 					while(e){
@@ -1108,7 +1108,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_TIMESYNCH && len >= 5){	//This is the client->server version.
-			int ctime = RLONG(&data[1]);
+			int32_t ctime = RLONG(&data[1]);
 			char b[16];
 			b[0] = BYTE_HEAD_TIMESYNCH;
 			WLONG(&b[1], (msec - ctime));
@@ -1144,7 +1144,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				//CRATER RECEIVE:
 				BitUnpackEngine bp(data, len);
 				bp.SkipBits(8);
-				int x, y;  float r, d, s;
+				int32_t x, y;  float r, d, s;
 				bp.UnpackInt(x, 13);
 				bp.UnpackInt(y, 13);
 				bp.UnpackFloatInterval(r, 0, 256, 11);
@@ -1191,7 +1191,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 #ifndef DISABLE_TYPE_SYNCH
 			//Send client's entity class info before connection info.  8 bytes per entity type.
 			ConfigFileList *cfgl = ConfigListHead.NextLink();
-			int num = 0;
+			int32_t num = 0;
 			BitPacker<256> pe;
 			while(cfgl){
 				if(num == 0){	//Reset header in buffer.
@@ -1228,13 +1228,13 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			if(pe.UnpackUInt(len, 32) && len > 0){
 				MemoryBuffer mem(len), memout;
 				if(mem.Data() && mem.Length() >= len){
-					for(int i = 0; i < len; i++){
+					for(int32_t i = 0; i < len; i++){
 						uint32_t n = 0;
 						pe.UnpackUInt(n, 8);
 						*((unsigned char*)mem.Data() + i) = n;
 					}
 					memout = ZUncompress(&mem);
-					OutputDebugLog("Uncompressed entity type, compressed " + String((int)mem.Length()) + ", original " + String((int)memout.Length()) + ".\n");
+					OutputDebugLog("Uncompressed entity type, compressed " + String((int32_t)mem.Length()) + ", original " + String((int32_t)memout.Length()) + ".\n");
 				}
 				//
 				EntitiesToSynch = total;
@@ -1267,7 +1267,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_DELETEENT && len >= 5){
 			EntityGID gid = RLONG(&data[1]) | ENTITYGID_NETWORK;
 			EntityBase *e = GetEntity(gid);
-	//	OutputDebugLog("*** Got EntityDelete, id " + String((int)gid) + ", eptr " + String((int)e) + ", R_F " + String(REMOVE_FORCE) + "\n");
+	//	OutputDebugLog("*** Got EntityDelete, id " + String((int32_t)gid) + ", eptr " + String((int32_t)e) + ", R_F " + String(REMOVE_FORCE) + "\n");
 			if(e) e->RemoveMe = REMOVE_FORCE;//DeleteItem();
 			//TODO: Should add some handler for if we get a premature delete, to flag ID as already deleted.  Perhaps create dummy entity, and let collision with create bounce it.
 			//ALSO: This won't work if we are for some reason doing a simultaneous client/server relay station...
@@ -1276,7 +1276,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_CREATEENT){// && len >= 10){
 			BitUnpackEngine bp(data, len);
 			bp.SkipBits(8);
-			int flags = 0;// = data[1];
+			int32_t flags = 0;// = data[1];
 			bp.UnpackUInt(flags, 8);
 			EntityGID gid;// = RLONG(&data[2]) | ENTITYGID_NETWORK;
 			bp.UnpackUInt(gid, 32);
@@ -1285,11 +1285,11 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			Vec3 pos = {0, 0, 0};
 			Vec3 rot = {0, 0, 0};
 			Vec3 vel = {0, 0, 0};
-			int flg = 0;
-			int id = 0;
-			int d = 10;
+			int32_t flg = 0;
+			int32_t id = 0;
+			int32_t d = 10;
 			if(flags & CREATEFLAGS_POS){// && d + 12 <= len){
-			//	for(int n = 0; n < 3; n++){
+			//	for(int32_t n = 0; n < 3; n++){
 			//	//	pos[n] = RFLOAT(&data[d]);
 			//	//	d += 4;
 			//		bp.UnpackFloatInterval(pos[n], CrRng1, CrRng2, CrBits);
@@ -1298,14 +1298,14 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				UnpackPosition(bp, pos, CrBits);
 			}
 			if(flags & CREATEFLAGS_ROT){// && d + 12 <= len){
-				for(int n = 0; n < 3; n++){
+				for(int32_t n = 0; n < 3; n++){
 				//	rot[n] = RFLOAT(&data[d]);
 				//	d += 4;
 					bp.UnpackFloatInterval(rot[n], CrRotRng1, CrRotRng2, CrRotBits);
 				}
 			}
 			if(flags & CREATEFLAGS_VEL){// && d + 12 <= len){
-				for(int n = 0; n < 3; n++){
+				for(int32_t n = 0; n < 3; n++){
 				//	vel[n] = RFLOAT(&data[d]);
 				//	d += 4;
 					bp.UnpackFloatInterval(vel[n], CrVelRng1, CrVelRng2, CrVelBits);
@@ -1328,17 +1328,17 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 			return;
 		}
 		if(data[0] == BYTE_HEAD_TIMESYNCH && len >= 5){	//This is the server->client version.
-			int msd = RLONG(&data[1]);
+			int32_t msd = RLONG(&data[1]);
 			if(std::abs(msd - msecdiff) > 1000){	//Whack of a jump there, probably first time.
 				msecdiff = msd;
-				for(int n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = msd;
+				for(int32_t n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = msd;
 			}else{	//Filter change.
 				msecdiffa[msecdiffan++] = msd;	//Add current result to history.
 				msecdiffan = msecdiffan % MSDIFF_HISTORY;
 				//
 #define MSDINVALID 0x7fffffff
-				int msmin = 2000000000, msmax = -2000000000;
-				int n;
+				int32_t msmin = 2000000000, msmax = -2000000000;
+				int32_t n;
 				for(n = 0; n < MSDIFF_HISTORY; n++){	//Find min/max.
 					if(msecdiffa[n] > msmax) msmax = msecdiffa[n];
 					if(msecdiffa[n] < msmin) msmin = msecdiffa[n];
@@ -1355,7 +1355,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 				}
 				msecdiff = tot / (double)(MSDIFF_HISTORY - 2);
 				//
-			//	msecdiff = (int)((double)msecdiff * 0.3 + (double)msd * 0.7);
+			//	msecdiff = (int32_t)((double)msecdiff * 0.3 + (double)msd * 0.7);
 			}
 		//	OutputDebugLog("MSECDIFF: " + String(msecdiff) + "  MSD: " + String(msd) + "\n");
 			return;
@@ -1367,7 +1367,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 		if(data[0] == BYTE_HEAD_STATUSMSG){	//Status message from server to client.
 			BitUnpackEngine pe(data, len);
 			pe.SkipBits(8);
-			int pri = 0;
+			int32_t pri = 0;
 			CStr text;
 			pe.UnpackUInt(pri, 8);
 			pe.UnpackString(text, 7);
@@ -1387,10 +1387,10 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int len){
 	//Else...
 }
 
-void VoxelWorld::OutOfBandPacket(sockaddr_in *src, const char *data, int len){
+void VoxelWorld::OutOfBandPacket(sockaddr_in *src, const char *data, int32_t len){
 	if(UCB) UCB->OutOfBandPacket(src, data, len);
 }
-bool VoxelWorld::SendClientInfo(EntityTypeBase *enttype, const char *clientname, int clientrate){
+bool VoxelWorld::SendClientInfo(EntityTypeBase *enttype, const char *clientname, int32_t clientrate){
 	if(enttype) OutgoingConnection.EntType = enttype->thash;
 	if(clientname && strlen(clientname) > 0) OutgoingConnection.ClientName = clientname;
 	if(clientrate > 0) OutgoingConnection.ClientRate = clientrate;
@@ -1411,7 +1411,7 @@ bool VoxelWorld::PrivSendClientInfo(bool firsttime){
 	}
 	return false;
 }
-bool VoxelWorld::BeginClientConnect(const char *address, short serverport, short clientport, EntityTypeBase *enttype, const char *clientname, int clientrate){
+bool VoxelWorld::BeginClientConnect(const char *address, short serverport, short clientport, EntityTypeBase *enttype, const char *clientname, int32_t clientrate){
 	OutgoingConnection.Init();
 	if(address && enttype && clientname){
 		OutgoingConnection.EntType = enttype->thash;
@@ -1427,13 +1427,13 @@ bool VoxelWorld::BeginClientConnect(const char *address, short serverport, short
 	}
 	return false;
 }
-bool VoxelWorld::InitServer(short port, int maxclients){
+bool VoxelWorld::InitServer(short port, int32_t maxclients){
 	Net.FreeClient();
 	Net.InitServer(port, std::min(maxclients, MAX_CLIENTS), 10);
 	return true;
 }
-int VoxelWorld::SetGameMode(int newmode){
-	int t = gamemode;
+int32_t VoxelWorld::SetGameMode(int32_t newmode){
+	int32_t t = gamemode;
 	gamemode = newmode;
 	//
 	if(Net.IsServerActive()){
@@ -1445,14 +1445,14 @@ int VoxelWorld::SetGameMode(int newmode){
 	//
 	return t;
 }
-int VoxelWorld::CountClients(){
-	int count = 0;
-	for(int i = 0; i < MAX_CLIENTS; i++){
+int32_t VoxelWorld::CountClients(){
+	int32_t count = 0;
+	for(int32_t i = 0; i < MAX_CLIENTS; i++){
 		if(Clients[i].Connected) count++;
 	}
 	return count;
 }
-bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, uint32_t teamid, bool localdisplay){
+bool VoxelWorld::StatusMessage(const char *text, int32_t pri, ClientID dest, uint32_t teamid, bool localdisplay){
 	if(text){
 		CStr Text = text;
 		if(teamid != TEAMID_NONE){
@@ -1463,7 +1463,7 @@ bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, uint32_
 			pe.PackUInt(BYTE_HEAD_STATUSMSG, 8);
 			pe.PackUInt(pri, 8);
 			pe.PackString(Text, 7);
-			for(int i = 0; i < MAX_CLIENTS; i++){
+			for(int32_t i = 0; i < MAX_CLIENTS; i++){
 				EntityBase *e = GetEntity(Clients[i].ClientEnt);
 				if((dest == i || dest == CLIENTID_BROADCAST) && Clients[i].Connected &&
 					e && (e->QueryInt(ATT_TEAMID) == teamid || teamid == TEAMID_NONE)){
@@ -1483,7 +1483,7 @@ bool VoxelWorld::StatusMessage(const char *text, int pri, ClientID dest, uint32_
 	}
 	return false;
 }
-int VoxelWorld::ChatMessage(const char *text, uint32_t teamid){	//Sends a chat message to the server, who sends it on to clients.
+int32_t VoxelWorld::ChatMessage(const char *text, uint32_t teamid){	//Sends a chat message to the server, who sends it on to clients.
 	if(text && strlen(text) > 0){
 		if(!Net.IsClientActive()){//Net.IsServerActive()){
 			CStr out;// = text;
@@ -1513,7 +1513,7 @@ VoxelWorld::VoxelWorld() : FM(), ResourceManager(&FM), ForceGroup(false) {
 	Status = STAT_Disconnect;
 	Net.Initialize();
 	msecdiffan = 0;
-	for(int n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = 0;
+	for(int32_t n = 0; n < MSDIFF_HISTORY; n++) msecdiffa[n] = 0;
 	//
 	CraterTail = &CraterHead;
 	ClearVec3(gravity);
@@ -1544,7 +1544,7 @@ VoxelWorld::VoxelWorld() : FM(), ResourceManager(&FM), ForceGroup(false) {
 	//
 	Net.LoadBanList("BanList.txt");
 }
-int VoxelWorld::SelectTerrainDriver(int driver){	//-1 causes a cycling.
+int32_t VoxelWorld::SelectTerrainDriver(int32_t driver){	//-1 causes a cycling.
 #ifndef HEADLESS
 	if(driver == -1){
 		if(VoxelRend == &GLVoxelRend) VoxelRend = &GLVoxelRend2;
@@ -1589,7 +1589,7 @@ void VoxelWorld::PulseNetwork(PacketProcessorCallback *call){
 //	}
 	//
 	if(Net.IsServerActive()){
-		for(int c = 0; c < MAX_CLIENTS; c++){	//Propagate craters to clients.
+		for(int32_t c = 0; c < MAX_CLIENTS; c++){	//Propagate craters to clients.
 			if(Clients[c].Connected && Clients[c].ClientEnt){	//Once ClientEnt is set we know map init dump is done.
 				if(Clients[c].LastCraterSent == NULL) Clients[c].LastCraterSent = &CraterHead;
 				while(Clients[c].LastCraterSent->NextLink()){	//At least one yet to send.
@@ -1668,7 +1668,7 @@ EntityTypeBase *VoxelWorld::FindEntityType(const char *Class, const char *Type){
 	if(Class && Type && Type[0] != 0){
 		EntityTypeBase *et = EntTypeHead.NextLink();
 		//Check for combined "class/type" specifier in the Type parameter.
-		int n;
+		int32_t n;
 		if((n = Instr(Type, "/")) >= 0){
 			CStr C = Left(Type, n);
 			CStr T = Mid(Type, n + 1);
@@ -1686,14 +1686,14 @@ EntityTypeBase *VoxelWorld::FindEntityType(ClassHash hash){
 	if(et) return et->Find(hash);
 	return 0;
 }
-int VoxelWorld::EnumEntityTypes(const char *Class, EntityTypeBase **ret, int cookie){	//Enumerates all Types within a Class.  Pass in 0 to begin, then the value returned from then on, until 0 is returned.  Null class string specifies ALL classes.
+int32_t VoxelWorld::EnumEntityTypes(const char *Class, EntityTypeBase **ret, int32_t cookie){	//Enumerates all Types within a Class.  Pass in 0 to begin, then the value returned from then on, until 0 is returned.  Null class string specifies ALL classes.
 	if(!ret || cookie < 0) return 0;
 	EntityTypeBase *et = EntTypeHead.NextLink();
 	if(!et) return 0;
 	et = et->FindItem(cookie);	//Return to previous location (or stay same if cookie is 0, to start).
 	if(!et) return 0;
 	while(et){
-		cookie++;	//If first is match, cookie should point to next.
+		cookie++;	//If first is match, cookie should point32_t to next.
 		if(!Class || CmpLower(et->cname, Class)){
 			*ret = et;
 			return cookie;
@@ -1704,15 +1704,15 @@ int VoxelWorld::EnumEntityTypes(const char *Class, EntityTypeBase **ret, int coo
 }
 
 EntityBase *VoxelWorld::AddEntity(const char *Class, const char *Type,
-								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags){
+								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags){
 	return AddEntity(FindEntityType(Class, Type), Pos, Rot, Vel, id, flags, specificgid, AddFlags);
 }
 EntityBase *VoxelWorld::AddEntity(ClassHash hash,
-								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags){
+								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags){
 	return AddEntity(FindEntityType(hash), Pos, Rot, Vel, id, flags, specificgid, AddFlags);
 }
 EntityBase *VoxelWorld::AddEntity(EntityTypeBase *et,
-								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int id, int flags, EntityGID specificgid, int AddFlags){
+								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags){
 //	EntityTypeBase *et = FindEntityType(hash);//EntTypeHead.NextLink();
 	if(et){// && (et = et->Find(Class, Type))){
 		et->CacheResources();	//Attempting support for mid-stream resource caching.
@@ -1747,27 +1747,27 @@ bool VoxelWorld::RemoveEntity(EntityBase *ent){	//Removes an entity.
 	}
 	return false;
 }
-int VoxelWorld::AddGIDBucket(EntityBucketNode *bn, EntityGID gid){
+int32_t VoxelWorld::AddGIDBucket(EntityBucketNode *bn, EntityGID gid){
 	return IDBucket.AddEntity(bn, gid);
 }
 bool VoxelWorld::AddPosBucket(EntityBucketNode *bn, Vec3 pos, EntityGroup grp){
 	if(pos && grp < ENTITY_GROUPS && grp >= 0 && bn){
-		return EntBucket[grp].AddEntity(bn, (int)pos[0], (int)-pos[2]);
+		return EntBucket[grp].AddEntity(bn, (int32_t)pos[0], (int32_t)-pos[2]);
 	}
 	return false;
 }
 
-int VoxelWorld::CountEntities(int group){
+int32_t VoxelWorld::CountEntities(int32_t group){
 	if(group >= 0 && group < ENTITY_GROUPS){
 		return EntHead[group].CountItems(-1);
 	}else{
-		int i, count = 0;
+		int32_t i, count = 0;
 		for(i = 0; i < ENTITY_GROUPS; i++) count += EntHead[i].CountItems(-1);
 		return count;
 	}
 }
 bool VoxelWorld::ClearEntities(){
-	for(int i = 0; i < ENTITY_GROUPS; i++) EntHead[i].DeleteList();
+	for(int32_t i = 0; i < ENTITY_GROUPS; i++) EntHead[i].DeleteList();
 	RegEntHead.DeleteList();
 	PolyRend->InitRender();	//This makes sure there are no poly render object pointers pointing into dead entities.
 	UnlinkResources();
@@ -1782,12 +1782,12 @@ bool VoxelWorld::AppendEntities(IFF *iff){
 	char eclass[1024], etype[1024], buf[1024];
 	Vec3 Pos, Vel;
 	Rot3 Rot;
-	int i, j;
-	int id, flags;
+	int32_t i, j;
+	int32_t id, flags;
 
 	if(iff && iff->IsFileOpen() && iff->IsFileRead() && iff->FindChunk("ENTS")){
-		int EntityVersion = iff->ReadLong();
-		int NumEnts = iff->ReadLong();
+		int32_t EntityVersion = iff->ReadLong();
+		int32_t NumEnts = iff->ReadLong();
 		for(i = 0; i < NumEnts; i++){
 			iff->ReadBytes((uchar*)eclass, iff->ReadLong()); iff->Even();
 			iff->ReadBytes((uchar*)etype, iff->ReadLong()); iff->Even();
@@ -1811,15 +1811,15 @@ bool VoxelWorld::AppendEntities(IFF *iff){
 bool VoxelWorld::SaveEntities(IFF *iff){
 	EntityTypeBase *et;
 	EntityBase *ent;
-	int NumEnts = CountEntities();//EntHead.CountItems(-1);
-//	int NumTypes = EntTypeHead.CountItems(-1);
-	int j;
+	int32_t NumEnts = CountEntities();//EntHead.CountItems(-1);
+//	int32_t NumTypes = EntTypeHead.CountItems(-1);
+	int32_t j;
 	if(iff && iff->IsFileOpen() && iff->IsFileWrite()){
 		iff->SetType("VOXL");	//Same as Terrain object, so they share basic file type.
 		iff->StartChunk("ENTS");
 		iff->WriteLong(ENTITYFILEVERSION);
 		iff->WriteLong(NumEnts);
-		for(int i = 0; i < ENTITY_GROUPS; i++){
+		for(int32_t i = 0; i < ENTITY_GROUPS; i++){
 			ent = EntHead[i].NextLink();
 			while(ent){
 				et = ent->TypePtr;
@@ -1848,7 +1848,7 @@ bool VoxelWorld::SaveEntities(IFF *iff){
 }
 bool VoxelWorld::LoadVoxelWorld(const char *name, bool loadentities, bool mirror){
 	IFF iff;
-//	int numeco;
+//	int32_t numeco;
 	FM.PushFile();
 	if(iff.OpenIn(FM.Open(name))){
 		MapFileName = name;	//So we can pass it back to clients who connect.
@@ -1867,7 +1867,7 @@ bool VoxelWorld::LoadVoxelWorld(const char *name, bool loadentities, bool mirror
 			MapCfgString = "";
 			MapCfg.Free();
 			if(iff.IsFileOpen() && iff.IsFileRead() && iff.FindChunk("SCFG")){
-				int len = iff.ReadLong();
+				int32_t len = iff.ReadLong();
 				char *buf;
 				if(len > 0 && (buf = (char*)malloc(len + 1))){
 					iff.ReadBytes(buf, len);
@@ -1906,7 +1906,7 @@ bool VoxelWorld::LoadVoxelWorld(const char *name, bool loadentities, bool mirror
 	return false;
 }
 
-int VoxelWorld::ClearVoxelWorld(){
+int32_t VoxelWorld::ClearVoxelWorld(){
 	FreeIndexedImages();
 	Map.Free();
 	InitializeEntities();
@@ -1919,7 +1919,7 @@ int VoxelWorld::ClearVoxelWorld(){
 
 bool VoxelWorld::SaveVoxelWorld(const char *name){
 	IFF iff;
-//	int numeco;
+//	int32_t numeco;
 //	for(numeco = MAXTERTEX - 1; numeco >= 0; numeco--){	//Find last valid ecosystem.
 //		if(strlen(Eco[numeco].name) > 0 && strcmp(Eco[numeco].name, "none") != 0) break;
 //	} numeco++;
@@ -1956,10 +1956,10 @@ bool VoxelWorld::TextureVoxelWorld32(){
 	return false;
 }
 
-int VoxelWorld::CacheEntityResources(){
-	int nents = 0;
+int32_t VoxelWorld::CacheEntityResources(){
+	int32_t nents = 0;
 	EntityBase *ent;
-	for(int i = 0; i < ENTITY_GROUPS; i++){
+	for(int32_t i = 0; i < ENTITY_GROUPS; i++){
 		ent = EntHead[i].NextLink();
 		while(ent){
 			nents++;
@@ -2019,7 +2019,7 @@ bool VoxelWorld::ListResources(const char *Class, const char *Type){
 
 bool VoxelWorld::InitializeEntities(){
 	IDBucket.InitBuckets(BUCKET_SIZE_ID);//, std::max(CountEntities(), 1000) * 2);
-	int i;//, buckets = 100;
+	int32_t i;//, buckets = 100;
 	for(i = 0; i < ENTITY_GROUPS; i++){
 		EntBucket[i].InitBuckets(Map.Width() / BUCKET_SIZE_2D, Map.Height() / BUCKET_SIZE_2D,
 			BUCKET_SIZE_2D, BUCKET_SIZE_2D);//, buckets);
@@ -2028,7 +2028,7 @@ bool VoxelWorld::InitializeEntities(){
 	return true;
 }
 
-void VoxelWorld::InputTime(int framemsec){
+void VoxelWorld::InputTime(int32_t framemsec){
 	vmsec = framemsec;
 	msec += framemsec;
 	ffrac = ((float)framemsec) / 1000.0f;
@@ -2039,9 +2039,9 @@ void VoxelWorld::InputTime(int framemsec){
 //be used for shrubs and such...  Argh.  I need buckets that are updated dynamically
 //with the entities they hold...
 //
-int VoxelWorld::ThinkEntities(/*int framemsec,*/ int flags){
+int32_t VoxelWorld::ThinkEntities(/*int32_t framemsec,*/ int32_t flags){
 	FrameFlags = flags;
-	int nents = 0, i;
+	int32_t nents = 0, i;
 	EntityBase *ent, *ent2;
 	//Add to ID/Collision buckets.
 //	IDBucket.ClearBuckets();
@@ -2067,8 +2067,8 @@ int VoxelWorld::ThinkEntities(/*int framemsec,*/ int flags){
 	CraterUpdateFlag = 0;
 	if(Net.IsClientActive()){	//Actually create craters sent from server.
 		if(OutgoingConnection.LastCraterSent == NULL) OutgoingConnection.LastCraterSent = &CraterHead;
-		int lim = 20;	//Limit number of craters actually added to map each client frame.
-	//	int lim = 1;	//Limit number of craters actually added to map each client frame.
+		int32_t lim = 20;	//Limit number of craters actually added to map each client frame.
+	//	int32_t lim = 1;	//Limit number of craters actually added to map each client frame.
 		while(lim > 0 && OutgoingConnection.LastCraterSent->NextLink()){
 			CraterEntry *ce = OutgoingConnection.LastCraterSent->NextLink();
 			Crater(ce->x, ce->y, ce->r, ce->d, ce->scorch);
@@ -2101,7 +2101,7 @@ int VoxelWorld::ThinkEntities(/*int framemsec,*/ int flags){
 			//Temporarily Disabled!
 //				IDBucket.AddEntity(ent, ent->GID);
 			//	if(ent->CanCollide){
-			//		EntBucket[i].AddEntity(ent, (int)ent->Position[0], -(int)ent->Position[2]);
+			//		EntBucket[i].AddEntity(ent, (int32_t)ent->Position[0], -(int32_t)ent->Position[2]);
 			//	}
 				ent = ent->NextLink();
 			}
@@ -2130,7 +2130,7 @@ EntityBase *VoxelWorld::FindRegisteredEntity(const char *name){	//Finds a regist
 	}
 	return NULL;
 }
-int VoxelWorld::RegisterEntity(EntityBase *ent, const char *name){	//Registers a named entity, if name not taken.
+int32_t VoxelWorld::RegisterEntity(EntityBase *ent, const char *name){	//Registers a named entity, if name not taken.
 	if(!FindRegisteredEntity(name) && ent && name){
 		RegEntHead.InsertObjectAfter(new RegEntList(ent, name));
 		return 1;
@@ -2138,7 +2138,7 @@ int VoxelWorld::RegisterEntity(EntityBase *ent, const char *name){	//Registers a
 		return 0;
 	}
 }
-int VoxelWorld::UnregisterEntity(EntityBase *ent){
+int32_t VoxelWorld::UnregisterEntity(EntityBase *ent){
 	if(ent){
 		for(RegEntList *rl = RegEntHead.NextLink(); rl; rl = rl->NextLink()){
 			if(rl->entity == ent){
@@ -2154,7 +2154,7 @@ void VoxelWorld::InputMousePos(float x, float y){
 	mousex = std::min(1.0f, std::max(0.0f, x));
 	mousey = std::min(1.0f, std::max(0.0f, y));
 }
-void VoxelWorld::InputMouseButton(int but){	//Use these to set mouse state from operating system.
+void VoxelWorld::InputMouseButton(int32_t but){	//Use these to set mouse state from operating system.
 	mousebutton = but ? 1 : 0;
 }
 float VoxelWorld::GetMouseX(){
@@ -2163,7 +2163,7 @@ float VoxelWorld::GetMouseX(){
 float VoxelWorld::GetMouseY(){	//GUI entities use these to access mouse state.
 	return mousey;
 }
-int VoxelWorld::GetMouseButton(){
+int32_t VoxelWorld::GetMouseButton(){
 	return mousebutton;
 }
 void VoxelWorld::SetChar(char c){	//Adds an ascii char to internal buffer.
@@ -2190,26 +2190,26 @@ void VoxelWorld::SetActivated(EntityGID gid){
 EntityGID VoxelWorld::GetActivated(){	//Used by gui entities to set and read input focus.
 	return guiactivated;
 }
-void VoxelWorld::InputMouseClicked(int b){
+void VoxelWorld::InputMouseClicked(int32_t b){
 	mouseclicked = b;
 	if(b) mousereleased = 0;	//Click obliterates Release.
 }
-void VoxelWorld::InputMouseReleased(int b){
+void VoxelWorld::InputMouseReleased(int32_t b){
 	mousereleased = b;
 }
 void VoxelWorld::ClearMouseFlags(){
 	mouseclicked = mousereleased = 0;
 }
-int VoxelWorld::GetMouseClicked(){
+int32_t VoxelWorld::GetMouseClicked(){
 	return mouseclicked;
 }
-int VoxelWorld::GetMouseReleased(){
+int32_t VoxelWorld::GetMouseReleased(){
 	return mousereleased;
 }
-void VoxelWorld::SetChatMode(int mode){
+void VoxelWorld::SetChatMode(int32_t mode){
 	chatmode = mode;
 }
-int VoxelWorld::GetChatMode(){
+int32_t VoxelWorld::GetChatMode(){
 	return chatmode;
 }
 
@@ -2217,23 +2217,23 @@ int VoxelWorld::GetChatMode(){
 
 bool VoxelWorld::CheckCollision(EntityBase *ent, EntityGroup maxgroup){
 	Mat43 mat1, mat2;
-	int mat1made = 0;
+	int32_t mat1made = 0;
 	nColliders = 0;
 	if(ent && maxgroup >= 0 && maxgroup < ENTITY_GROUPS){
 		//Okay, now, based on radius of calling entity's bounding sphere, scan as large a bucket area as needed.
-		int radlevel = (ent->BoundRad + (BUCKET_SIZE_2D / 2)) / BUCKET_SIZE_2D;
+		int32_t radlevel = (ent->BoundRad + (BUCKET_SIZE_2D / 2)) / BUCKET_SIZE_2D;
 		//
 		radlevel++;	//Hack to get stuck in big structures less...
 		//
-		int bx1 = ent->Position[0] - ((BUCKET_SIZE_2D / 2) + BUCKET_SIZE_2D * radlevel);
-		int by1 = (-ent->Position[2]) - ((BUCKET_SIZE_2D / 2) + BUCKET_SIZE_2D * radlevel);
-		int bx2 = bx1 + BUCKET_SIZE_2D * (1 + radlevel * 2);
-		int by2 = by1 + BUCKET_SIZE_2D * (1 + radlevel * 2);
+		int32_t bx1 = ent->Position[0] - ((BUCKET_SIZE_2D / 2) + BUCKET_SIZE_2D * radlevel);
+		int32_t by1 = (-ent->Position[2]) - ((BUCKET_SIZE_2D / 2) + BUCKET_SIZE_2D * radlevel);
+		int32_t bx2 = bx1 + BUCKET_SIZE_2D * (1 + radlevel * 2);
+		int32_t by2 = by1 + BUCKET_SIZE_2D * (1 + radlevel * 2);
 		//
-		for(int grp = 0; grp <= maxgroup; grp++){
-		//	for(int quad = 0; quad < 4; quad++){
-			for(int by = by1; by <= by2; by += BUCKET_SIZE_2D){
-				for(int bx = bx1; bx <= bx2; bx += BUCKET_SIZE_2D){
+		for(int32_t grp = 0; grp <= maxgroup; grp++){
+		//	for(int32_t quad = 0; quad < 4; quad++){
+			for(int32_t by = by1; by <= by2; by += BUCKET_SIZE_2D){
+				for(int32_t bx = bx1; bx <= bx2; bx += BUCKET_SIZE_2D){
 				//	EntityBucketNode *ebn = EntBucket[grp].GetBucket(ent->Position[0], -ent->Position[2], quad);
 					EntityBucketNode *ebn = EntBucket[grp].GetBucket(bx, by);
 					while(ebn){
@@ -2301,7 +2301,7 @@ EntityBase *VoxelWorld::NextCollider(Vec3 returnpnt){
 //for final collision.
 //
 //First bounding box gets poked by second.
-int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2, Mat43 mat2, Vec3 retpnt){
+int32_t CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2, Mat43 mat2, Vec3 retpnt){
 	Vec3 pnts[8] = {
 	{min2[0], min2[1], min2[2]},	//Left Bottom Back
 	{max2[0], min2[1], min2[2]},	//Right Bottom Back
@@ -2312,8 +2312,8 @@ int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2,
 	{min2[0], max2[1], max2[2]},	//Left Top Front
 	{max2[0], max2[1], max2[2]}};	//Right Top Front
 	Vec3 tpnts[8];
-	static int lines[12][2] = {{0, 1}, {2, 3}, {0, 2}, {1, 3}, {4, 5}, {6, 7}, {4, 6}, {5, 7}, {0, 4}, {1, 5}, {2, 6}, {3, 7}};
-	int i;
+	static int32_t lines[12][2] = {{0, 1}, {2, 3}, {0, 2}, {1, 3}, {4, 5}, {6, 7}, {4, 6}, {5, 7}, {0, 4}, {1, 5}, {2, 6}, {3, 7}};
+	int32_t i;
 	for(i = 0; i < 8; i++){
 		//TODO: This should be concatenated.
 		Vec3MulMat43(pnts[i], mat2, tpnts[i]);	//Xform bbox into world space.
@@ -2322,9 +2322,9 @@ int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2,
 	Vec3 cntr;
 	Vec3IMulMat3(mat2[3], mat1, cntr);	//Find 1-relative center of 2.
 	Vec3 is;
-	for(int l = 0; l < 12; l++){
-		for(int d = 0; d < 3; d++){
-			int l1, l2;
+	for(int32_t l = 0; l < 12; l++){
+		for(int32_t d = 0; d < 3; d++){
+			int32_t l1, l2;
 			if(pnts[lines[l][0]][d] > pnts[lines[l][1]][d]){
 				l1 = lines[l][1]; l2 = lines[l][0];
 			}else{
@@ -2352,7 +2352,7 @@ int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2,
 				}
 			}
 			//Check InterSect against 6 planes...  Only really needs to be 4 planes.
-			int j;
+			int32_t j;
 			for(j = 0; j < 3; j++){
 				if(is[j] < min1[j] || is[j] > max1[j]) break;
 			}
@@ -2364,7 +2364,7 @@ int CollideBoundingBoxes(Vec3 min1, Vec3 max1, Mat43 mat1, Vec3 min2, Vec3 max2,
 	}
 	//Sanity check for total enclosure.
 	for(i = 0; i < 8; i++){
-		int d;
+		int32_t d;
 		for(d = 0; d < 3; d++){
 			if(pnts[i][d] < min1[d] || pnts[i][d] > max1[d]) break;
 		}

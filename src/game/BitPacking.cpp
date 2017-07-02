@@ -19,13 +19,13 @@
 
 #include "BitPacking.h"
 
-BitPackEngine::BitPackEngine(char *buffer, int buflength){
+BitPackEngine::BitPackEngine(char *buffer, int32_t buflength){
 	data = (unsigned char*)buffer;
 	maxlen = buflength;
 	bitlen = buflength * 8;
 	pos = 0;
 }
-BitPackEngine::BitPackEngine(unsigned char *buffer, int buflength){
+BitPackEngine::BitPackEngine(unsigned char *buffer, int32_t buflength){
 	data = (unsigned char*)buffer;
 	maxlen = buflength;
 	bitlen = buflength * 8;
@@ -34,15 +34,15 @@ BitPackEngine::BitPackEngine(unsigned char *buffer, int buflength){
 BitPackEngine::~BitPackEngine(){
 	//
 }
-int BitPackEngine::BytesUsed(){	//Returns number of bytes used in buffer.
+int32_t BitPackEngine::BytesUsed(){	//Returns number of bytes used in buffer.
 	if(data && maxlen > 0) return (pos + 7) / 8;	//0 bits will be 0 bytes, 1 bit will be 1 byte, 8 bits will be 1 bytes, 9 bits 2 bytes, etc.
 	return 0;
 }
-int BitPackEngine::BitsUsed(){	//Returns number of bits used in buffer.
+int32_t BitPackEngine::BitsUsed(){	//Returns number of bits used in buffer.
 	if(data && maxlen > 0) return pos;
 	return 0;
 }
-int BitPackEngine::SkipBits(int bits){
+int32_t BitPackEngine::SkipBits(int32_t bits){
 	if(pos + bits <= bitlen && pos + bits >= 0){
 		pos += bits;
 		return 1;
@@ -52,12 +52,12 @@ int BitPackEngine::SkipBits(int bits){
 void BitPackEngine::Reset(){
 	pos = 0;
 }
-int BitPackEngine::PackInt(int val, int bits){
+int32_t BitPackEngine::PackInt(int32_t val, int32_t bits){
 	if(data && bitlen > 0 && bits <= bitlen - pos && bits <= 32){
 		val <<= (BPW - bits);	//BitsPerWord - bits shifts meaningful data to "top" of variable.
-		int bytepos = pos >>3;
-		int bitpos = pos;	//Save working position.
-		int freebits = 8 - (bitpos & 7);	//Empty bits in current byte.
+		int32_t bytepos = pos >>3;
+		int32_t bitpos = pos;	//Save working position.
+		int32_t freebits = 8 - (bitpos & 7);	//Empty bits in current byte.
 		pos += bits;	//Increment internal pos now for next call.
 		if(freebits < 8){	//Partial byte free.
 			unsigned char mask = (uint32_t)((1 << (freebits - 0)) - 1);	//Mask for lowe end of bit yet unused.
@@ -75,10 +75,10 @@ int BitPackEngine::PackInt(int val, int bits){
 	}
 	return 0;
 }
-int BitPackEngine::PackUInt(int val, int bits){
+int32_t BitPackEngine::PackUInt(int32_t val, int32_t bits){
 	return PackInt(val, bits);	//Signed vs. unsigned only matters when unpacking!
 }
-int BitPackEngine::PackFloatInterval(float val, float min, float max, int bits){
+int32_t BitPackEngine::PackFloatInterval(float val, float min, float max, int32_t bits){
 	if(bits > 0 && max > min){
 	//	return PackUInt((uint32_t)(((val - min) / (max - min)) * (float)((1 << bits) - 1)), bits);
 		uint32_t j;
@@ -92,17 +92,17 @@ int BitPackEngine::PackFloatInterval(float val, float min, float max, int bits){
 	}
 	return 0;
 }
-int BitPackEngine::PackFloat(float val, int bits){
+int32_t BitPackEngine::PackFloat(float val, int32_t bits){
 	//TODO:  Make good!
 	return PackFloatInterval(val, -10000.0f, 10000.0f, bits);
 }
-int BitPackEngine::PackString(const char *str, int bits){
+int32_t BitPackEngine::PackString(const char *str, int32_t bits){
 	if(str && bits <= 8 && bits >= 1){
-		int mask = (1 << bits) - 1;
-		int val = 1;
-		int ret = 1;
+		int32_t mask = (1 << bits) - 1;
+		int32_t val = 1;
+		int32_t ret = 1;
 		while(val != 0){	//Make sure we check the _truncated_ string value for zero-ness.
-			val = ((int)*((const unsigned char*)str)) & mask;
+			val = ((int32_t)*((const unsigned char*)str)) & mask;
 			ret &= PackUInt(val, bits);
 			str++;
 		}
@@ -111,13 +111,13 @@ int BitPackEngine::PackString(const char *str, int bits){
 	return 0;
 }
 
-BitUnpackEngine::BitUnpackEngine(const char *buffer, int buflength){
+BitUnpackEngine::BitUnpackEngine(const char *buffer, int32_t buflength){
 	data = (unsigned char*)buffer;
 	maxlen = buflength;
 	bitlen = buflength * 8;
 	pos = 0;
 }
-BitUnpackEngine::BitUnpackEngine(const unsigned char *buffer, int buflength){
+BitUnpackEngine::BitUnpackEngine(const unsigned char *buffer, int32_t buflength){
 	data = (unsigned char*)buffer;
 	maxlen = buflength;
 	bitlen = buflength * 8;
@@ -126,15 +126,15 @@ BitUnpackEngine::BitUnpackEngine(const unsigned char *buffer, int buflength){
 BitUnpackEngine::~BitUnpackEngine(){
 	//
 }
-int BitUnpackEngine::BytesUsed(){	//Returns number of bytes used in buffer.
+int32_t BitUnpackEngine::BytesUsed(){	//Returns number of bytes used in buffer.
 	if(data && maxlen > 0) return (pos + 7) / 8;	//0 bits will be 0 bytes, 1 bit will be 1 byte, 8 bits will be 1 bytes, 9 bits 2 bytes, etc.
 	return 0;
 }
-int BitUnpackEngine::BitsUsed(){	//Returns number of bits used in buffer.
+int32_t BitUnpackEngine::BitsUsed(){	//Returns number of bits used in buffer.
 	if(data && maxlen > 0) return pos;
 	return 0;
 }
-int BitUnpackEngine::SkipBits(int bits){
+int32_t BitUnpackEngine::SkipBits(int32_t bits){
 	if(pos + bits <= bitlen && pos + bits >= 0){
 		pos += bits;
 		return 1;
@@ -142,34 +142,34 @@ int BitUnpackEngine::SkipBits(int bits){
 	return 0;
 }
 
-int BitUnpackEngine::UnpackInt(int &outval, int bits){
+int32_t BitUnpackEngine::UnpackInt(int32_t &outval, int32_t bits){
 	if(data && bitlen > 0 && bits <= bitlen - pos && bits <= 32){
-		int bitpos = pos;
-		int bytepos = bitpos >>3;
-		int endbitpos = bitpos + bits;
-		int endbytepos = (endbitpos - 1) >>3;
+		int32_t bitpos = pos;
+		int32_t bytepos = bitpos >>3;
+		int32_t endbitpos = bitpos + bits;
+		int32_t endbytepos = (endbitpos - 1) >>3;
 		pos += bits;	//Increment internal pos now for next call.
 		//
-		int val = 0;
+		int32_t val = 0;
 		while(endbytepos > bytepos){
 			val >>= 8;
 			val &= ((1 << (BPW - 8)) - 1);	//Mask.
-			val |= (int)data[endbytepos] << (BPW - 8);
+			val |= (int32_t)data[endbytepos] << (BPW - 8);
 			endbytepos--;
 		}
 		//
-		int usedbits = 8 - (bitpos & 7);
+		int32_t usedbits = 8 - (bitpos & 7);
 		val >>= usedbits;
 		val &= (((uint32_t)1 << (BPW - usedbits)) - 1);
-		val |= (((int)data[bytepos]) << (BPW - usedbits));
+		val |= (((int32_t)data[bytepos]) << (BPW - usedbits));
 		val >>= (BPW - bits);	//Scoot right.
 		outval = val;
 		return 1;
 	}
 	return 0;
 }
-int BitUnpackEngine::UnpackUInt(uint32_t &val, int bits){
-	int v;
+int32_t BitUnpackEngine::UnpackUInt(uint32_t &val, int32_t bits){
+	int32_t v;
 	if(UnpackInt(v, bits)){
 		if(bits < 32) v &= (((uint32_t)1 << bits) - 1);	//Mask off extraneous bits.
 		val = (uint32_t)v;
@@ -177,7 +177,7 @@ int BitUnpackEngine::UnpackUInt(uint32_t &val, int bits){
 	}
 	return 0;
 }
-int BitUnpackEngine::UnpackFloatInterval(float &val, float min, float max, int bits){
+int32_t BitUnpackEngine::UnpackFloatInterval(float &val, float min, float max, int32_t bits){
 	if(bits > 0 && max > min){
 		uint32_t v;
 		if(UnpackUInt(v, bits)){
@@ -189,22 +189,22 @@ int BitUnpackEngine::UnpackFloatInterval(float &val, float min, float max, int b
 	}
 	return 0;
 }
-int BitUnpackEngine::UnpackFloat(float &val, int bits){
+int32_t BitUnpackEngine::UnpackFloat(float &val, int32_t bits){
 	return UnpackFloatInterval(val, -10000.0f, 10000.0f, bits);
 }
-int BitUnpackEngine::UnpackString(CStr &strout, int bits){
+int32_t BitUnpackEngine::UnpackString(CStr &strout, int32_t bits){
 	if(bits <= 8 && bits >= 1){
 		char c[MAX_STRING] = {0};
-	//	int mask = (1 << bits) - 1;
-		int val = 1;
-		int ret = 1;
-		int n = 0;
+	//	int32_t mask = (1 << bits) - 1;
+		int32_t val = 1;
+		int32_t ret = 1;
+		int32_t n = 0;
 		while(val != 0){	//Make sure we check the _truncated_ string value for zero-ness.
 			val = 0;
 			ret &= UnpackUInt(val, bits);
 			if(n < MAX_STRING) c[n] = (unsigned char)val;
 			n++;
-		//	val = (int)*((const unsigned char*)str++) & mask;
+		//	val = (int32_t)*((const unsigned char*)str++) & mask;
 		}
 		c[MAX_STRING - 1] = 0;
 		strout = c;
