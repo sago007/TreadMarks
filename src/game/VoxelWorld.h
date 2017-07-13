@@ -522,11 +522,11 @@ public:
 private:
 	bool ForceGroup;
 	uint32_t msec;	//Time stamp for global think.
-	signed long msecdiff;	//When client, difference from current client clock to get server clock.
+	int32_t msecdiff;	//When client, difference from current client clock to get server clock.
 	int32_t vmsec;	//Time since last global think ("length" of this think).
 	float ffrac;
 #define MSDIFF_HISTORY 16
-	signed long msecdiffa[MSDIFF_HISTORY];
+	int32_t msecdiffa[MSDIFF_HISTORY];
 	int32_t msecdiffan;
 	//
 #define SYNCH_EVERY 100

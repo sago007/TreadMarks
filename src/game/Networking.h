@@ -11,7 +11,7 @@
 // GNU General Public License for more details.
 // 
 // You should have received a copy of the GNU General Public License
-// along with Tread Marks.  If not, see <http://www.gnu.org/licenses/>.
+// aint32_t with Tread Marks.  If not, see <http://www.gnu.org/licenses/>.
 
 //
 // UDP based networking class, by Seumas McNally,
@@ -40,13 +40,13 @@ typedef unsigned int ClientID;
 #define WLONG(ptr, lng) (*((uint32_t*)(ptr)) = htonl((lng)))
 #define RLONG(ptr) (ntohl(*((uint32_t*)(ptr))))
 //
-//#define WFLOAT(ptr, flt) (*((long*)(ptr)) = htonl(*((long*)&(flt))))
-//#define RFLOAT(ptr) (ntohl(*((long*)(ptr))))
+//#define WFLOAT(ptr, flt) (*((int32_t*)(ptr)) = htonl(*((int32_t*)&(flt))))
+//#define RFLOAT(ptr) (ntohl(*((int32_t*)(ptr))))
 inline void WFLOAT(void *ptr, float flt){
-	*((long*)ptr) = htonl(*((long*)&flt));
+	*((int32_t*)ptr) = htonl(*((int32_t*)&flt));
 };
 inline float RFLOAT(const void *ptr){
-	long t = htonl(*((long*)ptr));
+	int32_t t = htonl(*((int32_t*)ptr));
 	return *((float*)&t);
 }
 //
