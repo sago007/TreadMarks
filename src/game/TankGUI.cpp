@@ -1073,7 +1073,7 @@ void DoMain()
 		return;
 	case BID_Web :
 		//SetActiveWindow(NULL);
-		//OpenWebLink("http://www.longbowgames.com");
+		OpenWebLink("http://www.longbowgames.com");
 
 		break;
 	case BID_Tutorial:
