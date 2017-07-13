@@ -17,8 +17,13 @@
 
 CStr GetAppDataDir()
 {
-	CStr the_path =  getenv("HOME");
-	the_path = the_path + CStr("/.local/share/Tread Marks/");
+    CStr the_path =  getenv("HOME");
+    the_path = the_path + CStr("/.local/share/Tread Marks/");
+
+    //Create the directory if it does not exist. Should be replaced by a library call instead at some point.
+    std::string mkdirCommand = "mkdir -p \""+the_path+"\"";
+    system(mkdirCommand.c_str());
+    
     return the_path;
 }
 
