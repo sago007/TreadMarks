@@ -1297,35 +1297,10 @@ int32_t GLMipMap(Bitmap *bmp, int32_t fmt, int32_t trans, int32_t maxres, int32_
 					unsigned char *ts = tbmp1.Data() + (y * 2) * tbmp1.Pitch();
 					unsigned char *td = tbmp2.Data() + y * tbmp2.Pitch();
 					for(x = w; x; x--){
-						//Maximum filter.
-					//	int32_t pp = tbmp1.Pitch();
-					//	const int32_t p = 0;
-					//	int32_t p1 = ((int32_t)ts[p] + (int32_t)ts[p + 1] + (int32_t)ts[p + 2]) * (int32_t)ts[p + 3];
-					//	int32_t p2 = ((int32_t)ts[p + 4] + (int32_t)ts[p + 5] + (int32_t)ts[p + 6]) * (int32_t)ts[p + 7];
-					//	int32_t p3 = ((int32_t)ts[p + pp] + (int32_t)ts[p + 1 + pp] + (int32_t)ts[p + 2 + pp]) * (int32_t)ts[p + 3 + pp];
-					//	int32_t p4 = ((int32_t)ts[p + 4 + pp] + (int32_t)ts[p + 5 + pp] + (int32_t)ts[p + 6 + pp]) * (int32_t)ts[p + 7 + pp];
-					//	if(p1 > p2 && p1 > p3 && p1 > p4){
-					//		*((int*)&td[p]) = *((int*)&ts[p]);
-					//	}else if(p2 > p1 && p2 > p3 && p2 > p4){
-					//		*((int*)&td[p]) = *((int*)&ts[p + 4]);
-					//	}else if(p3 > p2 && p3 > p1 && p3 > p4){
-					//		*((int*)&td[p]) = *((int*)&ts[p + pp]);
-					//	}else{
-					//		*((int*)&td[p]) = *((int*)&ts[p + pp + 4]);
-					//	}
 						for(int32_t p = 0; p < 4; p++){
-							//Gain filter.
-						//	td[p] = gaintab[(unsigned char)((((int32_t)ts[p]) + (int32_t)ts[p + 4] +
-						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>2)];
 							//Uneven box filter 2.
 							td[p] = (((int32_t)ts[p] <<2) + (int32_t)ts[p + 4] +
 								(int32_t)ts[p + tbmp1.Pitch()] + ((int32_t)ts[p + 4 + tbmp1.Pitch()] <<1)) >>3;
-							//Uneven box filter.
-						//	td[p] = (((int32_t)ts[p] * 5) + (int32_t)ts[p + 4] +
-						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>3;
-							//Even box filter.
-						//	td[p] = (((int32_t)ts[p]) + (int32_t)ts[p + 4] +
-						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>2;
 						}
 						ts += 8;
 						td += 4;

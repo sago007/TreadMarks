@@ -85,7 +85,7 @@ int Decrypt(const void *data, int length, void **out, int *outlen){
 		return 0;
 	}
 	uint32_t t = *((uint32_t*)data);
-	int buflen = (int)(t ^ 0xabbafad5);
+	uint32_t buflen = (uint32_t)(t ^ 0xabbafad5);
 	if(buflen != length){
 	//	printf("Bad sizes.  External: %d  Internal: %d  T: %x\n", length, buflen, t);
 		free(buf);

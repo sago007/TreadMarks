@@ -69,7 +69,7 @@ bool MakeRemapTable(unsigned char *Remap, const PaletteEntry *oldpe, const Palet
 		diff = 2048;
 		for(k = 0; k < 256; k++){
 		//	t = (abs(pe[k].peRed - r) << 1) + (abs(pe[k].peGreen - g) << 2) + abs(pe[k].peBlue - b);
-			t = (abs(int(pe[k].peRed) - r)) + (abs(int(pe[k].peGreen) - g)) + abs(int(pe[k].peBlue) - b);
+			t = (abs(int32_t(pe[k].peRed) - r)) + (abs(int32_t(pe[k].peGreen) - g)) + abs(int32_t(pe[k].peBlue) - b);
 			if(t < diff){
 				diff = t;
 				col = k;
@@ -1091,8 +1091,8 @@ bool Bitmap::InitAnalyze(){
 	if(nLines != height){
 		FreeAnalyze();
 		nLines = height;
-		LineLeft = new int[nLines];
-		LineRight = new int[nLines];
+		LineLeft = new int32_t[nLines];
+		LineRight = new int32_t[nLines];
 		if(LineLeft != NULL && LineRight != NULL) return 1;
 		FreeAnalyze();
 		return false;
@@ -1160,7 +1160,7 @@ bool ImageSet::LoadSet(FILE *f){
 			}
 			for(i = 0; i < nImg; i++){
 				pos = ReadLong(f);	//Size of name.
-				fread(buf, std::min(int(sizeof(buf)) - 1, pos), 1, f);
+				fread(buf, std::min(int32_t(sizeof(buf)) - 1, pos), 1, f);
 				if(names && i < nImages) names[i] = buf;	//Set the name.
 				ip = &((*this)[i]);
 				w = ReadLong(f);

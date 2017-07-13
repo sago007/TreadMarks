@@ -92,10 +92,10 @@ float fsqrt_inv(float f)
 #else
 	float fsqrt_inv(float f)
 	{
-	 long i;
+	 int32_t i;
 	 float x2, y;
 	 x2 = 0.5f*f;
-	 i = *(long *)&f;
+	 i = *(int32_t *)&f;
 	 i = 0x5f3759df - (i>>1);
 	 y = *(float *)&i;
 	 // repeat this iteration for more accuracy

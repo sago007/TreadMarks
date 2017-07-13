@@ -15,7 +15,9 @@
 
 //Simple checksum and encryption algorithms.
 
-unsigned int Checksum(const void *data, int length);
+#include <stdint.h>
+
+uint32_t Checksum(const void *data, int length);
 
 //The following return malloc()ed buffers that you must
 //free() yourself.

@@ -886,8 +886,8 @@ bool EntityRacetank::Think(){
 	//Do weapon fire, now that turret matrix is made so tip of gun is known.
 	if(flag_fireratescale != 0.0f)
 	{
-		int relms = (int)(TP->reloadtime * 1000.0f * (3.0f - skill * 2.0f) / flag_fireratescale);
-		int relms2 = relms - 1000;
+		int32_t relms = (int32_t)(TP->reloadtime * 1000.0f * (3.0f - skill * 2.0f) / flag_fireratescale);
+		int32_t relms2 = relms - 1000;
 		if(relms2 > 200 && lastfiretime != 0 && lastfiretime + relms2 < VW->Time() && lastfiretime + relms2 >= VW->Time() - VW->FrameTime()){
 			if(playertank && ammo > 0) VW->AddEntity("sound", "reload", Position, NULL, NULL, 0, 0, 0, 0);	//Reloading sound.
 		}

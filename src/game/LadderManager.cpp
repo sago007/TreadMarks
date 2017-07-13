@@ -103,7 +103,7 @@ bool LadderManager::Load(const char *name){
 			iff.ReadLong(&PlayerRank);
 			iff.ReadLong(&RacesRun);
 			iff.ReadString(&PlayerName);
-			iff.ReadLong((int*)&Mirrored);
+			iff.ReadLong((int32_t*)&Mirrored);
 			iff.ReadLong(&NextMap);
 		}
 		if(iff.FindChunk("LDR4")){

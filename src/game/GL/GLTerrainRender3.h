@@ -139,24 +139,24 @@ private:
 	float		texscalex, texscaley, texaddx, texaddy;
 	float		texoffx2, texoffy2, texscalex2, texscaley2;
 
-	int			PolyCount;
+	int32_t			PolyCount;
 
-	int			nFanStack;
-	int			FanCount;
-	int			UseMT;
+	int32_t			nFanStack;
+	int32_t			FanCount;
+	int32_t			UseMT;
 	union
 	{	int32_t FanStack[200];
 		float FanStackf[200];
 	};
 
 	Timer		gltmr;
-	int			TerrainFrame;
+	int32_t			TerrainFrame;
 
 	float		CurQuality;
-	int			CurBinTris;
+	int32_t			CurBinTris;
 
 	MapPatch	*patches;
-	int			npatches;
+	int32_t			npatches;
 
 	void GLViewplane(float w, float h, float view, float n, float f);
 

@@ -62,7 +62,7 @@ public:
 public:
 	int GetCompressedLength();
 	int GetCompressedData(char *dest, int maxlen, int offset = 0, int bytes = 0);
-	unsigned int GetChecksum();
+	uint32_t GetChecksum();
 	//Compressed Data is a version of the config file text created at load time which has
 	//all white space and comments removed, and key names converted to lower case, suitable
 	//for faster network transmission.  A checksum of the compressed version is also created,

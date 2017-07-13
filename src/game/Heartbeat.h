@@ -38,7 +38,7 @@ public:
 	int Clients, MaxClients, Rate, GameMode;
 	sockaddr_in Address;
 	TimeStamp Time, TimeInGame;
-	unsigned int version[4];
+	uint32_t version[4];
 	int FragLimit, TimeLimit, Bots, DediFPS;
 public:
 	ServerEntry(){
@@ -55,7 +55,7 @@ public:
 		return 0;
 	};
 	CStr AddressText(){
-		return CStr(inet_ntoa(Address.sin_addr)) + ":" + String((int)ntohs(Address.sin_port));
+		return CStr(inet_ntoa(Address.sin_addr)) + ":" + String((int32_t)ntohs(Address.sin_port));
 	};
 };
 

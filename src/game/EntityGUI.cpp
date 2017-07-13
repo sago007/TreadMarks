@@ -449,7 +449,7 @@ bool EntityGUIEdit::Think(){
 	}else{
 		flashms = 0;
 	}
-	int fms = (int)(TP->type_cursorflash * 1000.0f);
+	int32_t fms = (int32_t)(TP->type_cursorflash * 1000.0f);
 	if(flashms > fms / 2){
 		faketext = Left(realtext, caretpos) + "_" + Mid(realtext, caretpos + 1) + FAKETAIL2;
 		if(flashms > fms) flashms = 0;
@@ -627,7 +627,7 @@ bool EntityGUIListbox::Think(){
 		if(e->QueryInt(ATT_CLICKED)){	//Knob is being clicked and/or dragged.
 			scrollt = (VW->GetMouseY() - (Position[1] + Rotation[1] * (float)(upscrollpresent) + knobh * 0.5f)) /
 				MAX(0.01f, iknobh);//Rotation[1] * (float)height);
-			scroll = (int)(scrollt * (float)((listlen - height) + 1));
+			scroll = (int32_t)(scrollt * (float)((listlen - height) + 1));
 		}
 	}
 	scroll = CLAMP(scroll, 0, std::max(0, listlen - height));
@@ -759,7 +759,7 @@ EntityBase *EntityGUIImageBrowserType::CreateEntity(Vec3 Pos, Rot3 Rot, Vec3 Vel
 }
 bool EntityGUIImageBrowserType::CacheResources(){
 	if(ResCached) return true;
-	texture = VW->GetCreateImage(cname + "_" + tname, (int)(type_w + 0.5f), (int)(type_h + 0.5f), type_bpp, true);
+	texture = VW->GetCreateImage(cname + "_" + tname, (int32_t)(type_w + 0.5f), (int32_t)(type_h + 0.5f), type_bpp, true);
 	if(texture){
 		texture->Dynamic = true;	//Prevents texture compression.
 		return ResCached = true;	//This _shouldn't_ fail...  But if it does, call parent's rescache.
@@ -816,8 +816,8 @@ bool EntityGUIImageBrowser::SetString(int type, const char *s){
 				Flags &= ~FLAG_BUTTON_HIDDEN;
 
 				// if the texture is not the same size as the gui ent than resize it
-				if( (img->Width() != (int) TP->type_w) || (img->Height() != (int) TP->type_h) )
-					img->Scale((int) TP->type_w, (int) TP->type_h);
+				if( (img->Width() != (int32_t) TP->type_w) || (img->Height() != (int32_t) TP->type_h) )
+					img->Scale((int32_t) TP->type_w, (int32_t) TP->type_h);
 
 				// if not flipped then flip it
 				if( bHFlip && (img->flags & BFLAG_HFLIPPED) == 0 )

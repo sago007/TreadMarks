@@ -75,7 +75,7 @@ public:
 	double	ReadFloat(double *pnt);
 	uint32_t	ReadLong();
 	uint32_t	ReadLong(uint32_t *pnt);
-	int		ReadLong(int *pnt);
+	int32_t		ReadLong(int32_t *pnt);
 	ushort	ReadShort();
 	ushort	ReadShort(ushort *pnt);
 	uchar	ReadByte();

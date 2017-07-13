@@ -114,7 +114,7 @@ typedef CVec3 Vector;
 
 class Poly3D{
 public:
-	int Points[3];	//Pointers to points that make up poly.  Now array indices.
+	int32_t Points[3];	//Pointers to points that make up poly.  Now array indices.
 	Vector Normal;	//Polygon face normal vector.
 	PolyUV UV;
 //	Image *Tex;	//Pointer to RawBMP texture for this poly.
@@ -182,45 +182,6 @@ public:
 	bool SetTexture(Image *img);
 	bool SetLod(int level, float bias, Mesh *next);
 };
-/*
-class Object{
-friend class PolyRender;
-friend class RenderEngine;
-private:
-	int Type;
-	int Flags;
-	float Opacity;	//HW-accel for sprites only, 0.0 to 1.0, fade out/in.
-	//Lod will now be handled by having links to next-lod-mesh in mesh structures.
-	Mesh *M;	//Easy pointer.
-	int *YBufPtr;
-	int YBufLeft, YBufRight;	//YBuf space is now dynamically allocated off of YBuf heap.
-	Image *Sprite;
-	Float SpriteWidth, SpriteHeight;
-	Object *Link, *Parent;	//Pointer to next linked object, if any.
-	unsigned char Red, Green, Blue, Seed;	//Particle cloud.
-	float Radius;	//Cloud size.
-public:
-	Mat43 model;	//model matrix for object.
-	Vector xfpos;	//transformed viewspace position.
-	Float SortZ;
-};
-*/
-/*
-#define MAX_TEXTLEN 1024
-class TextObject{
-friend class PolyRender;
-private:
-	Float X, Y, W, H;
-	Float Opacity;
-//	CStr Text;
-	unsigned char Glyph[MAX_TEXTLEN];	//Index into texture, NOT ASCII!
-	int nGlyph;
-	Image *Bmp;
-	int Flags;
-	int CharsX, CharsY;	//Character grid in texture bitmap.
-	unsigned char Red, Green, Blue;
-};
-*/
 
 class PolyRender;	//Forward decl.
 

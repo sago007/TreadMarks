@@ -50,7 +50,7 @@ public:
 
 	void WriteDword(const char *name, uint32_t val) { WriteValue(name, val); }
 	void ReadDword(const char *name, uint32_t *val) const { ReadValue(name, *val); }
-	void ReadDword(const char *name, int *val) const { ReadValue(name, *val); }
+	void ReadDword(const char *name, int32_t *val) const { ReadValue(name, *val); }
 	void ReadDword(const char *name, bool *val) const { ReadValue(name, *val); }
 	void WriteFloat(const char *name, float val) { WriteValue(name, val); }
 	void ReadFloat(const char *name, float *val) const { ReadValue(name, *val); }
@@ -67,7 +67,7 @@ public:
 	}
 
 	void Cast(const std::string& in, uint32_t& out) const { out = std::stoul(in); }
-	void Cast(const std::string& in, int& out) const { out = std::stoi(in); }
+	void Cast(const std::string& in, int32_t& out) const { out = std::stoi(in); }
 	void Cast(const std::string& in, bool& out) const { out = (!in.empty() && in[0] == 't') || in[0] == 'T' || in[0] == '1'; }
 	void Cast(const std::string& in, float& out) const { out = std::stof(in); }
 

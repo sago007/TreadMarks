@@ -906,7 +906,7 @@ bool EntitySkyboxType::CacheResources(){
 						unsigned char *src = tbmp.Data() + y * tbmp.Pitch();	//Suck back into real image.
 						for(int x = 0; x < tbmp.Width() - 1; x++){
 							for(int p = 0; p < 4; p++){
-								*dst = ((int)src[0] + (int)src[4] + (int)src[0 + tbmp.Pitch()] + (int)src[4 + tbmp.Pitch()]) >>2;
+								*dst = ((int32_t)src[0] + (int32_t)src[4] + (int32_t)src[0 + tbmp.Pitch()] + (int32_t)src[4 + tbmp.Pitch()]) >>2;
 								src++;
 								dst++;
 							}
@@ -987,8 +987,8 @@ bool EntitySkyboxType::CacheResources(){
 					//	iy = iy & (bmp.Height() - 1);
 						ix = std::max(ix, 0); ix = std::min(ix, bmp.Width() - 1);
 						iy = std::max(iy, 0); iy = std::min(iy, bmp.Height() - 1);
-						*((long*)(envtexture->Data() + (x <<2) + y * envtexture->Pitch())) =
-							*((long*)(bmp.Data() + (ix <<2) + iy * bmp.Pitch()));
+						*((int32_t*)(envtexture->Data() + (x <<2) + y * envtexture->Pitch())) =
+							*((int32_t*)(bmp.Data() + (ix <<2) + iy * bmp.Pitch()));
 					}
 				}
 			}
@@ -1013,7 +1013,7 @@ bool EntitySkyboxType::CacheResources(){
 				float a = (float)ai * (PI2 / steps);
 				float fx = ((sin(a) * 0.707) * 0.5f + 0.5f) * (float)envtexture->Width();
 				float fy = ((cos(a) * 0.707) * 0.5f + 0.5f) * (float)envtexture->Height();
-				unsigned char *pnt = envtexture->Data() + (int)fx * 4 + (int)fy * envtexture->Pitch();
+				unsigned char *pnt = envtexture->Data() + (int32_t)fx * 4 + (int32_t)fy * envtexture->Pitch();
 				for(int p = 0; p < 3; p++){
 					caccum[2 - p] += (float)pnt[p] / 255.0f;
 				}

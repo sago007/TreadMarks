@@ -587,7 +587,7 @@ bool InversePal::Init(int32_t rbits, int32_t gbits, int32_t bbits){
 bool InversePal::Make(PaletteEntry *npe, int32_t ncols){
 	if(!inv_pal || npe == NULL || ncols <= 0 || ncols > 256) return false;
 	int32_t *inv_pal_dist;
-	if(NULL == (inv_pal_dist = (int*)malloc(red_max * green_max * blue_max * sizeof(int32_t)))) return false;
+	if(NULL == (inv_pal_dist = (int32_t*)malloc(red_max * green_max * blue_max * sizeof(int32_t)))) return false;
 	int32_t i, j;
 	for(i = red_max * green_max * blue_max - 1; i >= 0; i--){
 		inv_pal_dist[i] = 0x10000000;

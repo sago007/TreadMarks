@@ -303,15 +303,15 @@ void SpreadPal(PaletteEntry *pe1, PaletteEntry *pe2, PaletteEntry *dst){
 		for(int i = 0; i < 256; i++){
 			if(i < 128){
 				float t = ((float)i) / 127.0f;
-				dst[i].peRed = (int)(((float)pe1->peRed) * t);
-				dst[i].peGreen = (int)(((float)pe1->peGreen) * t);
-				dst[i].peBlue = (int)(((float)pe1->peBlue) * t);
+				dst[i].peRed = (int32_t)(((float)pe1->peRed) * t);
+				dst[i].peGreen = (int32_t)(((float)pe1->peGreen) * t);
+				dst[i].peBlue = (int32_t)(((float)pe1->peBlue) * t);
 			}else{
 				float t = (float)(i - 127) / 128.0f;
 				float it = 1.0f - t;
-				dst[i].peRed = (int)((float)pe1->peRed * it + (float)pe2->peRed * t);
-				dst[i].peGreen = (int)((float)pe1->peGreen * it + (float)pe2->peGreen * t);
-				dst[i].peBlue = (int)((float)pe1->peBlue * it + (float)pe2->peBlue * t);
+				dst[i].peRed = (int32_t)((float)pe1->peRed * it + (float)pe2->peRed * t);
+				dst[i].peGreen = (int32_t)((float)pe1->peGreen * it + (float)pe2->peGreen * t);
+				dst[i].peBlue = (int32_t)((float)pe1->peBlue * it + (float)pe2->peBlue * t);
 			}
 		}
 	}
@@ -347,51 +347,6 @@ void Palette(int ColorScheme){
 	}
 	SpreadPal(&p1, &p2, pe);
 }
-/*
-void Palette(int ColorScheme){
-	//Create palette.
-	int i;
-	if(ColorScheme == 0){
-		for(i = 0; i < 128; i++){
-			pe[i].peRed = i * 2;  pe[i].peGreen = i;  pe[i].peBlue = 0;  }
-		for(i = 128; i < 256; i++){
-			pe[i].peRed = 255;  pe[i].peGreen = i;  pe[i].peBlue = 0;  }
-	}
-	if(ColorScheme == 1){
-		for(i = 0; i < 128; i++){
-			pe[i].peRed = 0;  pe[i].peGreen = i;  pe[i].peBlue = i * 2;  }
-		for(i = 128; i < 256; i++){
-			pe[i].peRed = 0;  pe[i].peGreen = i;  pe[i].peBlue = 255;  }
-	}
-	if(ColorScheme == 2){
-		for(i = 0; i < 128; i++){
-			pe[i].peRed = i / 2;  pe[i].peGreen = i / 2;  pe[i].peBlue = i;  }
-		for(i = 128; i < 256; i++){
-			pe[i].peRed = i - 64;  pe[i].peGreen = i - 64;  pe[i].peBlue = i;  }
-	}
-	if(ColorScheme == 3){
-		for(i = 0; i < 128; i++){
-			pe[i].peRed = i / 4;  pe[i].peGreen = i;  pe[i].peBlue = i / 4;  }
-		for(i = 128; i < 256; i++){
-			pe[i].peRed = i - 96;  pe[i].peGreen = i;  pe[i].peBlue = i - 96;  }
-	}
-	if(ColorScheme == 4){
-		for(i = 0; i < 128; i++){
-			pe[i].peRed = i * 2;  pe[i].peGreen = i / 2;  pe[i].peBlue = i / 2;  }
-		for(i = 128; i < 256; i++){
-			pe[i].peRed = 255;  pe[i].peGreen = i - 64;  pe[i].peBlue = i - 64;  }
-	}
-	pe[255].peRed = pe[255].peGreen = pe[255].peBlue = 255;
-	for(i = 0; i < 32; i++){
-		int c = 224 + i;
-		int a = i + 1;
-		int ia = 32 - a;
-		pe[c].peRed = ((pe[c].peRed * ia) + (255 * a)) >>5;
-		pe[c].peGreen = ((pe[c].peGreen * ia) + (255 * a)) >>5;
-		pe[c].peBlue = ((pe[c].peBlue * ia) + (255 * a)) >>5;
-	}
-}
-*/
 
 bool Realized = false;
 bool Preview = false;
@@ -747,10 +702,10 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 				p[i].dx += frand(KICK_STRENGTH);
 ///				if(AltColor) p[i].color = std::min(254, p[i].color + 32);
 			}
-			x = (int)p[i].lx;
-			y = (int)p[i].ly;
-			dx = (int)p[i].x - x;
-			dy = (int)p[i].y - y;
+			x = (int32_t)p[i].lx;
+			y = (int32_t)p[i].ly;
+			dx = (int32_t)p[i].x - x;
+			dy = (int32_t)p[i].y - y;
 			if(x >= XOFF && y >= YOFF && x < WIDTH - XOFF && y < HEIGHT - YOFF){	//Make sure LAST coords are inside bounds too.
 				//Bresenham style line drawer.
 				if(abs(dx) > abs(dy)){	//X major.
@@ -938,7 +893,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 				srcy = yshrink >>1;
 				//
 				unsigned char clamptab[512];
-				for(int i = 0; i < 512; i++) clamptab[i] = std::min(i, 255);
+				for(int32_t i = 0; i < 512; i++) clamptab[i] = std::min(i, 255);
 				//
 				for(y = 0; y < h; y++){
 					srcx = (xshrink >>1) + BXOFF;

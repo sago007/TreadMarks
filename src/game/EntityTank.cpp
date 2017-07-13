@@ -745,7 +745,7 @@ EntitySmoke::EntitySmoke(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 	EntitySmokeType *TP = (EntitySmokeType*)TypePtr;
 	timeofbirth = VW->Time();
 	if(id == 0){	//Set defaults.
-		timetodie = VW->Time() + (int)(TP->type_lifespan * 1000.0f);
+		timetodie = VW->Time() + (int32_t)(TP->type_lifespan * 1000.0f);
 	}else{
 		timetodie = VW->Time() + id;//(id == 0 ? 1000 : id);
 	}
@@ -777,7 +777,7 @@ bool EntitySmoke::Think(){
 	}
 	//
 	float t = (float)(VW->Time() - timeofbirth) / (float)(timetodie - timeofbirth);
-	frame = (int)((float)TP->texture->Images() * std::min(t, 0.99f));
+	frame = (int32_t)((float)TP->texture->Images() * std::min(t, 0.99f));
 	w = TP->type_w * (t * TP->type_grow + 1.0f);
 	h = TP->type_h * (t * TP->type_grow + 1.0f);
 //	VW->PolyRend->AddSprite(&(*(TP->texture))[frame], w, h, Position, false,
@@ -898,7 +898,7 @@ bool EntityExplo::Think(){
 	}
 	//
 	float t = (float)(VW->Time() - timeofbirth) / (float)(timetodie - timeofbirth);
-	frame = (int)((float)TP->texture->Images() * std::min(t, 0.99f));
+	frame = (int32_t)((float)TP->texture->Images() * std::min(t, 0.99f));
 	w = TP->type_w * (t * TP->type_grow + 1.0f);
 	h = TP->type_h * (t * TP->type_grow + 1.0f);
 	//
@@ -911,7 +911,7 @@ bool EntityExplo::Think(){
 		while(loop){
 			float framefrac = VW->FrameFrac();
 			int frametime = VW->FrameTime();
-			if(TP->type_timewarp > 0.0f && timewarpms < (int)(TP->type_timewarp * 1000.0f)){
+			if(TP->type_timewarp > 0.0f && timewarpms < (int32_t)(TP->type_timewarp * 1000.0f)){
 				loop = 1;
 				framefrac = MAX(0.05, framefrac);
 				frametime = MAX(50, frametime);
@@ -1002,7 +1002,7 @@ EntityExploSphere::EntityExploSphere(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec
 						 int id, int flags) : EntityMesh(et, Pos, Rot, Vel, id, flags) {
 	EntityExploSphereType *TP = (EntityExploSphereType*)TypePtr;
 	timeofbirth = VW->Time();
-	if(id == 0) timetodie = VW->Time() + (int)(TP->type_lifespan * 1000.0f);
+	if(id == 0) timetodie = VW->Time() + (int32_t)(TP->type_lifespan * 1000.0f);
 		else timetodie = VW->Time() + id;
 	if(TP->type_soundenttype.len() > 0) VW->AddEntity("sound", TP->type_soundenttype, Position, NULL, NULL, 0, 0, 0, 0);
 //	if(TP->mesh) TP->mesh->BndRad = std::max(TP->type_expand, TP->mesh->BndRad);
@@ -1629,7 +1629,7 @@ bool EntityProjectile::Think(){
 	int iters = 1;
 	float VWTime = VW->Time();
 	if(TP->type_hitscan){
-		iters = (int)((TP->type_hitscanrange / TP->speed) * (float)TP->type_iterations);	//Allow specification of how many pieces to chop the virtual second into for a hitscan weapon.
+		iters = (int32_t)((TP->type_hitscanrange / TP->speed) * (float)TP->type_iterations);	//Allow specification of how many pieces to chop the virtual second into for a hitscan weapon.
 		t = 1.0f / (float)MAX(TP->type_iterations, 1);//0.1f;
 	}
 	while(iters > 0 && RemoveMe == REMOVE_NONE){
@@ -1697,7 +1697,7 @@ bool EntityProjectile::Think(){
 			}
 		}else{
 		//	if(firstthink == 0){
-				int s = (int)(LengthVec3(disp) * 0.5f);
+				int32_t s = (int32_t)(LengthVec3(disp) * 0.5f);
 				s = std::max(1, s);
 				float S = 1.0f / (float)s;
 				Vec3 lP;
