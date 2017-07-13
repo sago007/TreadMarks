@@ -24,7 +24,7 @@ CStr GetAppDataDir()
 	std::string mkdirCommand = "mkdir -p \""+std::string(the_path.get())+"\"";
 	system(mkdirCommand.c_str());
 
-return the_path;
+	return the_path;
 }
 
 CStr GetCommonAppDataDir()

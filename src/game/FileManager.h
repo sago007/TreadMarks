@@ -66,9 +66,9 @@ public:
 	//These work on the currently opened file, either physical or in pack.
 	size_t fread(void *buf, size_t size, size_t count);
 	int fseek(long offset, int origin);
-	long ftell();
-	long length();	//Returns the length in bytes of currently opened file.
-	long ReadLong();
+	int32_t ftell();
+	int32_t length();	//Returns the length in bytes of currently opened file.
+	int32_t ReadLong();
 	char ReadByte();
 };
 

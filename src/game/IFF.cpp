@@ -140,12 +140,12 @@ uint32_t IFF::ReadLong(uint32_t *pnt){
 	if(pnt) return *pnt = ReadLong();
 	return 0;
 }
-int IFF::ReadLong(int *pnt){
-	if(pnt) return *pnt = (int)ReadLong();
+int IFF::ReadLong(int32_t *pnt){
+	if(pnt) return *pnt = (int32_t)ReadLong();
 	return 0;
 }
 uint16_t IFF::ReadShort(){
-	unsigned short Temp;
+	uint16_t Temp;
 	if(IsOpen && fread(&Temp, sizeof(Temp), 1, F)){
 		return ntohs(Temp);
 	}

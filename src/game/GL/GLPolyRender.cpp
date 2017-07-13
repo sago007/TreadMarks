@@ -1238,7 +1238,7 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 						OutputDebugLog("Quantizing texture to 8 bits...\n\n");
 						if(tbmp1.Quantize32to8(&tbmp8, 0, 256, 3)){
 							//Determine palette alpha.
-							int alphaaccum[256], alphacount[256];
+							int32_t alphaaccum[256], alphacount[256];
 							memset(alphaaccum, 0, sizeof(alphaaccum));
 							memset(alphacount, 0, sizeof(alphacount));
 							for(int y = 0; y < tbmp1.Height(); y++){

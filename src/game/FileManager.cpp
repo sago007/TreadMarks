@@ -173,16 +173,16 @@ size_t FileManager::fread(void *buf, size_t size, size_t count){
 	if(f && buf) return ::fread(buf, size, count, f);
 	return 0;
 }
-int FileManager::fseek(long offset, int origin){
+int32_t FileManager::fseek(long offset, int origin){
 	if(f) return ::fseek(f, offset, origin);
 	return 0;
 }
-long FileManager::ftell(){
+int32_t FileManager::ftell(){
 	if(f) return ::ftell(f);
 	return 0;
 }
-long FileManager::length(){
-	long pos, len = 0;
+int32_t FileManager::length(){
+	int32_t pos, len = 0;
 	if(f){
 		if(false){
 			//Do special case for packed file here.
@@ -195,8 +195,8 @@ long FileManager::length(){
 	}
 	return len;
 }
-long FileManager::ReadLong(){
-	long l = 0;
+int32_t FileManager::ReadLong(){
+	int32_t l = 0;
 	if(f) ::fread(&l, sizeof(l), 1, f);
 	return l;
 }
