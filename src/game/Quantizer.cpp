@@ -50,17 +50,17 @@
 //#define TEST_CUBE_LERP
 //Test code for RGB 233 color space sorting of 8bit palette for lerp mixing.
 typedef PaletteEntry PE;
-int CDECL PeRedCompare(const void *c1, const void *c2){
+int32_t CDECL PeRedCompare(const void *c1, const void *c2){
 	return ((PE*)c1)->peRed - ((PE*)c2)->peRed; }
-int CDECL PeGreenCompare(const void *c1, const void *c2){
+int32_t CDECL PeGreenCompare(const void *c1, const void *c2){
 	return ((PE*)c1)->peGreen - ((PE*)c2)->peGreen; }
-int CDECL PeBlueCompare(const void *c1, const void *c2){
+int32_t CDECL PeBlueCompare(const void *c1, const void *c2){
 	return ((PE*)c1)->peBlue - ((PE*)c2)->peBlue; }
-int CDECL PeRedOverBlueCompare(const void *c1, const void *c2){
+int32_t CDECL PeRedOverBlueCompare(const void *c1, const void *c2){
 	return (((PE*)c1)->peRed - ((PE*)c1)->peBlue) - (((PE*)c2)->peRed - ((PE*)c2)->peBlue); }
-int CDECL PeGreenOverBlueCompare(const void *c1, const void *c2){
+int32_t CDECL PeGreenOverBlueCompare(const void *c1, const void *c2){
 	return (((PE*)c1)->peGreen - ((PE*)c1)->peBlue) - (((PE*)c2)->peGreen - ((PE*)c2)->peBlue); }
-int CDECL PeBrightnessCompare(const void *c1, const void *c2){
+int32_t CDECL PeBrightnessCompare(const void *c1, const void *c2){
 	return ( (((PE*)c1)->peRed <<1) + (((PE*)c1)->peGreen <<2) + (((PE*)c1)->peBlue)
 		) - ( (((PE*)c2)->peRed <<1) + (((PE*)c2)->peGreen <<2) + (((PE*)c2)->peBlue) );
 }
@@ -77,10 +77,10 @@ unsigned char LerpRGB332(unsigned char rgb1, unsigned char rgb2, float t){
 	float r2 = (float)(((rgb2 & RMASK) >>RSHIFT) + 0.5f) * t + r1 * (1.0f - t);
 	float g2 = (float)(((rgb2 & GMASK) >>GSHIFT) + 0.5f) * t + g1 * (1.0f - t);
 	float b2 = (float)(((rgb2 & BMASK) >>BSHIFT) + 0.5f) * t + b1 * (1.0f - t);
-	return (unsigned char)(((int)r2 <<RSHIFT) | ((int)g2 <<GSHIFT) | ((int)b2 <<BSHIFT));
+	return (unsigned char)(((int32_t)r2 <<RSHIFT) | ((int32_t)g2 <<GSHIFT) | ((int32_t)b2 <<BSHIFT));
 }
 void SortPaletteCube(PaletteEntry *pe){
-	int i;
+	int32_t i;
 #if 1
 	qsort(&pe[0], 256, sizeof(PaletteEntry), PeBlueCompare);
 	for(i = 0; i < 256; i += 64){
@@ -107,7 +107,7 @@ void MixTable::BestColorInit(PaletteEntry *pe){
 	DifferentColors = 0;
 	CachedColors = 0;
 	/*
-	int x, y, z;
+	int32_t x, y, z;
 	for(x = 0; x < 64; x++){
 		for(y = 0; y < 64; y++){
 			for(z = 0; z < 64; z++){
@@ -117,7 +117,7 @@ void MixTable::BestColorInit(PaletteEntry *pe){
 	}
 	*/
 	/*
-	int r, g, b, x, y, z;
+	int32_t r, g, b, x, y, z;
 	uint32_t diff, k, t;
 	UCHAR col;
 	for(x = 0; x < INVPALSIZE; x++){
@@ -168,11 +168,11 @@ bool MixTable::MakeLookup(PaletteEntry *pe, bool disk){
 	disk = false;
 	//*** New Inverse Palette should make things fast enough to not need this...
 
-	int r, g, b, c, i;//, k, diff, col, t,
+	int32_t r, g, b, c, i;//, k, diff, col, t,
 	bool OK;
 //	unsigned char tempfooey;
 	const char fn[] = "MixLookup.dat";
-	const int tablesize = 256 * 256 * 4;
+	const int32_t tablesize = 256 * 256 * 4;
 	PaletteEntry tpe[256];
 	FILE *f;
 
@@ -267,12 +267,12 @@ bool MixTable::MakeLookup(PaletteEntry *pe, bool disk){
 }
 
 
-int ColorOctree::ColorCount = 0;
-int ColorOctree::ColorIndex = 0;
+int32_t ColorOctree::ColorCount = 0;
+int32_t ColorOctree::ColorIndex = 0;
 PaletteEntry *ColorOctree::pep = NULL;
 
 //Returns numeric octant that col is in relation to split.
-inline int ColorOctree::Octant(PaletteEntry col){
+inline int32_t ColorOctree::Octant(PaletteEntry col){
 	if(col.peGreen < Split.peGreen){	//Lower in Green.
 		if(col.peRed < Split.peRed){	//Lower in Red.
 			if(col.peBlue < Split.peBlue){	//Lower in Blue.
@@ -304,9 +304,9 @@ inline int ColorOctree::Octant(PaletteEntry col){
 	}
 }
 //Returns the splitting plane for the child in the specified octant and with the specified size based on the current splitting plane.
-inline PaletteEntry ColorOctree::SplitPlane(int octant){
+inline PaletteEntry ColorOctree::SplitPlane(int32_t octant){
 	PaletteEntry pe;
-	int size = Size >>1;	//Size is assumed to be full size of child node, se we add half to find splitting plane.
+	int32_t size = Size >>1;	//Size is assumed to be full size of child node, se we add half to find splitting plane.
 	if(Size == 1){	//Must special case this!  Emulate a div by 2 result of 0.5!  We still subtract, but we do not add, because of >= rule!
 		if(octant >>2) pe.peGreen = Split.peGreen;
 		else pe.peGreen = Split.peGreen - 1;
@@ -332,13 +332,13 @@ void ColorOctree::Clear(){
 }
 ColorOctree::ColorOctree(){
 	Prev = NULL;
-	for(int o = 0; o < 8; o++) Next[o] = NULL;
+	for(int32_t o = 0; o < 8; o++) Next[o] = NULL;
 	Clear();
 }
 //Creates a child node with splitting plane split, and child size of size.
-ColorOctree::ColorOctree(ColorOctree *prev, PaletteEntry split, int size){
+ColorOctree::ColorOctree(ColorOctree *prev, PaletteEntry split, int32_t size){
 	Prev = prev;
-	for(int o = 0; o < 8; o++) Next[o] = NULL;
+	for(int32_t o = 0; o < 8; o++) Next[o] = NULL;
 	Size = size;
 	Rt = Gt = Bt = Count = 0;
 	Split = split;
@@ -348,7 +348,7 @@ ColorOctree::~ColorOctree(){
 	DeleteTree();
 }
 void ColorOctree::DeleteTree(){	//Deletes all children recursively, DOES NOT TOUCH this node.
-	for(int o = 0; o < 8; o++){
+	for(int32_t o = 0; o < 8; o++){
 		if(Next[o]){
 			delete Next[o];
 			Next[o] = NULL;
@@ -367,7 +367,7 @@ ColorOctree *ColorOctree::Add(PaletteEntry col){
 		Count++;
 		return this;
 	}else{	//Nope, gotta keep diving.
-		int octant = Octant(col);	//Find octant we should dive into.
+		int32_t octant = Octant(col);	//Find octant we should dive into.
 		if(Next[octant] == NULL){	//No node, so make one.
 			Next[octant] = new ColorOctree(this, SplitPlane(octant), Size >>1);
 		}
@@ -375,15 +375,15 @@ ColorOctree *ColorOctree::Add(PaletteEntry col){
 		return NULL;
 	}
 }
-int ColorOctree::CountLeaves(){
-	int n = 0;
+int32_t ColorOctree::CountLeaves(){
+	int32_t n = 0;
 	if(Count) n += 1;	//We are a leaf.
-	for(int o = 0; o < 8; o++) if(Next[o]) n += Next[o]->CountLeaves();	//Might be leaves below too.
+	for(int32_t o = 0; o < 8; o++) if(Next[o]) n += Next[o]->CountLeaves();	//Might be leaves below too.
 	return n;
 }
 //Reduces current node and all children into perent node, if present.
-void ColorOctree::Reduce(int size, int cols){
-	for(int o = 0; o < 8; o++) if(Next[o]) Next[o]->Reduce(size, cols);
+void ColorOctree::Reduce(int32_t size, int32_t cols){
+	for(int32_t o = 0; o < 8; o++) if(Next[o]) Next[o]->Reduce(size, cols);
 	//
 //	if(Next[1]) Next[1]->Reduce(size, cols);	//Lr, Lg, Hb
 //	if(Next[6]) Next[6]->Reduce(size, cols);	//Hr, Hg, Lb
@@ -407,17 +407,17 @@ void ColorOctree::Reduce(int size, int cols){
 //void ColorOctree::SetColorCount(){
 //	ColorCount = Count();
 //}
-int ColorOctree::Reduce(int cols){
+int32_t ColorOctree::Reduce(int32_t cols){
 	if(cols <= 0) return 0;
 	ColorCount = CountLeaves();	//Count total leaves.
-	int size = 1;	//Start out only reducing size 0 nodes.
+	int32_t size = 1;	//Start out only reducing size 0 nodes.
 	while(ColorCount > cols){
 		Reduce(size, cols);	//Recursive reduce.
 		size = size <<1;	//Double size of reducible nodes.
 	}
 	return ColorCount;
 }
-void ColorOctree::GetPalette(int index){	//Privy recursive.
+void ColorOctree::GetPalette(int32_t index){	//Privy recursive.
 	if(Count && ColorCount > 0){	//Ve izt a nude!
 		Rt /= Count;
 		Gt /= Count;	//Get average color.
@@ -430,9 +430,9 @@ void ColorOctree::GetPalette(int index){	//Privy recursive.
 		index = ColorIndex++;
 	}
 	Index = index;
-	for(int o = 0; o < 8; o++) if(Next[o]) Next[o]->GetPalette(index);
+	for(int32_t o = 0; o < 8; o++) if(Next[o]) Next[o]->GetPalette(index);
 }
-bool ColorOctree::GetPalette(PaletteEntry *pe, int cols){	//Public, root only.
+bool ColorOctree::GetPalette(PaletteEntry *pe, int32_t cols){	//Public, root only.
 	if(pe && cols > 0){
 		pep = pe;
 		ColorCount = cols;	//Now ColorCount holds how many pe entries we are to dig out.
@@ -442,11 +442,11 @@ bool ColorOctree::GetPalette(PaletteEntry *pe, int cols){	//Public, root only.
 	}
 	return false;
 }
-int ColorOctree::LookupIndex(PaletteEntry pe){
+int32_t ColorOctree::LookupIndex(PaletteEntry pe){
 	if(Index >= 0 && pe.peRed == Split.peRed && pe.peGreen == Split.peGreen && pe.peBlue == Split.peBlue){	//We have a weiner!
 		return Index;	//Only hit if Index is 0 or more, if it's -1 this is a real parent node and we should continue.
 	}else{
-		int octant = Octant(pe);
+		int32_t octant = Octant(pe);
 		if(Next[octant]) return Next[octant]->LookupIndex(pe);
 		return 0;
 	}
@@ -455,7 +455,7 @@ int ColorOctree::LookupIndex(PaletteEntry pe){
 //                               Below we have the Quantizer class.
 //***************************************************************************
 #define PEP (PaletteEntry*)
-int CDECL PeCompare(const void *c1, const void *c2){
+int32_t CDECL PeCompare(const void *c1, const void *c2){
 	return
 		(
 		(((PaletteEntry*)c1)->peRed <<1) +
@@ -476,7 +476,7 @@ Quantizer::Quantizer(){
 Quantizer::~Quantizer(){
 }
 bool Quantizer::ClearPalette(){
-//	for(int c = 0; c < MAXCOLS; c++){
+//	for(int32_t c = 0; c < MAXCOLS; c++){
 //		pal1[c].peRed = pal1[c].peGreen = pal1[c].peBlue = 0;
 //		pal2[c].peRed = pal2[c].peGreen = pal2[c].peBlue = 0;
 //	}
@@ -484,14 +484,14 @@ bool Quantizer::ClearPalette(){
 	octree.DeleteTree();
 	return true;
 }
-bool Quantizer::AddPalette(PaletteEntry *pe, int NumCols, int NumShades){
+bool Quantizer::AddPalette(PaletteEntry *pe, int32_t NumCols, int32_t NumShades){
 	if(NumShades < 0 || pe == NULL) return false;
-//	int Top = NumShades * 2;
-//	int Bottom = NumShades;
-	int Top = NumShades + 1;	//Not half intensity anymore.
-	int Bottom = 1;
-	int Shade = 0;
-	int c = 0;//, found = 0, c2 = 0, r, g, b;
+//	int32_t Top = NumShades * 2;
+//	int32_t Bottom = NumShades;
+	int32_t Top = NumShades + 1;	//Not half intensity anymore.
+	int32_t Bottom = 1;
+	int32_t Shade = 0;
+	int32_t c = 0;//, found = 0, c2 = 0, r, g, b;
 	if(NumShades == 0){
 		Top = 1;
 		Bottom = 1;
@@ -532,7 +532,7 @@ bool Quantizer::AddPalette(PaletteEntry *pe, int NumCols, int NumShades){
 	}
 	return true;
 }
-bool Quantizer::GetCompressedPalette(PaletteEntry *pe, int NumCols){//, int level){
+bool Quantizer::GetCompressedPalette(PaletteEntry *pe, int32_t NumCols){//, int32_t level){
 //	if(NumCols <= 0 || npal1 <= 0 || pe == 0) return false;
 	if(NumCols <= 0 || pe == NULL) return false;
 
@@ -556,7 +556,7 @@ bool Quantizer::GetCompressedPalette(PaletteEntry *pe, int NumCols){//, int leve
 InversePal::InversePal(){
 	inv_pal = NULL;
 }
-InversePal::InversePal(int rbits, int gbits, int bbits){
+InversePal::InversePal(int32_t rbits, int32_t gbits, int32_t bbits){
 	inv_pal = NULL;
 	Init(rbits, gbits, bbits);
 }
@@ -567,7 +567,7 @@ void InversePal::Free(){
 	if(inv_pal) free(inv_pal);
 	inv_pal = NULL;
 }
-bool InversePal::Init(int rbits, int gbits, int bbits){
+bool InversePal::Init(int32_t rbits, int32_t gbits, int32_t bbits){
 	Free();
 	if(rbits < 0 || rbits > 8 || gbits < 0 || gbits > 8 || bbits < 0 || bbits > 8) return false;
 	red_max = 1 <<rbits;
@@ -584,11 +584,11 @@ bool InversePal::Init(int rbits, int gbits, int bbits){
 	if(NULL == (inv_pal = (unsigned char*)malloc(red_max * green_max * blue_max))) return false;
 	return true;
 }
-bool InversePal::Make(PaletteEntry *npe, int ncols){
+bool InversePal::Make(PaletteEntry *npe, int32_t ncols){
 	if(!inv_pal || npe == NULL || ncols <= 0 || ncols > 256) return false;
-	int *inv_pal_dist;
-	if(NULL == (inv_pal_dist = (int*)malloc(red_max * green_max * blue_max * sizeof(int)))) return false;
-	int i, j;
+	int32_t *inv_pal_dist;
+	if(NULL == (inv_pal_dist = (int*)malloc(red_max * green_max * blue_max * sizeof(int32_t)))) return false;
+	int32_t i, j;
 	for(i = red_max * green_max * blue_max - 1; i >= 0; i--){
 		inv_pal_dist[i] = 0x10000000;
 	}
@@ -621,8 +621,8 @@ bool InversePal::Make(PaletteEntry *npe, int ncols){
 inline void InversePal::blue_init(){
 	b_skip1 = b_skip2 = 0;
 }
-inline bool InversePal::blue_loop(int *dbuf, unsigned char *cbuf, int center, int dist){
-	int n, d, diter;
+inline bool InversePal::blue_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist){
+	int32_t n, d, diter;
 	bool b_found1, b_found2;
 	b_found1 = false;
 	d = dist + (diter = 0);
@@ -657,8 +657,8 @@ inline bool InversePal::blue_loop(int *dbuf, unsigned char *cbuf, int center, in
 inline void InversePal::green_init(){
 	g_skip1 = g_skip2 = 0;
 }
-inline bool InversePal::green_loop(int *dbuf, unsigned char *cbuf, int center, int dist){
-	int n, d, diter;
+inline bool InversePal::green_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist){
+	int32_t n, d, diter;
 	bool g_found1, g_found2;
 	blue_init();
 	g_found1 = false;
@@ -690,8 +690,8 @@ inline bool InversePal::green_loop(int *dbuf, unsigned char *cbuf, int center, i
 }
 inline void InversePal::red_init(){
 }
-inline bool InversePal::red_loop(int *dbuf, unsigned char *cbuf, int center, int dist){
-	int n, d, diter;
+inline bool InversePal::red_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist){
+	int32_t n, d, diter;
 	bool r_found1, r_found2;
 	green_init();
 	r_found1 = false;

@@ -334,7 +334,7 @@ void BinaryTriangle::TestSplitClip(int32_t level, int32_t index, float radius, i
 	}
 };
 
-//A section of world for rendering, may point to wrapped terrain off-map.
+//A section of world for rendering, may point32_t to wrapped terrain off-map.
 struct MapPatch{
 	int32_t x, y;	//Coordinates in patch grid.
 	uint32_t id;
@@ -586,7 +586,7 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, f
 				float xscale = atan((float)(boxw / 2) / cam->viewplane) * 2.0f;	//Radians per skyplane screen.
 				float yscale = atan((float)(boxh / 2) / cam->viewplane);// * 2.0f;
 				//Now make x radians per skyplane an even multiple of pi2.  Remember we must use two skyplanes at a time with tiling...
-				xscale = (PI2 / (float)((int)(PI2 / (xscale * 2.0f) + 0.5f))) * 0.5f;
+				xscale = (PI2 / (float)((int32_t)(PI2 / (xscale * 2.0f) + 0.5f))) * 0.5f;
 				boxw = tan(xscale * 0.5f) * 2.0f * cam->viewplane;
 				//Don't bother with Y, as we won't be pitching enough for it to matter.
 				float xoff = fmodf(-cam->b * DEG2RAD, xscale) / xscale;	//Fraction into skybox.
@@ -611,8 +611,8 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, f
 					for(int32_t x = 0; x < 3; x++){
 						xf = -xvw * 3.0f + x * xvw * 2.0f + xoff * xvw * 2.0f;
 						yf = yvw * 4.0f + (-y * yvw * 2.0f) + (-yoff * yvw * 2.0f);
-						fx = (((int)xdiv & 1) ^ (x & 1)) ? 1.0f - halfpixel : halfpixel;
-						fy = (((int)ydiv & 1) ^ (y & 1)) ? halfpixel : 1.0f - halfpixel;
+						fx = (((int32_t)xdiv & 1) ^ (x & 1)) ? 1.0f - halfpixel : halfpixel;
+						fy = (((int32_t)ydiv & 1) ^ (y & 1)) ? halfpixel : 1.0f - halfpixel;
 						glTexCoord2f(fx, fy);
 						glVertex3f(xf , yf, zvw);
 						glTexCoord2f(1.0f - fx, fy);

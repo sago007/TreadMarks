@@ -29,10 +29,10 @@ void Terrain::UndownloadTextures(){
 		memset(TexIDs, 0, TEXIDSIZE * TEXIDSIZE * 4);
 	}
 }
-int Terrain::MakeTexturePalette(EcoSystem *eco, int numeco){	//Makes a map-specific texture palette, for use with paletted terrain textures.
+int32_t Terrain::MakeTexturePalette(EcoSystem *eco, int32_t numeco){	//Makes a map-specific texture palette, for use with paletted terrain textures.
 	if(!eco) return 0;
 	TerrainQuant.ClearPalette();
-	for(int i = 0; i < numeco; i++){
+	for(int32_t i = 0; i < numeco; i++){
 		if(eco[i].tex) TerrainQuant.AddPalette(eco[i].tex->pe, 256, 6);
 	}
 	PaletteEntry pe[256];
@@ -47,7 +47,7 @@ void Terrain::UsePalettedTextures(bool usepal){
 
 bool Terrain::DownloadTextures(){
 	Bitmap tbmp;	//Temporary storage, ASSUMES ROWS WILL BE PACKED TIGHTLY TO DWORDS AND WITH SANE PITCH!  Currently this is true of Bitmap objects.
-	int w = Width(), h = Height(), x, y;
+	int32_t w = Width(), h = Height(), x, y;
 	//
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, 0);
 	glPixelStorei(GL_UNPACK_LSB_FIRST, 0);
@@ -96,7 +96,7 @@ bool Terrain::DownloadTextures(){
 			//	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);//GL_MODULATE);//GL_DECAL);
 				//
 				//Stupid 3DFX opengl driver doesn't like row_length...
-				for(int y2 = y; y2 < y + TexSize; y2++){
+				for(int32_t y2 = y; y2 < y + TexSize; y2++){
 					memcpy(tbmp.Data() + (y2 - y) * TexSize * 4, data32 + x + y2 * w, TexSize * 4);
 				}
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,//GL_RGB,
@@ -110,12 +110,12 @@ bool Terrain::DownloadTextures(){
 	}
 	return false;
 }
-int Terrain::UpdateTextures(int x1, int y1, int w, int h){
+int32_t Terrain::UpdateTextures(int32_t x1, int32_t y1, int32_t w, int32_t h){
 //	if(!data32) return 0;
 	w++;
 	h++;	//Add an extra, so patch that should suck from left or top always does so.
-	int px, py, dx, dy, dw, dh;
-	int startpx, startpy, endpx, endpy;
+	int32_t px, py, dx, dy, dw, dh;
+	int32_t startpx, startpy, endpx, endpy;
 	if(x1 < 0) startpx = (x1 - (TexSize - 1)) / TexSize;
 	else startpx = x1 / TexSize;
 	if(y1 < 0) startpy = (y1 - (TexSize - 1)) / TexSize;
@@ -125,7 +125,7 @@ int Terrain::UpdateTextures(int x1, int y1, int w, int h){
 	if(y1 + h - 1 < 0) endpy = (y1 + h - 1 - (TexSize - 1)) / TexSize;
 	else endpy = (y1 + h - 1) / TexSize;
 	//
-	int tpw = Width() / TexSize, tph = Height() / TexSize;
+	int32_t tpw = Width() / TexSize, tph = Height() / TexSize;
 	//
 	//Loop over all texture patches covered by rectangle.
 	for(py = startpy; py <= endpy; py++){
@@ -157,10 +157,10 @@ int Terrain::UpdateTextures(int x1, int y1, int w, int h){
 	return 1;
 }
 
-int Terrain::Redownload(int px, int py){
+int32_t Terrain::Redownload(int32_t px, int32_t py){
 	if(!data32) return 0;
 	static uint32_t tbuf[TexSize * TexSize];
-	int tpw = Width() / TexSize, tph = Height() / TexSize;
+	int32_t tpw = Width() / TexSize, tph = Height() / TexSize;
 	//
 	GLuint id = TexIDs[px & (tpw - 1)][py & (tph - 1)];
 	ByteRect &br = TexDirty[px & (tpw - 1)][py & (tph - 1)];
@@ -173,28 +173,28 @@ int Terrain::Redownload(int px, int py){
 		//
 		glBindTexture(GL_TEXTURE_2D, id);
 		unsigned char *ts, *td = (unsigned char*)tbuf;
-		int xs = (px & (tpw - 1)) * TexSize + br.x;
-		int ys = (py & (tph - 1)) * TexSize + br.y;
+		int32_t xs = (px & (tpw - 1)) * TexSize + br.x;
+		int32_t ys = (py & (tph - 1)) * TexSize + br.y;
 		//
 	//	if(ys < 0 || ys + br.h > Height() || xs < 0 || xs + br.w > Width()){
 	//		OutputDebugLog("! ! ! ! Bad download!  xs" + String(xs) + " ys" + String(ys) + " w" +
-	//			String((int)br.w) + " h" + String((int)br.h) +
-	//			" x" + String((int)br.x) + " y" + String((int)br.y) + "\n");
+	//			String((int32_t)br.w) + " h" + String((int32_t)br.h) +
+	//			" x" + String((int32_t)br.x) + " y" + String((int32_t)br.y) + "\n");
 	//	}else{
 			//
 		if(br.x == 0){	//Suck from left.
-			for(int y = ys; y < ys + br.h; y++){
+			for(int32_t y = ys; y < ys + br.h; y++){
 				*(data32 + xs + y * Width()) = *(data32 + ((xs - 1) & (Width() - 1)) + y * Width());
 			}
 		}
 		if(br.y == 0){	//Suck from top.
-			for(int x = xs; x < xs + br.w; x++){
+			for(int32_t x = xs; x < xs + br.w; x++){
 				*(data32 + x + ys * Width()) = *(data32 + x + ((ys - 1) & (Height() - 1)) * Width());
 			}
 		}
 		//
 		ts = (unsigned char*)(data32 + ys * Width() + xs);
-		for(int y = ys; y < ys + br.h; y++){
+		for(int32_t y = ys; y < ys + br.h; y++){
 		//	memcpy(td, ts, ((uint32_t)br.w) <<2);
 			for(uint32_t t = 0; t < ((uint32_t)br.w); t++) ((uint32_t*)td)[t] = ((uint32_t*)ts)[t];
 			ts += Width() <<2;
@@ -217,33 +217,33 @@ LodTreeMap LodMap;	//Single global variable.
 
 bool Terrain::MapLod(){
 	//
-//	OutputDebugLog("sizeof(BinaryTriangle) = " + String((int)sizeof(BinaryTriangle)) + "\n");
+//	OutputDebugLog("sizeof(BinaryTriangle) = " + String((int32_t)sizeof(BinaryTriangle)) + "\n");
 	//
-	int pw = Width() / TexSize, ph = Height() / TexSize;
+	int32_t pw = Width() / TexSize, ph = Height() / TexSize;
 	LodMap.Init(pw, ph);
-	for(int y = 0; y < ph; y++){
-		for(int x = 0; x < pw; x++){	//Build lod variance trees for entire map.
-			int x1 = x * TexSize, y1 = y * TexSize;
-			int x2 = x1 + TexSize, y2 = y1 + TexSize;
+	for(int32_t y = 0; y < ph; y++){
+		for(int32_t x = 0; x < pw; x++){	//Build lod variance trees for entire map.
+			int32_t x1 = x * TexSize, y1 = y * TexSize;
+			int32_t x2 = x1 + TexSize, y2 = y1 + TexSize;
 			LodMap.Tree(x, y, 0)->BuildLodTree(this, x1, y2, x2, y1, x1, y1);
 			LodMap.Tree(x, y, 1)->BuildLodTree(this, x2, y1, x1, y2, x2, y2);
 		}
 	}
 	return true;
 }
-bool Terrain::MapLod(int x, int y, int w, int h){
+bool Terrain::MapLod(int32_t x, int32_t y, int32_t w, int32_t h){
 	//This is simple and hacky and very non-optimal.  It should check whether it should
 	//continue diving at each bintri.  It'll still get a 32x+ savings right now though.
-//	int xc = x + w / 2, yc = y + h / 2;
-//	int xt = xc / TexSize, yt = yc / TexSize;
-	int xfirst = x / TexSize, yfirst = y / TexSize;
-	int xlast = (x + w) / TexSize, ylast = (y + h) / TexSize;
+//	int32_t xc = x + w / 2, yc = y + h / 2;
+//	int32_t xt = xc / TexSize, yt = yc / TexSize;
+	int32_t xfirst = x / TexSize, yfirst = y / TexSize;
+	int32_t xlast = (x + w) / TexSize, ylast = (y + h) / TexSize;
 	//Now handle huge changes, such as nuke, by iterating over every square affected.
-	for(int yt = yfirst; yt <= ylast; yt++){
-		for(int xt = xfirst; xt <= xlast; xt++){
-			int x1 = xt * TexSize, y1 = yt * TexSize;
-			int x2 = x1 + TexSize, y2 = y1 + TexSize;
-		//	int xv = xc - x2, yv = yc - y1;
+	for(int32_t yt = yfirst; yt <= ylast; yt++){
+		for(int32_t xt = xfirst; xt <= xlast; xt++){
+			int32_t x1 = xt * TexSize, y1 = yt * TexSize;
+			int32_t x2 = x1 + TexSize, y2 = y1 + TexSize;
+		//	int32_t xv = xc - x2, yv = yc - y1;
 		//	if(abs(xv) > abs(yv)){
 			LodMap.Tree(xt, yt, 0)->waterflag = 0;
 			LodMap.Tree(xt, yt, 0)->BuildLodTree(this, x1, y2, x2, y1, x1, y1);

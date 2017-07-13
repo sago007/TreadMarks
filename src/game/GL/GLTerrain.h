@@ -32,7 +32,7 @@
 struct LodTree{
 	unsigned char lodtree[1 << LodTreeDepth];
 	//
-	int waterflag;
+	int32_t waterflag;
 	//
 	void ClearLodTree(){
 		memset(lodtree, 0, sizeof(lodtree));
@@ -41,17 +41,17 @@ struct LodTree{
 	LodTree(){
 		ClearLodTree();
 	};
-	inline int BuildLodTree(Terrain *curmap, int x1, int y1, int x2, int y2, int x3, int y3, int level = 0, int index = 0){
+	inline int32_t BuildLodTree(Terrain *curmap, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, int32_t level = 0, int32_t index = 0){
 		//Sets the variance parameter for that tri to the maximum of all variances below.
-		int variance = 0, t;
-		int avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
+		int32_t variance = 0, t;
+		int32_t avgx = (x1 + x2) >>1, avgy = (y1 + y2) >>1;
 		if(level + 1 < MaxLodDepth){
 			t = BuildLodTree(curmap, x3, y3, x1, y1, avgx, avgy, level + 1, (index <<1) + 0);
 			if(t > variance) variance = t;
 			t = BuildLodTree(curmap, x2, y2, x3, y3, avgx, avgy, level + 1, (index <<1) + 1);
 			if(t > variance) variance = t;
 		}
-		int tt = curmap->GetHwrap(avgx, avgy);
+		int32_t tt = curmap->GetHwrap(avgx, avgy);
 		t = abs(((curmap->GetHwrap(x1, y1) + curmap->GetHwrap(x2, y2)) >>1) - tt);
 		if(tt <= WATERHEIGHTRAW){
 			waterflag = 1;	//Detection for below water line now.
@@ -72,10 +72,10 @@ struct LodTree{
 //Holds an array of LodTree structures, usually to cover the entire physical map.
 struct LodTreeMap{
 	static LodTree dummy;
-	int w= 0, h = 0;
+	int32_t w= 0, h = 0;
 	LodTree *trees = nullptr;
 	LodTreeMap() {};
-	bool Init(int W, int H){
+	bool Init(int32_t W, int32_t H){
 		if(W > 0 && H > 0){
 			Free();
 			trees = new LodTree[W * H * 2];
@@ -92,7 +92,7 @@ struct LodTreeMap{
 		trees = 0;
 	};
 	~LodTreeMap(){ Free(); };
-	LodTree *Tree(int x, int y, int n){	//GUARANTEED valid pointer.  Oops, doesn't do wrapping coords yet...
+	LodTree *Tree(int32_t x, int32_t y, int32_t n){	//GUARANTEED valid pointer.  Oops, doesn't do wrapping coords yet...
 		if(trees && w > 0 && h > 0){// && x >= 0 && y >= 0 && x < w && y < h){
 			return &trees[(x & (w - 1)) * 2 + (y & (h - 1)) * w * 2 + (n & 1)];
 		}else{

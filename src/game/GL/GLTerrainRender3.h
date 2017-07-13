@@ -37,7 +37,7 @@ public:
 		float height;
 		int32_t iheight;
 	};
-	unsigned int iIndex; // index into vertex array
+	uint32_t iIndex; // index into vertex array
 	void Null(){
 		LeftNeighbor = 0;
 		RightNeighbor = 0;
@@ -48,12 +48,12 @@ public:
 		iheight = 0;
 	};
 private:
-	int Split2(BinTriPool *pool);	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
+	int32_t Split2(BinTriPool *pool);	//Note, leaves, LeftChild->RightNeighbor and RightChild->LeftNeighbor hanging!
 public:
 	void Split(BinTriPool *pool);
-	void TestSplit(LodTree *lod, int variance, int LimitLod, int level, int index, BinTriPool *pool);
-	void TestSplitZ(int level, int LimitLod, int index, float cz1, float cz2, float cz3, LodTree *lod, BinTriPool *pool);
-	void TestSplitClip(int level, float variance, int LimitLod, int index, float radius, int x1, int y1, int x2, int y2, int x3, int y3, float lclip[3], float rclip[3], float zclip[3], LodTree *lod, BinTriPool *pool);
+	void TestSplit(LodTree *lod, int32_t variance, int32_t LimitLod, int32_t level, int32_t index, BinTriPool *pool);
+	void TestSplitZ(int32_t level, int32_t LimitLod, int32_t index, float cz1, float cz2, float cz3, LodTree *lod, BinTriPool *pool);
+	void TestSplitClip(int32_t level, float variance, int32_t LimitLod, int32_t index, float radius, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, float lclip[3], float rclip[3], float zclip[3], LodTree *lod, BinTriPool *pool);
 };
 
 class BinTriPool
@@ -66,8 +66,8 @@ private:
 public:
 	BinTriPool() {NextBinTriPool = 0; 	/*AlignedBinTriPool = (BinaryTriangleR3*)((((uint32_t)RealBinTriPool) + 31) & (~31));*/ }
 	void ResetBinTriPool(){ NextBinTriPool = 0;}
-	int AvailBinTris(){ return BINTRIPOOL - NextBinTriPool;}
-	int ElectiveSplitSafe(){ return NextBinTriPool < BINTRISAFE;}
+	int32_t AvailBinTris(){ return BINTRIPOOL - NextBinTriPool;}
+	int32_t ElectiveSplitSafe(){ return NextBinTriPool < BINTRISAFE;}
 	BinaryTriangleR3 *AllocBinTri()
 	{
 		if(NextBinTriPool < BINTRIPOOL)
@@ -79,24 +79,24 @@ public:
 		return 0;
 	}
 	void FreeBinTri(BinaryTriangleR3 *tri){return;}
-	int GetNextBinTriPool() {return NextBinTriPool;}
+	int32_t GetNextBinTriPool() {return NextBinTriPool;}
 };
 
-//A section of world for rendering, may point to wrapped terrain off-map.
+//A section of world for rendering, may point32_t to wrapped terrain off-map.
 struct MapPatch{
-	int x, y;	//Coordinates in patch grid.
-	unsigned int id;
+	int32_t x, y;	//Coordinates in patch grid.
+	uint32_t id;
 	BinaryTriangleR3 ul, dr;
 	LodTree *lodul, *loddr;
 	MapPatch() : x(0), y(0), id(0) {
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	MapPatch(int X, int Y, unsigned int ID) : x(X), y(Y), id(ID) {
+	MapPatch(int32_t X, int32_t Y, uint32_t ID) : x(X), y(Y), id(ID) {
 		ul.Null(); ul.BottomNeighbor = &dr;	//Links component root bintris together at bottoms.
 		dr.Null(); dr.BottomNeighbor = &ul;
 	};
-	void SetCoords(int X, int Y, unsigned int ID){
+	void SetCoords(int32_t X, int32_t Y, uint32_t ID){
 		x = X;
 		y = Y;
 		id = ID;
@@ -115,9 +115,9 @@ struct MapPatch{
 			p->dr.LeftNeighbor = &ul;
 		}
 	};
-	void Split(float variance, int LimitLod, float lclip[3], float rclip[3], float zclip[3], BinTriPool *pool){
-		int x1 = x * TexSize, y1 = y * TexSize;
-		int x2 = x1 + TexSize, y2 = y1 + TexSize;
+	void Split(float variance, int32_t LimitLod, float lclip[3], float rclip[3], float zclip[3], BinTriPool *pool){
+		int32_t x1 = x * TexSize, y1 = y * TexSize;
+		int32_t x2 = x1 + TexSize, y2 = y1 + TexSize;
 		float rad = sqrtf((float)(SQUARE(TexSize >>1) + SQUARE(TexSize >>1)));
 		//
 		ul.TestSplitClip(0, variance * 0.01f, LimitLod, 0, rad, x1, y2, x2, y1, x1, y1, lclip, rclip, zclip, lodul, pool);
@@ -160,20 +160,20 @@ private:
 
 	void GLViewplane(float w, float h, float view, float n, float f);
 
-	void BinTriVert(int x, int y);
-	void RenderBinTri(BinaryTriangleR3 *btri, int x1, int y1, int x2, int y2, int x3, int y3);
+	void BinTriVert(int32_t x, int32_t y);
+	void RenderBinTri(BinaryTriangleR3 *btri, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3);
 	void BinTriVert3(float x, float y, float h);
 	void BinTriVert3MT(float x, float y, float h);
 	void InitFanStack();
 	void FlushFanStack();
-	void AddFanPoint(int x, int y, float h);
-	void AddFanPoint(int x1, int y1, float h1, int x2, int y2, float h2, int x3, int y3, float h3);
-	void RenderBinTriFan(BinaryTriangleR3 *btri, int x1, int y1, int x2, int y2, int x3, int y3, int sense, float h1, float h2, float h3);
+	void AddFanPoint(int32_t x, int32_t y, float h);
+	void AddFanPoint(int32_t x1, int32_t y1, float h1, int32_t x2, int32_t y2, float h2, int32_t x3, int32_t y3, float h3);
+	void RenderBinTriFan(BinaryTriangleR3 *btri, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, int32_t sense, float h1, float h2, float h3);
 public:
 	GLRenderEngine3();
 
-	bool GLTerrainRender(Terrain *map, Camera *cam, int flags, float quality, int ms = 0);	//Optional number of msecs for frame parameter.
-	bool GLRenderWater(Terrain *map, Camera *cam, int flags, float quality);
+	bool GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, float quality, int32_t ms = 0);	//Optional number of msecs for frame parameter.
+	bool GLRenderWater(Terrain *map, Camera *cam, int32_t flags, float quality);
 	const char *GLTerrainDriverName() {return "Tom's Experimental Terrain Driver";}
 };
 

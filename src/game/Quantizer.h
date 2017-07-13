@@ -20,36 +20,38 @@
 #ifndef QUANTIZER_H
 #define QUANTIZER_H
 
+#include <cstdint>
+
 struct PaletteEntry
 {
-	unsigned int peRed;
-	unsigned int peGreen;
-	unsigned int peBlue;
-	unsigned int peFlags;
+	uint32_t peRed;
+	uint32_t peGreen;
+	uint32_t peBlue;
+	uint32_t peFlags;
 };
 
 class InversePal{
 private:
-	int r_center, g_center, b_center;
+	int32_t r_center, g_center, b_center;
 	bool r_skip1, r_skip2, g_skip1, g_skip2, b_skip1, b_skip2;
 	unsigned char *inv_pal;
-	int red_max, green_max, blue_max;
-	int gb_pow2, red_pow2, green_pow2, blue_pow2;
-	int r_quant, g_quant, b_quant;
+	int32_t red_max, green_max, blue_max;
+	int32_t gb_pow2, red_pow2, green_pow2, blue_pow2;
+	int32_t r_quant, g_quant, b_quant;
 	unsigned char cur_color;
 	void red_init();
 	void green_init();
 	void blue_init();
-	bool red_loop(int *dbuf, unsigned char *cbuf, int center, int dist);
-	bool green_loop(int *dbuf, unsigned char *cbuf, int center, int dist);
-	bool blue_loop(int *dbuf, unsigned char *cbuf, int center, int dist);
+	bool red_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist);
+	bool green_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist);
+	bool blue_loop(int32_t *dbuf, unsigned char *cbuf, int32_t center, int32_t dist);
 public:
 	PaletteEntry pe[256];
 	InversePal();
-	InversePal(int rbits, int gbits, int bbits);
+	InversePal(int32_t rbits, int32_t gbits, int32_t bbits);
 	~InversePal();
-	bool Init(int rbits, int gbits, int bbits);
-	bool Make(PaletteEntry *pe, int ncols = 256);
+	bool Init(int32_t rbits, int32_t gbits, int32_t bbits);
+	bool Make(PaletteEntry *pe, int32_t ncols = 256);
 	void Free();
 	unsigned char Lookup(unsigned char r, unsigned char g, unsigned char b) const{
 		if(inv_pal){
@@ -82,8 +84,8 @@ private:
 //	unsigned char InvPal[INVPALSIZE][INVPALSIZE][INVPALSIZE];
 	InversePal InvPal;
 public:
-	int DifferentColors;
-	int CachedColors;
+	int32_t DifferentColors;
+	int32_t CachedColors;
 public:
 	unsigned char Mix25(unsigned char a, unsigned char b){ return Mix4[a][b][MIX25]; };
 	unsigned char Mix50(unsigned char a, unsigned char b){ return Mix4[a][b][MIX50]; };
@@ -99,7 +101,7 @@ public:
 		//Set disk to true to load in old table (if palette matches) and save out table.
 };
 
-//Note because of static variable, only one Reduce(int) or GetPalette() call can be going on at a time, anywhere!
+//Note because of static variable, only one Reduce(int32_t) or GetPalette() call can be going on at a time, anywhere!
 //Ok, for sucking out the palette after reduction, you iterate through and copy leaves'
 //colors (RtGtBt / Count) to next pep stop, and divide RtGtBt by Count and set it to 1.
 //Then (after external sorting, say) to reassociate the octree to the sorted palette
@@ -108,30 +110,30 @@ public:
 //store the index in the node (and all sub-nodes) as the palette is being pulled out.
 class ColorOctree{
 private:
-	static int ColorCount, ColorIndex;
+	static int32_t ColorCount, ColorIndex;
 	static PaletteEntry *pep;
 	ColorOctree *Prev;
 	ColorOctree *Next[8];
 	PaletteEntry Split;	//The splitting plane for this node.  Root is 128,128,128.
-	int Size;	//The size of this node's children.  Root should have a Size of 128, the final level should have a break of 1.  Break / 2 is how much to add to the node's center when spawning shildren.
-	int Rt, Gt, Bt;	//Color value totals for this node, combination of all children that were reduced into this node.
-	int Count;	//Count of children concatenated, or 1 for a first time leaf node.  If 0, we are not a leaf.
-	int Index;	//Color table index for inverse palette use.
-	int Octant(PaletteEntry col);
-	PaletteEntry SplitPlane(int octant);
-	void Reduce(int size, int cols);	//Recursively reduces only those nodes with sizes smaller than size.
-	void GetPalette(int index);
+	int32_t Size;	//The size of this node's children.  Root should have a Size of 128, the final level should have a break of 1.  Break / 2 is how much to add to the node's center when spawning shildren.
+	int32_t Rt, Gt, Bt;	//Color value totals for this node, combination of all children that were reduced into this node.
+	int32_t Count;	//Count of children concatenated, or 1 for a first time leaf node.  If 0, we are not a leaf.
+	int32_t Index;	//Color table index for inverse palette use.
+	int32_t Octant(PaletteEntry col);
+	PaletteEntry SplitPlane(int32_t octant);
+	void Reduce(int32_t size, int32_t cols);	//Recursively reduces only those nodes with sizes smaller than size.
+	void GetPalette(int32_t index);
 	void Clear();
 public:
 	ColorOctree();	//Creates a root node, 128,128,128.
-	ColorOctree(ColorOctree *prev, PaletteEntry split, int size);	//Creates a child node with splitting plane split, and child size of size.
+	ColorOctree(ColorOctree *prev, PaletteEntry split, int32_t size);	//Creates a child node with splitting plane split, and child size of size.
 	~ColorOctree();
 	void DeleteTree();	//Deletes all children recursively, DOES NOT TOUCH this node.
 	ColorOctree *Add(PaletteEntry col);	//Adds color col to tree.  If split and col match, becomes leaf node, otherwise passes on to children or makes new kids.
-	int CountLeaves();	//Recursively counts the color leaves in the tree, NOT all the total nodes.
-	int Reduce(int cols);	//Only call on root node, reduces tree to only cols leaves.
-	bool GetPalette(PaletteEntry *pe, int cols = 256);
-	int LookupIndex(PaletteEntry pe);	//You can only look up exact colors that were put in the tree previously!
+	int32_t CountLeaves();	//Recursively counts the color leaves in the tree, NOT all the total nodes.
+	int32_t Reduce(int32_t cols);	//Only call on root node, reduces tree to only cols leaves.
+	bool GetPalette(PaletteEntry *pe, int32_t cols = 256);
+	int32_t LookupIndex(PaletteEntry pe);	//You can only look up exact colors that were put in the tree previously!
 };
 
 //#define MAXCOLS 10240
@@ -142,14 +144,14 @@ private:
 //	PALETTEENTRY realpal2[MAXCOLS];
 //	PALETTEENTRY *pal1;
 //	PALETTEENTRY *pal2;
-//	int npal1, npal2;
+//	int32_t npal1, npal2;
 	ColorOctree octree;
 public:
 	Quantizer();
 	~Quantizer();
 	bool ClearPalette();
-	bool AddPalette(PaletteEntry *pe, int NumCols, int NumShades = 0);
-	bool GetCompressedPalette(PaletteEntry *pe, int NumCols);//, int level);
+	bool AddPalette(PaletteEntry *pe, int32_t NumCols, int32_t NumShades = 0);
+	bool GetCompressedPalette(PaletteEntry *pe, int32_t NumCols);//, int32_t level);
 //	bool RemapRawBMP(RawBMP *bmp, PALETTEENTRY *pe);
 };
 

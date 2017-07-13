@@ -20,7 +20,7 @@
 
 void Terrain::UndownloadTextures(){
 }
-int Terrain::MakeTexturePalette(EcoSystem *eco, int numeco){	//Makes a map-specific texture palette, for use with paletted terrain textures.
+int32_t Terrain::MakeTexturePalette(EcoSystem *eco, int32_t numeco){	//Makes a map-specific texture palette, for use with paletted terrain textures.
 	return 1;
 }
 void Terrain::UsePalettedTextures(bool usepal){
@@ -29,11 +29,11 @@ void Terrain::UsePalettedTextures(bool usepal){
 bool Terrain::DownloadTextures(){
 	return false;
 }
-int Terrain::UpdateTextures(int x1, int y1, int w, int h){
+int32_t Terrain::UpdateTextures(int32_t x1, int32_t y1, int32_t w, int32_t h){
 	return 1;
 }
 
-int Terrain::Redownload(int px, int py){
+int32_t Terrain::Redownload(int32_t px, int32_t py){
 	return 0;
 }
 
@@ -42,7 +42,7 @@ int Terrain::Redownload(int px, int py){
 bool Terrain::MapLod(){
 	return true;
 }
-bool Terrain::MapLod(int x, int y, int w, int h){
+bool Terrain::MapLod(int32_t x, int32_t y, int32_t w, int32_t h){
 	return true;
 }
 

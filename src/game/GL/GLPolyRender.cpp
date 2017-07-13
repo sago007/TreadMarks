@@ -41,7 +41,7 @@ void GLPolyRender::GLResetStates(){
 	blendmode = BLEND_UNSET;
 	texunbound = true;
 }
-void GLPolyRender::GLBlendMode(int mode){
+void GLPolyRender::GLBlendMode(int32_t mode){
 	if(blendmode == BLEND_UNSET || mode != blendmode){
 		if(mode == BLEND_NONE){
 			glDisable(GL_BLEND);
@@ -115,7 +115,7 @@ inline void SphericalYEnvMapCoords(float *out, Vec3 vert, Vec3 norm, Mat3 envbas
 //	out[1] = r2[2] * im + 0.5f;
 }
 //float tex[20][2];	//Temporary texcoord storage for finding broken envmap texcoords in strips.
-//int ntt = 0;
+//int32_t ntt = 0;
 #define TEXMODE_NORMAL 0
 #define TEXMODE_ENVSMOOTH 1
 #define TEXMODE_ENVFLAT 2
@@ -130,7 +130,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		//
 		float tex[10][2];
 		//
-		int flags = thismesh->Flags;//Obj->Flags;
+		int32_t flags = thismesh->Flags;//Obj->Flags;
 	//	flags |= MESH_BLEND_ENVMAP | MESH_ENVMAP1_SPHERE;// | MESH_SHADE_SMOOTH | MESH_ENVMAP_SMOOTH;
 	//	Obj->Opacity = 0.5f;
 	//	flags |= MESH_SHADE_SMOOTH;
@@ -147,13 +147,13 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		//
 		//Create model*view matrix.
 		Mat43 modelview;
-		for(int i = 0; i < 3; i++) Vec3MulMat3(thismesh->Orient[i], PR->view, modelview[i]);
+		for(int32_t i = 0; i < 3; i++) Vec3MulMat3(thismesh->Orient[i], PR->view, modelview[i]);
 		Vec3MulMat43(thismesh->Pos, PR->view, modelview[3]);
 		//
 	//	Mat43MulMat43(Obj->model, view, modelview);
 		GLfloat gm[16];
 		memset(gm, 0, sizeof(gm));
-		for(int i = 0; i < 4; i++){
+		for(int32_t i = 0; i < 4; i++){
 			CopyVec3(&modelview[i][0], &gm[i * 4]);
 			gm[i * 4 + 2] = -gm[i * 4 + 2];	//Flip coord system.
 		}
@@ -197,7 +197,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 	//	if(flags & MESH_ENVBASIS_MODEL){	//Model matrix to pull envmap basis with it.
 	//		IdentityMat3(envbasis);
 	//	}else{
-		//	for(int i = 0; i < 3; i++) CopyVec3(Obj->model[i], envbasis[i]);
+		//	for(int32_t i = 0; i < 3; i++) CopyVec3(Obj->model[i], envbasis[i]);
 		Mat3 lightmat;
 		IdentityMat3(lightmat);
 		if(flags & MESH_ENVBASIS_LIGHT){	//TODO:  Add a way to config this flag through mesh options in cfg file.
@@ -210,7 +210,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		if(flags & MESH_ENVBASIS_MODEL){	//Model matrix to pull envmap basis with it.
 			Mat3MulMat3(thismesh->Orient, lightmat, tlmat);
 		}else{
-			for(int i = 0; i < 3; i++) CopyVec3(lightmat[i], tlmat[i]);
+			for(int32_t i = 0; i < 3; i++) CopyVec3(lightmat[i], tlmat[i]);
 		}
 		Mat3IMulMat3(thismesh->Orient, tlmat, envbasis);
 	//	}
@@ -222,9 +222,9 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		Vec3IMulMat43(tv, modelview, camoff);
 		//
 		//Pre-calc envmap texcoords if appropriate.
-		int EnvPrecalced = 0;
+		int32_t EnvPrecalced = 0;
 		if((flags & MESH_ENVMAP_SMOOTH) && (flags & MESH_ENVMAP_MASK) && m->nVertex < MAXTEMPVERTS){
-			for(int v = 0; v < m->nVertex; v++){
+			for(int32_t v = 0; v < m->nVertex; v++){
 				SphericalYEnvMapCoords(&TempTexCoords[v][0], m->Vertex[v], m->VertNorm[v], envbasis, camoff, scale);
 			}
 			EnvPrecalced = 1;
@@ -238,7 +238,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		//	float cscale = 1.0f / 5.0f;
 			float cscale = thismesh->PerturbScale;
 			if(thismesh->Flags & MESH_PERTURB_NOISE_Z){	//Special mode for YZ plane noise scaled by Z for insignia flags.
-				for(int v = 0; v < m->nVertex; v++){
+				for(int32_t v = 0; v < m->nVertex; v++){
 					CVec3 tv(m->Vertex[v].y + thismesh->PerturbX, m->Vertex[v].x, m->Vertex[v].z + thismesh->PerturbZ);
 					Vec3 pt = {Perturber.Noise((tv.x + tv.y) * cscale, (tv.z + tv.y) * cscale, 2) - 0.5f,
 						Perturber.Noise((tv.x + tv.y) * cscale + 55.0f, (tv.z - tv.y) * cscale + 55.0f, 2) - 0.5f,
@@ -246,7 +246,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 					ScaleAddVec3(pt, thismesh->Perturb * m->Vertex[v].z, m->Vertex[v], TempVertCoords[v]);
 				}
 			}else{
-				for(int v = 0; v < m->nVertex; v++){
+				for(int32_t v = 0; v < m->nVertex; v++){
 				//	CVec3 tv;
 				//	Vec3MulMat3(m->Vertex[v], Orient, tv);
 				//	AddVec3(Pos, tv);
@@ -265,8 +265,8 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 		Vec3IMulMat3(tcz, modelview, CameraZ);
 		//
 		//
-		for(int iter = 0; iter < (flags & MESH_BLEND_ENVMAP ? 2 : 1); iter++){
-			int ColMode, TexMode;	//Coordinate and color generation modes.
+		for(int32_t iter = 0; iter < (flags & MESH_BLEND_ENVMAP ? 2 : 1); iter++){
+			int32_t ColMode, TexMode;	//Coordinate and color generation modes.
 			float LightScale = 1.0f;	//Scales post-ambient light and solid light, to darken in total for additive mixing.
 			//
 			//Set rendering flags for this pass as appropriate.
@@ -318,7 +318,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 			//
 		//	if(m->Poly[0].Tex) BindTexture(m->Poly[0].Tex->id);
 			Poly3D *pp = m->Poly;
-			for(int p = 0; p < m->nPoly; p++){
+			for(int32_t p = 0; p < m->nPoly; p++){
 				if(pp->Flags == POLY_STRIP){
 					if(TexMode == TEXMODE_NORMAL){
 						tex[0][0] = pp->UV.U[0];  tex[0][1] = pp->UV.V[0];
@@ -353,35 +353,35 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 					if(p > 0) glEnd();
 					glBegin(GL_TRIANGLE_STRIP);
 					if(TexMode == TEXMODE_NORMAL){
-						for(int i = 0; i < 3; i++){ tex[i][0] = pp->UV.U[i];  tex[i][1] = pp->UV.V[i]; }
+						for(int32_t i = 0; i < 3; i++){ tex[i][0] = pp->UV.U[i];  tex[i][1] = pp->UV.V[i]; }
 					}else if(TexMode == TEXMODE_ENVSMOOTH){
-						for(int i = 0; i < 3; i++)
+						for(int32_t i = 0; i < 3; i++)
 							SphericalYEnvMapCoords(&tex[i][0], VertA[pp->Points[i]], m->VertNorm[pp->Points[i]], envbasis, camoff, scale);
 					}else if(TexMode == TEXMODE_ENVPRECALC){
-						for(int i = 0; i < 3; i++){
+						for(int32_t i = 0; i < 3; i++){
 							tex[i][0] = TempTexCoords[pp->Points[i]][0];
 							tex[i][1] = TempTexCoords[pp->Points[i]][1];
 						}
 					}else{	//TEXMODE_ENVFLAT
-						for(int i = 0; i < 3; i++)
+						for(int32_t i = 0; i < 3; i++)
 							SphericalYEnvMapCoords(&tex[i][0], VertA[pp->Points[i]], pp->Normal, envbasis, camoff, scale);
 					}
 					if(ColMode == COLMODE_FLAT){
 						l = DotVec3(light, pp->Normal);  l = (std::max(0.0f, l) * InvAmbient + PR->Ambient) * LightScale;	//Ok, now direct lighting plus ambient.
 						glColor4f(l, l, l, opac);
-						for(int i = 0; i < 3; i++){
+						for(int32_t i = 0; i < 3; i++){
 							glTexCoord2fv(&tex[i][0]);
 							glVertex3fv(VertA[pp->Points[i]]);
 						}
 					}else if(ColMode == COLMODE_SMOOTH){
-						for(int i = 0; i < 3; i++){
+						for(int32_t i = 0; i < 3; i++){
 							l = DotVec3(light, m->VertNorm[pp->Points[i]]);  l = (std::max(0.0f, l) * InvAmbient + PR->Ambient) * LightScale;	//Ok, now direct lighting plus ambient.
 							glColor4f(l, l, l, opac);
 							glTexCoord2fv(&tex[i][0]);
 							glVertex3fv(VertA[pp->Points[i]]);
 						}
 					}else if(ColMode == COLMODE_EDGETRANS){
-						for(int i = 0; i < 3; i++){
+						for(int32_t i = 0; i < 3; i++){
 							float edge = fabsf(DotVec3(m->VertNorm[pp->Points[i]], CameraZ));
 							glColor4f(LightScale * edge, LightScale * edge, LightScale * edge, opac * edge);
 							glTexCoord2fv(&tex[i][0]);
@@ -389,7 +389,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 						}
 					}else{	//COLMODE_SOLID
 						glColor4f(LightScale, LightScale, LightScale, opac);
-						for(int i = 0; i < 3; i++){
+						for(int32_t i = 0; i < 3; i++){
 							glTexCoord2fv(&tex[i][0]);
 							glVertex3fv(VertA[pp->Points[i]]);
 						}
@@ -409,7 +409,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_LINES);
 			glColor4f(1, 0, 0, 1);
-			for(int v = 0; v < m->nVertNorm; v++){
+			for(int32_t v = 0; v < m->nVertNorm; v++){
 				Vec3 tv;
 				glVertex3fv(m->Vertex[v]);
 				AddVec3(m->Vertex[v], m->VertNorm[v], tv);
@@ -417,9 +417,9 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 			}
 			//Do poly norms too.
 			glColor4f(0, 1, 0, 1);
-			for(int p = 0; p < m->nPoly; p++){
+			for(int32_t p = 0; p < m->nPoly; p++){
 				Vec3 tv = {0, 0, 0};
-				for(int j = 0; j < 3; j++) AddVec3(m->Vertex[m->Poly[p].Points[j]], tv);
+				for(int32_t j = 0; j < 3; j++) AddVec3(m->Vertex[m->Poly[p].Points[j]], tv);
 				ScaleVec3(tv, 0.33333333f);
 				glVertex3fv(tv);
 				AddVec3(m->Poly[p].Normal, tv);
@@ -439,7 +439,7 @@ void GLPolyRender::GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR){
 
 #define NUMRANDFLOAT 256
 static float randfloat[NUMRANDFLOAT * 2];
-static int randfloatmade = 0;
+static int32_t randfloatmade = 0;
 
 #define NUMROTTABLE 32
 #define QTRNUMROTTABLE 8
@@ -471,7 +471,7 @@ void GLPolyRender::GLRenderSpriteObject(SpriteObject *thissprite, PolyRender *PR
 		Vec3 xfpos;
 		Vec3MulMat43(thissprite->Pos, PR->view, xfpos);
 		//
-		int ww = 1;
+		int32_t ww = 1;
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &ww);
 		//
 	//	float zero = (1.0f / (float)MAX(1, Texture->Width())) * 1.0f;
@@ -540,13 +540,13 @@ void GLPolyRender::GLRenderParticleCloudObject(ParticleCloudObject *thispc, Poly
 		Vec3MulMat43(thispc->Pos, PR->view, xfpos);
 		//
 	//	glPointSize(PARTICLE_SIZE / xfpos[2] * PR->Cam.viewplane);
-		int r = thispc->Seed & (NUMRANDFLOAT - 1);
+		int32_t r = thispc->Seed & (NUMRANDFLOAT - 1);
 	//	glBegin(GL_POINTS);
 		glBegin(GL_TRIANGLES);
 		float h2 = thispc->Height * 2.0f, w2 = thispc->Width * 2.0f;
 	//	float x = xfpos[0] - Width * 0.5f, y = xfpos[1] - Height * 0.5f;
 		float z = -xfpos[2], rad = thispc->Radius;
-		int numpart = FastFtoL((float)thispc->Particles * PR->ParticleAtten);
+		int32_t numpart = FastFtoL((float)thispc->Particles * PR->ParticleAtten);
 		//
 		float wx = rottable[(thispc->IntRot + QTRNUMROTTABLE) & NUMROTMASK][0] * w2;
 		float wy = rottable[(thispc->IntRot + QTRNUMROTTABLE) & NUMROTMASK][1] * w2;
@@ -555,7 +555,7 @@ void GLPolyRender::GLRenderParticleCloudObject(ParticleCloudObject *thispc, Poly
 		float x = (xfpos[0] - wx * 0.25f) - hx * 0.25f;
 		float y = (xfpos[1] - wy * 0.25f) - hy * 0.25f;
 		//
-		for(int i = 0; i < numpart; i += 2){
+		for(int32_t i = 0; i < numpart; i += 2){
 			{	//Draw two at once with different particle texture halves.
 				float xx = x + randfloat[r] * rad, yy = y + randfloat[r + 1] * rad, zz = z + randfloat[r + 2] * rad;
 				glTexCoord2f(0, 1);
@@ -597,7 +597,7 @@ void GLPolyRender::GLRenderStringObject(StringObject *thisstring, PolyRender *PR
 		//
 		float iterscale = 1.0f / std::max(1.0f, (float)thisstring->AddIters);
 		//
-		for(int iter = 0; iter < 1 + std::max(1, thisstring->AddIters); iter++){
+		for(int32_t iter = 0; iter < 1 + std::max(1, thisstring->AddIters); iter++){
 			float gsx, gsy;
 			x = thisstring->X;
 			float t = iterscale * (float)iter;
@@ -616,14 +616,14 @@ void GLPolyRender::GLRenderStringObject(StringObject *thisstring, PolyRender *PR
 				gsx = ((w * thisstring->AddGlyphScale) - w) * 0.5f * t;
 				gsy = ((h * thisstring->AddGlyphScale) - h) * 0.5f * t;
 			}
-			for (int i=0;i<4;i++) {
+			for (int32_t i=0;i<4;i++) {
 				if (c[i] < 0.0f)	c[i] = 0.0f;
 				if (c[i] > 1.0f)	c[i] = 1.0f;
 			}
 
 			glBegin(GL_QUADS);
 			glColor4fv(c);
-			for(int n = 0; n < thisstring->nGlyph; n++){
+			for(int32_t n = 0; n < thisstring->nGlyph; n++){
 				unsigned char g = thisstring->Glyph[n];
 				float gx = (float)(g & (thisstring->CharsX - 1)) * gw;
 				float gy = (float)(g / thisstring->CharsX) * gh;
@@ -652,7 +652,7 @@ void GLPolyRender::GLRenderLineMapObject(LineMapObject *thislinemap, PolyRender 
 	float yscale = (float)PR->Cam.viewwidth / (float)PR->Cam.viewheight;	//Must remove distortion, screen is 0.0 to 1.0, which would be fine for square, but not for normal 4/3.
 	float yoff = (yscale - 1.0f) * -0.5f;
 	glBegin(GL_QUADS);
-	for(int l = 0; l < thislinemap->nLines; l++){
+	for(int32_t l = 0; l < thislinemap->nLines; l++){
 		float X1 = thislinemap->Lines[l].x1 - thislinemap->CenterX, Y1 = thislinemap->Lines[l].y1 - thislinemap->CenterY;
 		float X2 = thislinemap->Lines[l].x2 - thislinemap->CenterX, Y2 = thislinemap->Lines[l].y2 - thislinemap->CenterY;
 		//
@@ -678,7 +678,7 @@ void GLPolyRender::GLRenderLineMapObject(LineMapObject *thislinemap, PolyRender 
 		glVertex3f(x2 + dx, yoff + (y2 + dy) * yscale, thislinemap->Z);
 	}
 	glEnd();
-	for(int p = 0; p < thislinemap->nPoints; p++){
+	for(int32_t p = 0; p < thislinemap->nPoints; p++){
 		float X1 = thislinemap->Points[p].x - thislinemap->CenterX, Y1 = thislinemap->Points[p].y - thislinemap->CenterY;
 		//Clipping (fading out).
 		float clipped = sqrtf(X1 * X1 + Y1 * Y1) / thislinemap->ClipRad;
@@ -748,7 +748,7 @@ void GLPolyRender::GLRenderChamfered2DBoxObject(Chamfered2DBoxObject *thisbox, P
 
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4f(thisbox->red, thisbox->green, thisbox->blue, thisbox->alpha);
-	for(int i = 0 ; i < 8; i++)
+	for(int32_t i = 0 ; i < 8; i++)
 		glVertex2fv(v[i]);
 	glVertex2fv(v[0]);
 	glEnd();
@@ -770,7 +770,7 @@ void GLPolyRender::GLRenderTilingTextureObject(TilingTextureObject *thistile, Po
 		//
 		GLfloat c[4] = {thistile->red, thistile->green, thistile->blue, thistile->alpha};
 		//
-		for (int i=0;i<4;i++) {
+		for (int32_t i=0;i<4;i++) {
 			// FIXME: bit of a bodge to prevent values going out of bounds
 			// Some come in at <0.95, 1.05, 1.05, 1.00>
 			if (c[i] < 0.0f)	c[i] = 0.0f;
@@ -779,8 +779,8 @@ void GLPolyRender::GLRenderTilingTextureObject(TilingTextureObject *thistile, Po
 		if(thistile->VertsX > 1 && thistile->VertsY > 1 && thistile->VertsX * thistile->VertsY < MAXTEMPVERTS){
 			float ivx = 1.0f / (float)(thistile->VertsX - 1);
 			float ivy = 1.0f / (float)(thistile->VertsY - 1);
-			int totalv = thistile->VertsX * thistile->VertsY;
-			for(int v = 0; v < totalv; v++){	//Make vertex and texture coords.
+			int32_t totalv = thistile->VertsX * thistile->VertsY;
+			for(int32_t v = 0; v < totalv; v++){	//Make vertex and texture coords.
 				SetVec3((float)(v % thistile->VertsX) * ivx, (float)(v / thistile->VertsX) * ivy, 0, TempVertCoords[v]);
 				//
 				CVec3 tv(TempVertCoords[v].x + thistile->PerturbX, TempVertCoords[v].y + thistile->PerturbY, 0);
@@ -791,11 +791,11 @@ void GLPolyRender::GLRenderTilingTextureObject(TilingTextureObject *thistile, Po
 			//	ScaleAddVec3(pt, Perturb, m->Vertex[v], TempVertCoords[v]);
 			}
 			glColor4fv(c);
-			for(int y = 0; y < thistile->VertsY - 1; y++){
+			for(int32_t y = 0; y < thistile->VertsY - 1; y++){
 				glBegin(GL_TRIANGLE_STRIP);
-				int v1 = y * thistile->VertsX;
-				for(int x = 0; x < thistile->VertsX * 2; x++){
-					int v = v1 + (x >>1) + (1 - (x & 1)) * thistile->VertsX;
+				int32_t v1 = y * thistile->VertsX;
+				for(int32_t x = 0; x < thistile->VertsX * 2; x++){
+					int32_t v = v1 + (x >>1) + (1 - (x & 1)) * thistile->VertsX;
 					glTexCoord2fv(&TempTexCoords[v][0]);
 					glVertex2fv(&TempVertCoords[v][0]);
 				}
@@ -829,13 +829,13 @@ bool GLPolyRender::GLDoRender(){
 	//Watch out...  If the near plane distance is different between here and GLTerrainRender, we're screwed.
 	//
 	if(!randfloatmade){
-		for(int n = 0; n < NUMRANDFLOAT; n++){
+		for(int32_t n = 0; n < NUMRANDFLOAT; n++){
 			randfloat[n] = ((float)TMrandom() - (float)(RAND_MAX / 2)) / (float)(RAND_MAX / 2);
 			randfloat[n + NUMRANDFLOAT] = randfloat[n];
 		}
 		randfloatmade = 1;
 		//
-		for(int a = 0; a < NUMROTTABLE; a++){
+		for(int32_t a = 0; a < NUMROTTABLE; a++){
 			float an = ((float)a / (float)(NUMROTTABLE)) * PI2;
 			rottable[a][0] = sin(an);
 			rottable[a][1] = cos(an);
@@ -873,7 +873,7 @@ bool GLPolyRender::GLDoRender(){
 	//
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);//GL_REPLACE);//GL_DECAL);//GL_DECAL);
 	//
-	for(int i = 0; i < nSolidObject; i++){
+	for(int32_t i = 0; i < nSolidObject; i++){
 		SolidObjectP[i]->Render(this);
 	}
 	//
@@ -904,7 +904,7 @@ bool GLPolyRender::GLDoRenderSecondary(){	//Renders using OpenGL.
 	//
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);//GL_REPLACE);//GL_DECAL);//GL_DECAL);
 	//
-	for(int i = 0; i < nSecondaryObject; i++){
+	for(int32_t i = 0; i < nSecondaryObject; i++){
 		if(SecondaryObjectP[i]->Transparent()){
 			glDepthMask(GL_FALSE);
 			SecondaryObjectP[i]->Render(this);
@@ -952,7 +952,7 @@ bool GLPolyRender::GLDoRenderTrans(){
 		qsort(TransObjectP, nTransObject, sizeof(Object3D*), CompareObject3DKeys);
 	}
 	//
-	for(int i = 0; i < nTransObject; i++){
+	for(int32_t i = 0; i < nTransObject; i++){
 		TransObjectP[i]->Render(this);
 	}
 	glDepthMask(GL_TRUE);
@@ -990,7 +990,7 @@ bool GLPolyRender::GLDoRenderOrtho(){
 	//
 	IdentityMat43(view);
 	//
-	for(int i = 0; i < nOrthoObject; i++){
+	for(int32_t i = 0; i < nOrthoObject; i++){
 		OrthoObjectP[i]->Render(this);
 	}
 	glEnable(GL_CULL_FACE);
@@ -1004,11 +1004,11 @@ bool GLPolyRender::GLDoRenderOrtho(){
 
 
 //Downloads loaded images to OpenGL driver as textures.
-//Indexed Images are only used to paint terrain, so aren't downloaded.
+//Indexed Images are only used to paint32_t terrain, so aren't downloaded.
 //Download sliced up terrain textures in Terrain class.
 bool ResourceManager::DownloadTextures(bool UpdateOnly){
 	if(DisableLoading) return true;	//Just skip if we have resource loading disabled.
-	int oldTexels = Texels;	//Only debug log texel count if changed.
+	int32_t oldTexels = Texels;	//Only debug log texel count if changed.
 	Bitmap tbmp;
 	GLenum format;
 	ARGB rgba[256];
@@ -1018,7 +1018,7 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 	//	if(node->id == 0){	//Generate new id.
 	//	}
 //		node->ScaleToPow2();	//OpenGL only likes pow2 textures.
-		int m;
+		int32_t m;
 		for(m = 0; m < node->Images(); m++){	//Now handle all images in set.
 			//
 			bool UpdateTex = false;
@@ -1057,39 +1057,39 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 				RGBAfromPE(rgba, (*node)[m].pe, 255);
 				if(node->Trans){
 				//	rgba[0].argb = 0;	//Give 0 alpha to black/trans pixels.
-					for(int i = 0; i < 256; i++)
+					for(int32_t i = 0; i < 256; i++)
 						if((*node)[m].pe[i].peRed == 0 &&
 						(*node)[m].pe[i].peGreen == 0 &&
 						(*node)[m].pe[i].peBlue == 0) rgba[i].argb = 0;
 					//
 					format = GL_RGB5_A1;
 					if(node->AlphaGrad){	//Gradiate alpha from 0 to 255.  This will probably break if image has been remapped to a global palette!  e.g. switching from software without reload.
-						int i, avmax = 0, av;
+						int32_t i, avmax = 0, av;
 						for(i = 0; i < 256; i++){
-							av = ((((int)(*node)[m].pe[i].peRed) <<1) + (((int)(*node)[m].pe[i].peGreen) <<2) +
-								(((int)(*node)[m].pe[i].peBlue))) / (7);
+							av = ((((int32_t)(*node)[m].pe[i].peRed) <<1) + (((int32_t)(*node)[m].pe[i].peGreen) <<2) +
+								(((int32_t)(*node)[m].pe[i].peBlue))) / (7);
 							if(av > avmax) avmax = av;
 						}
 						for(i = 0; i < 256; i++){
-							av = ((((((int)(*node)[m].pe[i].peRed) <<1) + (((int)(*node)[m].pe[i].peGreen) <<2) +
-								((int)(*node)[m].pe[i].peBlue)) / (7)) * 255) / avmax;
+							av = ((((((int32_t)(*node)[m].pe[i].peRed) <<1) + (((int32_t)(*node)[m].pe[i].peGreen) <<2) +
+								((int32_t)(*node)[m].pe[i].peBlue)) / (7)) * 255) / avmax;
 							if(node->AlphaGrad == ALPHAGRAD_ALPHAONLY2){
 								rgba[i].argb = (0xffffff) | (av <<24);
 							}else if(node->AlphaGrad == ALPHAGRAD_ALPHAONLY1){
-								for(int c = 0; c < 3; c++) rgba[i].byte[c] = (rgba[i].byte[c] >>2) + 191;
+								for(int32_t c = 0; c < 3; c++) rgba[i].byte[c] = (rgba[i].byte[c] >>2) + 191;
 								rgba[i].byte[3] = av;
 							}else{
 							//	rgba[i].argb = (rgba[i].argb & 0xffffff) | (av <<24);
 								//
-								av = (int)(Bias(node->AlphaGradBias, (float)av / 255.0f) * 255.0f);
+								av = (int32_t)(Bias(node->AlphaGradBias, (float)av / 255.0f) * 255.0f);
 								//
 								//Limit alpha on low end so inverse scale never clips colors high.
-								for(int b = 0; b < 3; b++) if(av < rgba[i].byte[b]) av = rgba[i].byte[b];
+								for(int32_t b = 0; b < 3; b++) if(av < rgba[i].byte[b]) av = rgba[i].byte[b];
 								//
-								int rav = (256 * 256) / std::max(1, av);
+								int32_t rav = (256 * 256) / std::max(1, av);
 								rgba[i].byte[3] = av;
-								for(int b = 0; b < 3; b++){
-									int t = (((int)rgba[i].byte[b] * rav) >>8);
+								for(int32_t b = 0; b < 3; b++){
+									int32_t t = (((int32_t)rgba[i].byte[b] * rav) >>8);
 									rgba[i].byte[b] = (unsigned char)std::min(255, t);
 								}
 								//Okay, NOW we're doing it properly, inversly scaling up the color channel
@@ -1108,10 +1108,10 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 			//	format = 4;
 				if((*node)[m].BPP() > 8){	//Handle 24/32bit bitmap in BGR or BGRA format.
 					unsigned char *src, *dst, alpha = ((*node)[m].BPP() == 32 ? 1 : 0);
-					for(int y = 0; y < tbmp.Height(); y++){
+					for(int32_t y = 0; y < tbmp.Height(); y++){
 						src = (*node)[m].Data() + y * (*node)[m].Pitch();
 						dst = tbmp.Data() + y * tbmp.Pitch();
-						for(int x = 0; x < tbmp.Width(); x++){
+						for(int32_t x = 0; x < tbmp.Width(); x++){
 							dst[0] = src[2];
 							dst[1] = src[1];
 							dst[2] = src[0];
@@ -1129,12 +1129,12 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 					(*node)[m].BlitRaw8to32((uint32_t*)tbmp.Data(), tbmp.Pitch(), 0, 0, tbmp.Width(), tbmp.Height(), false, rgba);
 					//
 					if(node->Trans){	//Special hack for binary transparent images, to smush color into trans pixels to help bilerping.
-						for(int y = 0; y < tbmp.Height() - 1; y++){
+						for(int32_t y = 0; y < tbmp.Height() - 1; y++){
 							unsigned char *src = (unsigned char*)(*node)[m].Data() + (*node)[m].Pitch() * y;
 							unsigned char *dst = (unsigned char*)tbmp.Data() + tbmp.Pitch() * y;
-							int spitch = (*node)[m].Pitch();
-							int dpitch = tbmp.Pitch();
-							for(int x = tbmp.Width() - 1; x; x--){	//Skip right and bottom rows!!!
+							int32_t spitch = (*node)[m].Pitch();
+							int32_t dpitch = tbmp.Pitch();
+							for(int32_t x = tbmp.Width() - 1; x; x--){	//Skip right and bottom rows!!!
 								if(rgba[*src].argb == 0){	//Pixel is trans, suck from down/right.
 									if(rgba[*(src + 1)].argb != 0){	//Right.
 										dst[0] = dst[4 + 0]; dst[1] = dst[4 + 1]; dst[2] = dst[4 + 2];
@@ -1175,11 +1175,11 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 				//TODO:  Use glTexSubImage2D when texture is to be updated in place.
 				//
 				//
-				int MaxRes = MAX(node->ForceMaxTexRes, MaxTexRes >> (abs(node->SizeBias)));
+				int32_t MaxRes = MAX(node->ForceMaxTexRes, MaxTexRes >> (abs(node->SizeBias)));
 				//MaxTexRes is global, SizeBias pulls it down n levels, ForceMTR brings it up to a minimum.
 				//
 				if(node->MipMap && UsePalTex == false){// && 0){
-					int t = GLMipMap(&tbmp, format, node->Trans, MaxRes,//MaxTexRes >> (abs(node->SizeBias)),
+					int32_t t = GLMipMap(&tbmp, format, node->Trans, MaxRes,//MaxTexRes >> (abs(node->SizeBias)),
 						node->BlackOutX, node->BlackOutY, false, UsePalTex, UpdateTex);
 					if(!UpdateTex) Texels += t;
 					//Trilinear!!
@@ -1193,7 +1193,7 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 				}else{
 				//	glTexImage2D(GL_TEXTURE_2D, 0, format, tbmp.Width(), tbmp.Height(), 0,
 				//		GL_RGBA, GL_UNSIGNED_BYTE, tbmp.Data());
-					int t = GLMipMap(&tbmp, format, node->Trans, MaxRes,//MaxTexRes >> (abs(node->SizeBias)),
+					int32_t t = GLMipMap(&tbmp, format, node->Trans, MaxRes,//MaxTexRes >> (abs(node->SizeBias)),
 						node->BlackOutX, node->BlackOutY, true, UsePalTex, UpdateTex);
 					if(!UpdateTex) Texels += t;
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -1202,7 +1202,7 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 				//
 				//Flush downloaded textures if configured to do so.
 				if(TextureFlush && node->Flushable && node->Dynamic == false && UpdateTex == false){
-					int id = (*node)[m].id, flags = (*node)[m].flags;
+					int32_t id = (*node)[m].id, flags = (*node)[m].flags;
 					(*node)[m].Free();
 					(*node)[m].id = id;
 					(*node)[m].flags = flags;	//Preserve GenTexed ID and flags over free.
@@ -1220,12 +1220,12 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 	return true;
 }
 
-int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int blackouty, bool nomipmap, bool usepaltex, bool update){
-	int texels = 0;
+int32_t GLMipMap(Bitmap *bmp, int32_t fmt, int32_t trans, int32_t maxres, int32_t blackoutx, int32_t blackouty, bool nomipmap, bool usepaltex, bool update){
+	int32_t texels = 0;
 	if(bmp && bmp->Data() && bmp->Width() > 0 && bmp->Height() > 0){
-		int w = bmp->Width(), h = bmp->Height();
+		int32_t w = bmp->Width(), h = bmp->Height();
 		Bitmap tbmp1, tbmp2;
-		int level = 0;
+		int32_t level = 0;
 		tbmp1 = *bmp;
 		while(true){
 			//DL.
@@ -1241,10 +1241,10 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 							int32_t alphaaccum[256], alphacount[256];
 							memset(alphaaccum, 0, sizeof(alphaaccum));
 							memset(alphacount, 0, sizeof(alphacount));
-							for(int y = 0; y < tbmp1.Height(); y++){
+							for(int32_t y = 0; y < tbmp1.Height(); y++){
 								unsigned char *p1 = (unsigned char*)tbmp1.Data() + y * tbmp1.Pitch();
 								unsigned char *p2 = (unsigned char*)tbmp8.Data() + y * tbmp8.Pitch();
-								for(int x = tbmp1.Width(); x; x--){
+								for(int32_t x = tbmp1.Width(); x; x--){
 									alphaaccum[*p2] += p1[3];
 									alphacount[*p2] += 1;
 									p1 += 4;
@@ -1253,7 +1253,7 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 							}
 							glTexImage2D(GL_TEXTURE_2D, level, GL_R3_G3_B2, tbmp1.Width(), tbmp1.Height(), 0,
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = glGetError();
+							int32_t ii = glGetError();
 							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 
@@ -1264,13 +1264,13 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 						if(update){	//Use TexSubImage to update existing texture object only.
 							glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, tbmp1.Width(), tbmp1.Height(),
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = glGetError();
+							int32_t ii = glGetError();
 							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 						}else{
 							glTexImage2D(GL_TEXTURE_2D, level, fmt, tbmp1.Width(), tbmp1.Height(), 0,
 								GL_RGBA, GL_UNSIGNED_BYTE, tbmp1.Data());
-							int ii = glGetError();
+							int32_t ii = glGetError();
 							if(ii)
 								OutputDebugLog("Error uploading texture: " + String(ii) + ".\n");
 						}
@@ -1288,22 +1288,22 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 				//
 				//Make a Gain table, trying something out...
 			//	unsigned char gaintab[256];
-			//	for(int i = 0; i < 256; i++){
-			//		gaintab[i] = (int)(Gain(0.8f, (float)i / 256.0f) * 255.0f);
+			//	for(int32_t i = 0; i < 256; i++){
+			//		gaintab[i] = (int32_t)(Gain(0.8f, (float)i / 256.0f) * 255.0f);
 			//	}
 				//
-				int x, y;
+				int32_t x, y;
 				for(y = 0; y < h; y++){
 					unsigned char *ts = tbmp1.Data() + (y * 2) * tbmp1.Pitch();
 					unsigned char *td = tbmp2.Data() + y * tbmp2.Pitch();
 					for(x = w; x; x--){
 						//Maximum filter.
-					//	int pp = tbmp1.Pitch();
-					//	const int p = 0;
-					//	int p1 = ((int)ts[p] + (int)ts[p + 1] + (int)ts[p + 2]) * (int)ts[p + 3];
-					//	int p2 = ((int)ts[p + 4] + (int)ts[p + 5] + (int)ts[p + 6]) * (int)ts[p + 7];
-					//	int p3 = ((int)ts[p + pp] + (int)ts[p + 1 + pp] + (int)ts[p + 2 + pp]) * (int)ts[p + 3 + pp];
-					//	int p4 = ((int)ts[p + 4 + pp] + (int)ts[p + 5 + pp] + (int)ts[p + 6 + pp]) * (int)ts[p + 7 + pp];
+					//	int32_t pp = tbmp1.Pitch();
+					//	const int32_t p = 0;
+					//	int32_t p1 = ((int32_t)ts[p] + (int32_t)ts[p + 1] + (int32_t)ts[p + 2]) * (int32_t)ts[p + 3];
+					//	int32_t p2 = ((int32_t)ts[p + 4] + (int32_t)ts[p + 5] + (int32_t)ts[p + 6]) * (int32_t)ts[p + 7];
+					//	int32_t p3 = ((int32_t)ts[p + pp] + (int32_t)ts[p + 1 + pp] + (int32_t)ts[p + 2 + pp]) * (int32_t)ts[p + 3 + pp];
+					//	int32_t p4 = ((int32_t)ts[p + 4 + pp] + (int32_t)ts[p + 5 + pp] + (int32_t)ts[p + 6 + pp]) * (int32_t)ts[p + 7 + pp];
 					//	if(p1 > p2 && p1 > p3 && p1 > p4){
 					//		*((int*)&td[p]) = *((int*)&ts[p]);
 					//	}else if(p2 > p1 && p2 > p3 && p2 > p4){
@@ -1313,19 +1313,19 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 					//	}else{
 					//		*((int*)&td[p]) = *((int*)&ts[p + pp + 4]);
 					//	}
-						for(int p = 0; p < 4; p++){
+						for(int32_t p = 0; p < 4; p++){
 							//Gain filter.
-						//	td[p] = gaintab[(unsigned char)((((int)ts[p]) + (int)ts[p + 4] +
-						//		(int)ts[p + tbmp1.Pitch()] + (int)ts[p + 4 + tbmp1.Pitch()]) >>2)];
+						//	td[p] = gaintab[(unsigned char)((((int32_t)ts[p]) + (int32_t)ts[p + 4] +
+						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>2)];
 							//Uneven box filter 2.
-							td[p] = (((int)ts[p] <<2) + (int)ts[p + 4] +
-								(int)ts[p + tbmp1.Pitch()] + ((int)ts[p + 4 + tbmp1.Pitch()] <<1)) >>3;
+							td[p] = (((int32_t)ts[p] <<2) + (int32_t)ts[p + 4] +
+								(int32_t)ts[p + tbmp1.Pitch()] + ((int32_t)ts[p + 4 + tbmp1.Pitch()] <<1)) >>3;
 							//Uneven box filter.
-						//	td[p] = (((int)ts[p] * 5) + (int)ts[p + 4] +
-						//		(int)ts[p + tbmp1.Pitch()] + (int)ts[p + 4 + tbmp1.Pitch()]) >>3;
+						//	td[p] = (((int32_t)ts[p] * 5) + (int32_t)ts[p + 4] +
+						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>3;
 							//Even box filter.
-						//	td[p] = (((int)ts[p]) + (int)ts[p + 4] +
-						//		(int)ts[p + tbmp1.Pitch()] + (int)ts[p + 4 + tbmp1.Pitch()]) >>2;
+						//	td[p] = (((int32_t)ts[p]) + (int32_t)ts[p + 4] +
+						//		(int32_t)ts[p + tbmp1.Pitch()] + (int32_t)ts[p + 4 + tbmp1.Pitch()]) >>2;
 						}
 						ts += 8;
 						td += 4;
@@ -1333,8 +1333,8 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 				}
 				//Black out multi-cell edges if need be.
 				if(blackoutx > 0 && blackouty > 0){
-					int xmask = (1 << HiBit(w / blackoutx)) - 1;
-					int ymask = (1 << HiBit(h / blackouty)) - 1;
+					int32_t xmask = (1 << HiBit(w / blackoutx)) - 1;
+					int32_t ymask = (1 << HiBit(h / blackouty)) - 1;
 					for(y = 0; y < h; y++){	//Horizontal lines.
 						if((y & ymask) == 0 || (y & ymask) == ymask){
 							unsigned char *td = tbmp2.Data() + y * tbmp2.Pitch();
@@ -1345,7 +1345,7 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 						if((x & xmask) == 0 || (x & xmask) == xmask){
 							unsigned char *td = tbmp2.Data() + x * 4;
 							for(y = 0; y < h; y++){
-								for(int p = 0; p < 4; p++) td[p] = 0;
+								for(int32_t p = 0; p < 4; p++) td[p] = 0;
 								td += tbmp2.Pitch();
 							}
 						}
@@ -1360,11 +1360,11 @@ int GLMipMap(Bitmap *bmp, int fmt, int trans, int maxres, int blackoutx, int bla
 }
 
 //These are the good pass-through functions.
-int GLGenTextures(int n, uint32_t*a){
+int32_t GLGenTextures(int32_t n, uint32_t*a){
 	glGenTextures(n, a);
 	return n;
 }
-int GLDeleteTextures(int n, uint32_t *a){
+int32_t GLDeleteTextures(int32_t n, uint32_t *a){
 	glDeleteTextures(n, a);
 	return n;
 }

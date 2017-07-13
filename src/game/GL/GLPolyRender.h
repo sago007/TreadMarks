@@ -27,8 +27,8 @@ public:
 	bool GLDoRenderSecondary();	//Renders using OpenGL.
 
 	void GLResetStates();
-	void GLBlendMode(int mode);	//Will not re-set already set modes.
-	void GLBindTexture(unsigned int name);	//Will not re-bind already bound textures.
+	void GLBlendMode(int32_t mode);	//Will not re-set already set modes.
+	void GLBindTexture(uint32_t name);	//Will not re-bind already bound textures.
 
 	//Russ
 	void GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR);
