@@ -140,7 +140,7 @@ uint32_t IFF::ReadLong(uint32_t *pnt){
 	if(pnt) return *pnt = ReadLong();
 	return 0;
 }
-int IFF::ReadLong(int32_t *pnt){
+int32_t IFF::ReadLong(int32_t *pnt){
 	if(pnt) return *pnt = (int32_t)ReadLong();
 	return 0;
 }

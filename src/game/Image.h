@@ -31,7 +31,7 @@
 //So, the ppe and premap pointers in the Bitmap are private except to descendants,
 //like the Image class.  At the moment the Image class is the ONLY place where
 //those pointers will be set!  And they WILL NOT CHANGE for the life of the
-//Bitmap and parent Image class, they will always point to the Image's fixed pe
+//Bitmap and parent Image class, they will always point32_t to the Image's fixed pe
 //and remap arrays.
 
 #ifndef IMAGE_H
@@ -60,8 +60,8 @@ struct ARGB{
 bool BGRAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha = 0);	//Fills an array of 256 longs with 32bit ARGB intel format color entries matching 256 entry PE array, for quick 8bit to 32bit conversion.
 bool RGBAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha = 0);	//Same in OpenGL style format.
 
-inline int HiBit(int num){
-	int bit = 31;
+inline int32_t HiBit(int32_t num){
+	int32_t bit = 31;
 	while(bit){
 		if((uint32_t)num & (uint32_t)((uint32_t)1 << bit)) return bit;
 		bit--;
@@ -124,34 +124,34 @@ bool SaveBMP(FILE *f, Bitmap *bmp, PaletteEntry *pe, bool noflip = false);
 class Bitmap{
 friend class Image;
 private:
-	void SetBPP(int b){
+	void SetBPP(int32_t b){
 		bpp = b;
 		pixelpitch = bpp / 8;
 		alphaskip = (pixelpitch > 3 ? pixelpitch - 3 : 0);
 		colorbytes = (pixelpitch > 3 ? 3 : pixelpitch);
 	};
-	int nLines;
-	int *LineLeft;
-	int *LineRight;
-	int xhot, yhot;
-	int CalcPitch(int w, int b){ return ((w * (b >>3)) + 3) & (~3); };
-	int CalcLength(int w, int h, int b){ return CalcPitch(w, b) * std::abs(h); };
+	int32_t nLines;
+	int32_t *LineLeft;
+	int32_t *LineRight;
+	int32_t xhot, yhot;
+	int32_t CalcPitch(int32_t w, int32_t b){ return ((w * (b >>3)) + 3) & (~3); };
+	int32_t CalcLength(int32_t w, int32_t h, int32_t b){ return CalcPitch(w, b) * std::abs(h); };
 protected:
 	unsigned char *data;
-	int width, height, pitch, bpp;	//bpp currently must be 8 or 24/32!
-	int pixelpitch, colorbytes, alphaskip;
+	int32_t width, height, pitch, bpp;	//bpp currently must be 8 or 24/32!
+	int32_t pixelpitch, colorbytes, alphaskip;
 	PaletteEntry *ppe;
 	unsigned char *premap;
 public:
-	int id;	//User-specifiable ID number, for e.g. OpenGL texture caching.  Set to 0 on init.
-	int flags;	//Flags that record what has been done to the bitmap.  Set to 0 on init.
-//	unsigned int xmask, xshift;	//ONLY VALID FOR POW2-WIDTH IMAGES!
-//	unsigned int ymask, yshift;	//Andable-masks for dimensions, and shift-values (in bytes).
+	int32_t id;	//User-specifiable ID number, for e.g. OpenGL texture caching.  Set to 0 on init.
+	int32_t flags;	//Flags that record what has been done to the bitmap.  Set to 0 on init.
+//	unsigned int32_t xmask, xshift;	//ONLY VALID FOR POW2-WIDTH IMAGES!
+//	unsigned int32_t ymask, yshift;	//Andable-masks for dimensions, and shift-values (in bytes).
 //	void MakeMasks();
 public:
 	Bitmap();
 	Bitmap(const Bitmap &bmp);
-//	Bitmap(int x, int y, int bpp = 8){ Bitmap(); Init(x, y, bpp); };
+//	Bitmap(int32_t x, int32_t y, int32_t bpp = 8){ Bitmap(); Init(x, y, bpp); };
 	virtual ~Bitmap();	//Make destructors virtual!
 	Bitmap& operator=(const Bitmap &bmp);
 	void Free();	//Free not virtual!!!
@@ -159,7 +159,7 @@ public:
 	PaletteEntry *Palette(){ return ppe; };
 //	void RemapTable(unsigned char *remap){ premap = remap; };	//Set and get 256 entry remap table pointer.  DITTO!
 	unsigned char *RemapTable(){ return premap; };
-	bool Init(int w, int h, int bpp = 8);
+	bool Init(int32_t w, int32_t h, int32_t bpp = 8);
 		//Frees and/or allocates new image data for w and h dimensions.
 	bool Init(Bitmap *bmp){	//Clones geometry of bitmap.
 		if(bmp) return Init(bmp->Width(), bmp->Height(), bmp->BPP());
@@ -175,7 +175,7 @@ public:
 		//Ditto.
 	bool ScaleToPow2();
 		//If need be, scales width and height to nearest (lower) power of 2 size.
-	bool Scale(int wnew, int hnew, bool lerp = false);
+	bool Scale(int32_t wnew, int32_t hnew, bool lerp = false);
 		//Scales image to new arbitrary dimensions.
 	bool FlipH();
 		//Flips bitmap horizontally
@@ -185,10 +185,10 @@ public:
 		//Analyzes amount of color-0 space at beginning and end of each line.
 	void FreeAnalyze();
 		//Frees data tables.
-	unsigned int GetPixel(int x, int y);
-	bool PutPixel(int x, int y, unsigned int pixel);
+	uint32_t GetPixel(int32_t x, int32_t y);
+	bool PutPixel(int32_t x, int32_t y, uint32_t pixel);
 		//Sanity-checked high-level pixel plotting funcs.
-	bool Suck(void *src, int w, int h, int pitch, int sbpp = 0);
+	bool Suck(void *src, int32_t w, int32_t h, int32_t pitch, int32_t sbpp = 0);
 		//Sucks bytes from source data into bitmap data.  sbpp is Source BPP, source and bitmap must both be 8bit or both some flavour of true color.
 		//New, bitmap can be 8 bit and source true color, and blit will average to grayscale.
 	bool Suck(Bitmap *bmp){
@@ -197,31 +197,31 @@ public:
 	};
 	bool SuckARGB(Bitmap *bmp, ARGB *argb);
 		//Sucks from an 8-bit bitmap to high/true-color self using ARGB array for pixel conversion.
-	bool Blit(void *dest, int dw, int dh, int dp, int dx = 0, int dy = 0, bool trans = false);
+	bool Blit(void *dest, int32_t dw, int32_t dh, int32_t dp, int32_t dx = 0, int32_t dy = 0, bool trans = false);
 		//Clipped and optionally transparent blit.  Provide top-left pointer of the
 		//entire destination graphics area, and full width and height values.
-	bool Blit(void *dest, int dw, int dh, int dp, int dx, int dy, int sx, int sy, int sw, int sh, bool trans = false);
+	bool Blit(void *dest, int32_t dw, int32_t dh, int32_t dp, int32_t dx, int32_t dy, int32_t sx, int32_t sy, int32_t sw, int32_t sh, bool trans = false);
 		//Version of same that accepts a rectangle in the source bitmap too.
 //	bool Blit(Bitmap *bmp){
 //		if(bmp) return Blit(bmp->Data(), bmp->Width(), bmp->Height(), bmp->Pitch());
 //		return false;
 //	};
-	bool Blit(Bitmap *bmp, int dx = 0, int dy = 0, bool trans = false){
+	bool Blit(Bitmap *bmp, int32_t dx = 0, int32_t dy = 0, bool trans = false){
 		if(bmp) return Blit(bmp->Data(), bmp->Width(), bmp->Height(), bmp->Pitch(), dx, dy, trans);
 		return false;
 	};
-	bool Blit(Bitmap *bmp, int dx, int dy, int sx, int sy, int sw, int sh, bool trans = false){
+	bool Blit(Bitmap *bmp, int32_t dx, int32_t dy, int32_t sx, int32_t sy, int32_t sw, int32_t sh, bool trans = false){
 		if(bmp) return Blit(bmp->Data(), bmp->Width(), bmp->Height(), bmp->Pitch(), dx, dy, sx, sy, sw, sh, trans);
 		return false;
 	};
-	bool BlitRaw(void *dest, int pitch, int insetx, int insety, int w, int h, bool trans = false);
+	bool BlitRaw(void *dest, int32_t pitch, int32_t insetx, int32_t insety, int32_t w, int32_t h, bool trans = false);
 		//Unclipped blit.  Provide top-left pointer of where bitmap should land.
-	bool BlitRaw8to32(uint32_t *dest, int dpitch, int insetx, int insety, int w, int h, bool trans = false, ARGB *argb = NULL);
+	bool BlitRaw8to32(uint32_t *dest, int32_t dpitch, int32_t insetx, int32_t insety, int32_t w, int32_t h, bool trans = false, ARGB *argb = NULL);
 		//Unclipped blit from 8bit source to 32bit dest using supplied ARGB table.
-	bool Quantize32to8(Bitmap *destb, PaletteEntry *pe = NULL, int cols = 256, int prequantize = 0);	//Destination palette.  prequantize is number of low bits to throw out in each color to speed quantization.
+	bool Quantize32to8(Bitmap *destb, PaletteEntry *pe = NULL, int32_t cols = 256, int32_t prequantize = 0);	//Destination palette.  prequantize is number of low bits to throw out in each color to speed quantization.
 	bool Quantize32to8HighQuality(Bitmap *destb, PaletteEntry *pe = NULL);
 		//High quality (slow) color quantization.
-	bool MakeMipMap(Bitmap *Source, MixTable *Mix, int mixmode = MIX50, bool trans = false);
+	bool MakeMipMap(Bitmap *Source, MixTable *Mix, int32_t mixmode = MIX50, bool trans = false);
 		//Creates half-sized (with mixing) image in current bitmap of source bitmap.
 		//Set mixmode to the define for the type of mixing you would like.  Higher
 		//values (e.g. MIX75) will bias towards the top-left pixel of each box sampled
@@ -272,17 +272,17 @@ public:
 	};
 	bool LoadPackedBMP(void *bmi){ return false; }//::LoadPackedBMP(bmi, this, ppe); };
 public:
-	int Width(){ return width;};
-	int Height(){ return height;};
-	int Pitch(){ return pitch;};
-	int BPP(){ return bpp;};
+	int32_t Width(){ return width;};
+	int32_t Height(){ return height;};
+	int32_t Pitch(){ return pitch;};
+	int32_t BPP(){ return bpp;};
 	unsigned char *Data(){ return data;};
-	int XHot(){ return xhot; };
-	int YHot(){ return yhot; };
-	void Hotspot(int x, int y){ xhot = x; yhot = y; };
-	int LineL(int n){ if(n >= 0 && n < nLines) return LineLeft[n]; return 0; };
+	int32_t XHot(){ return xhot; };
+	int32_t YHot(){ return yhot; };
+	void Hotspot(int32_t x, int32_t y){ xhot = x; yhot = y; };
+	int32_t LineL(int32_t n){ if(n >= 0 && n < nLines) return LineLeft[n]; return 0; };
 		//Number of linear transparent pixels on left of specified line.
-	int LineR(int n){ if(n >= 0 && n < nLines) return LineRight[n]; return 0; };
+	int32_t LineR(int32_t n){ if(n >= 0 && n < nLines) return LineRight[n]; return 0; };
 		//Ditto the right side of line, moving left.
 };
 
@@ -295,7 +295,7 @@ class Image : public Bitmap{
 friend class ImageSet;
 private:
 	Bitmap *bmp;	//Array/pointer for extra bitmaps.
-	int nBitmaps;	//Starts at 1, and includes parent bitmap object.
+	int32_t nBitmaps;	//Starts at 1, and includes parent bitmap object.
 public:
 	//Note, overloaded copy constructors and assignment operators don't automatically
 	//copy the base class!  Be sure to manually copy it, if copy/assign ops are added
@@ -303,7 +303,7 @@ public:
 	PaletteEntry pe[256];
 	unsigned char remap[256];
 	ARGB tcremap[256];	//High or True-Color reverse indexing table for 8bit images.
-	Image(int n = 0) : bmp(NULL), nBitmaps(1) {
+	Image(int32_t n = 0) : bmp(NULL), nBitmaps(1) {
 		ppe = pe;
 		premap = remap;
 		InitRemapTable();
@@ -322,14 +322,14 @@ public:
 		if(&img == this) return *this;	//Identity.
 		InitSet(img.nBitmaps);
 	//	if(img.nBitmaps > 1){
-		for(int i = 0; i < (nBitmaps - 0); i++) (*this)[i] = img[i];// (*this)[i] = img[i];
+		for(int32_t i = 0; i < (nBitmaps - 0); i++) (*this)[i] = img[i];// (*this)[i] = img[i];
 	//	}
 		SetPalette(img.pe);
 		SetRemapTable(img.remap);
 	//	*((Bitmap*)this) = *((Bitmap*)&img);	//Copy underlying bitmap.
 		return *this;
 	};
-	Bitmap &operator[](int n) const {
+	Bitmap &operator[](int32_t n) const {
 		if(n > 0 && n < nBitmaps && bmp) return bmp[n - 1];
 		return *((Bitmap*)this);
 	};
@@ -343,13 +343,13 @@ public:
 		InitPalette();
 		Bitmap::Free();
 	};
-	bool InitSet(int n){	//Ok, now InitSet does NOT harm the original bitmap!!
+	bool InitSet(int32_t n){	//Ok, now InitSet does NOT harm the original bitmap!!
 		FreeSet();
 		if(n == 1) return true;
 		if(n > 1){
 			if((bmp = new Bitmap[n - 1])){
 				nBitmaps = n;
-				for(int i = 0; i < (n - 1); i++){
+				for(int32_t i = 0; i < (n - 1); i++){
 					bmp[i].ppe = pe;
 					bmp[i].premap = remap;
 				}
@@ -358,9 +358,9 @@ public:
 		}
 		return false;
 	};
-	bool InitBitmaps(int x, int y, int bpp){
+	bool InitBitmaps(int32_t x, int32_t y, int32_t bpp){
 		if(nBitmaps > 0){
-			for(int i = 0; i < nBitmaps; i++){
+			for(int32_t i = 0; i < nBitmaps; i++){
 				(*this)[i].ppe = pe;
 				(*this)[i].premap = remap;
 				if(false == (*this)[i].Init(x, y, bpp)) return false;
@@ -369,35 +369,35 @@ public:
 		}
 		return false;
 	};
-	bool InitSet(int n, int x, int y, int bpp){
+	bool InitSet(int32_t n, int32_t x, int32_t y, int32_t bpp){
 		if(InitSet(n) && InitBitmaps(x, y, bpp)) return true;
 		else return false;
 	};
-	int Bitmaps(){ return nBitmaps; };
+	int32_t Bitmaps(){ return nBitmaps; };
 	void InitPalette(){
 		std::memset(pe, 0, sizeof(pe));
 		InitRemapTable();
 	};
-	bool Init(int x, int y, int bpp = 8){
+	bool Init(int32_t x, int32_t y, int32_t bpp = 8){
 		InitPalette();
 		return Bitmap::Init(x, y, bpp);
 	};
 	bool SetPalette(const PaletteEntry *newpe){
 		if(newpe){
-			for(int i = 0; i < 256; i++) pe[i] = newpe[i];
+			for(int32_t i = 0; i < 256; i++) pe[i] = newpe[i];
 			return true;
 		}
 		return false;
 	};
 	bool GetPalette(PaletteEntry *newpe){
 		if(newpe){
-			for(int i = 0; i < 256; i++) newpe[i] = pe[i];
+			for(int32_t i = 0; i < 256; i++) newpe[i] = pe[i];
 			return true;
 		}
 		return false;
 	};
 	bool InitRemapTable(){
-		for(int i = 0; i < 256; i++) remap[i] = i;	//1-1 remap table.
+		for(int32_t i = 0; i < 256; i++) remap[i] = i;	//1-1 remap table.
 		return true;
 	};
 	bool InitRemapTable(const PaletteEntry *newpe){
@@ -418,7 +418,7 @@ public:
 	bool Remap(const PaletteEntry *newpe = NULL){	//Remaps actual image bits of all contained Bitmaps.
 		bool ret = true;
 		if(newpe) InitRemapTable(newpe);
-		for(int i = 0; i < nBitmaps; i++){
+		for(int32_t i = 0; i < nBitmaps; i++){
 			if(false == (*this)[i].Remap()) ret = false;
 		}	//Leave setting the palette to the one remapped to up to the app.
 		if(newpe){	//Ok, I lied, set the palette and init the remap table, if a palette is provided.
@@ -430,7 +430,7 @@ public:
 	bool Remap(const InversePal *inv){	//Remaps actual image bits of all contained Bitmaps.
 		bool ret = true;
 		if(inv) InitRemapTable(inv);
-		for(int i = 0; i < nBitmaps; i++){ if(false == (*this)[i].Remap()) ret = false; }
+		for(int32_t i = 0; i < nBitmaps; i++){ if(false == (*this)[i].Remap()) ret = false; }
 		if(inv){
 			InitRemapTable();
 			SetPalette(inv->pe);
@@ -439,36 +439,36 @@ public:
 	};
 	bool RotateRight90(){
 	//	if(bmp && nBitmaps){
-		for(int n = 0; n < nBitmaps; n++) if(false == (*this)[n].RotateRight90()) return false;
+		for(int32_t n = 0; n < nBitmaps; n++) if(false == (*this)[n].RotateRight90()) return false;
 		return true;
 	//	}
 	//	return false;
 	};
 	bool RotateLeft90(){
 	//	if(bmp && nBitmaps){
-		for(int n = 0; n < nBitmaps; n++) if(false == (*this)[n].RotateLeft90()) return false;
+		for(int32_t n = 0; n < nBitmaps; n++) if(false == (*this)[n].RotateLeft90()) return false;
 		return true;
 	//	}
 	//	return false;
 	};
 	bool ScaleToPow2(){
 	//	if(bmp && nBitmaps){
-		for(int n = 0; n < nBitmaps; n++) if(false == (*this)[n].ScaleToPow2()) return false;
+		for(int32_t n = 0; n < nBitmaps; n++) if(false == (*this)[n].ScaleToPow2()) return false;
 		return true;
 	//	}
 	//	return false;
 	};
 	bool AnalyzeLines(){
 	//	if(bmp && nBitmaps){
-		for(int n = 0; n < nBitmaps; n++) if(false == (*this)[n].AnalyzeLines()) return false;
+		for(int32_t n = 0; n < nBitmaps; n++) if(false == (*this)[n].AnalyzeLines()) return false;
 		return true;
 	//	}
 	//	return false;
 	};
-	bool MakeMipMap(MixTable *Mix, int mixmode = MIX50, bool trans = false){
+	bool MakeMipMap(MixTable *Mix, int32_t mixmode = MIX50, bool trans = false){
 		if(InitSet(HiBit(std::max(Width(), Height())))){
 	//	if(bmp && nBitmaps){
-			for(int n = 1; n < nBitmaps; n++) if(false == (*this)[n].MakeMipMap(&(*this)[n - 1], Mix, mixmode, trans)) return false;
+			for(int32_t n = 1; n < nBitmaps; n++) if(false == (*this)[n].MakeMipMap(&(*this)[n - 1], Mix, mixmode, trans)) return false;
 			return true;
 		}
 		return false;
@@ -482,9 +482,9 @@ class ImageSet : public Image {
 private:
 	Image *img;
 	CStr *names;
-	int nImages;
+	int32_t nImages;
 public:
-	ImageSet(int n = 0) : img(NULL), names(NULL), nImages(1) {
+	ImageSet(int32_t n = 0) : img(NULL), names(NULL), nImages(1) {
 		if(n > 1) InitSet(n);
 	};
 	~ImageSet(){
@@ -496,17 +496,17 @@ public:
 	ImageSet &operator=(const ImageSet &img){
 		if(&img == this) return *this;
 		InitSet(img.Images());
-		for(int n = 0; n < img.Images(); n++) (*this)[n] = img[n];
+		for(int32_t n = 0; n < img.Images(); n++) (*this)[n] = img[n];
 		if(names && img.names && nImages == img.Images()){
-			for(int n = 0; n < img.Images(); n++) names[n] = img.names[n];
+			for(int32_t n = 0; n < img.Images(); n++) names[n] = img.names[n];
 		}
 		return *this;
 	};
-	Image &operator[](int n) const {
+	Image &operator[](int32_t n) const {
 		if(n > 0 && n < nImages && img) return img[n - 1];
 		return *((Image*)this);
 	};
-	int Images() const { return nImages; };
+	int32_t Images() const { return nImages; };
 	void FreeSet(){
 		if(img) delete [] img;
 		img = NULL;
@@ -518,7 +518,7 @@ public:
 		FreeSet();
 		Image::Free();
 	};
-	bool InitSet(int n){	//Ok, now InitSet does NOT harm the original bitmap!!
+	bool InitSet(int32_t n){	//Ok, now InitSet does NOT harm the original bitmap!!
 		FreeSet();
 		if(n > 0){
 			names = new CStr[n];
@@ -534,13 +534,13 @@ public:
 		}
 		return false;
 	};
-	CStr GetName(int n){
+	CStr GetName(int32_t n){
 		if(names && n >= 0 && n < nImages){
 			return names[n];
 		}
 		return CStr();
 	};
-	bool SetName(int n, const char *s){
+	bool SetName(int32_t n, const char *s){
 		if(names && s && n >= 0 && n < nImages){
 			names[n] = s;
 			return true;
@@ -549,62 +549,62 @@ public:
 	};
 	Image *FindImage(const char *s){
 		if(names){
-			for(int n = 0; n < nImages; n++){
+			for(int32_t n = 0; n < nImages; n++){
 				if(CmpLower(s, names[n])) return &(*this)[n];
 			}
 		}
 		return NULL;
 	};
-	int FindImageIndex(const char *s){
+	int32_t FindImageIndex(const char *s){
 		if(names){
-			for(int n = 0; n < nImages; n++){
+			for(int32_t n = 0; n < nImages; n++){
 				if(CmpLower(s, names[n])) return n;
 			}
 		}
 		return -1;
 	};
 	bool InitRemapTable(){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable()) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable()) return false;
 		return true;
 	};
 	bool InitRemapTable(const PaletteEntry *newpe){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable(newpe)) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable(newpe)) return false;
 		return true;
 	};
 	bool InitRemapTable(const InversePal *inv){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable(inv)) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].InitRemapTable(inv)) return false;
 		return true;
 	};
 	bool SetRemapTable(const unsigned char *rmp){	//rmp is 256 element array.
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].SetRemapTable(rmp)) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].SetRemapTable(rmp)) return false;
 		return true;
 	};
 	bool Remap(const PaletteEntry *newpe = NULL){	//Remaps actual image bits of all contained Bitmaps.
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].Remap(newpe)) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].Remap(newpe)) return false;
 		return true;
 	};
 	bool Remap(const InversePal *inv){	//Remaps actual image bits of all contained Bitmaps.
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].Remap(inv)) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].Remap(inv)) return false;
 		return true;
 	};
 	bool RotateRight90(){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].RotateRight90()) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].RotateRight90()) return false;
 		return true;
 	};
 	bool RotateLeft90(){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].RotateLeft90()) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].RotateLeft90()) return false;
 		return true;
 	};
 	bool ScaleToPow2(){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].ScaleToPow2()) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].ScaleToPow2()) return false;
 		return true;
 	};
 	bool AnalyzeLines(){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].AnalyzeLines()) return false;
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].AnalyzeLines()) return false;
 		return true;
 	};
-	bool MakeMipMap(MixTable *Mix, int mixmode = MIX50, bool trans = false){
-		for(int n = 0; n < nImages; n++) if(false == (*this)[n].MakeMipMap(Mix, mixmode, trans)) return false;
+	bool MakeMipMap(MixTable *Mix, int32_t mixmode = MIX50, bool trans = false){
+		for(int32_t n = 0; n < nImages; n++) if(false == (*this)[n].MakeMipMap(Mix, mixmode, trans)) return false;
 		return true;
 	};
 	bool LoadSet(FILE *f);

@@ -33,12 +33,12 @@ extern "C" {
 
 };
 
-inline int WriteLong(int n, FILE *f){ return fwrite(&n, sizeof(int), 1, f); }
-inline int ReadLong(FILE *f){ int n = 0; fread(&n, sizeof(int), 1, f); return n; }
+inline int32_t WriteLong(int32_t n, FILE *f){ return fwrite(&n, sizeof(int32_t), 1, f); }
+inline int32_t ReadLong(FILE *f){ int32_t n = 0; fread(&n, sizeof(int32_t), 1, f); return n; }
 
 bool BGRAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 	if(argb && pe){
-		for(int i = 0; i < 256; i++){
+		for(int32_t i = 0; i < 256; i++){
 			argb[i].argb = (uint32_t)((pe[i].peRed <<16) | (pe[i].peGreen <<8) | pe[i].peBlue | (alpha <<24));
 		}
 		return true;
@@ -47,7 +47,7 @@ bool BGRAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 }
 bool RGBAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 	if(argb && pe){
-		for(int i = 0; i < 256; i++){
+		for(int32_t i = 0; i < 256; i++){
 			argb[i].argb = (uint32_t)((pe[i].peRed) | (pe[i].peGreen <<8) | (pe[i].peBlue <<16) | (alpha <<24));
 		}
 		return true;
@@ -58,7 +58,7 @@ bool RGBAfromPE(ARGB *argb, PaletteEntry *pe, unsigned char alpha){
 bool MakeRemapTable(unsigned char *Remap, const PaletteEntry *oldpe, const PaletteEntry *pe){
 	if(Remap == NULL || oldpe == NULL || pe == NULL) return false;
 
-	int r, g, b, c, k, diff, t;
+	int32_t r, g, b, c, k, diff, t;
 	unsigned char col;
 
 	for(c = 0; c < 256; c++){	//First create remap table from the two palettes.
@@ -81,7 +81,7 @@ bool MakeRemapTable(unsigned char *Remap, const PaletteEntry *oldpe, const Palet
 }
 bool MakeRemapTable(unsigned char *Remap, const PaletteEntry *oldpe, const InversePal *inv){
 	if(Remap == NULL || oldpe == NULL || inv == NULL) return false;
-	int c;
+	int32_t c;
 	for(c = 0; c < 256; c++){
 		Remap[c] = inv->Lookup(oldpe[c].peRed, oldpe[c].peGreen, oldpe[c].peBlue);
 	}
@@ -142,7 +142,7 @@ bool LoadBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe){
 	BitmapInfoHeader    BMPFileInfo;
 
 	RGBQuad             Palette[256];
-	int BPP;
+	int32_t BPP;
 
 	if(file == NULL || bmp == NULL) return false;
 
@@ -156,7 +156,7 @@ bool LoadBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe){
 	//Nope, can handle 24 and 32 bits now...
 	memset(Palette, 0, sizeof(Palette));
 	if((BPP = BMPFileInfo.biBitCount) == 8){// return false;
-		int NumCols = BMPFileInfo.biClrUsed;	//Check the actual number of palette entries.
+		int32_t NumCols = BMPFileInfo.biClrUsed;	//Check the actual number of palette entries.
 		if(NumCols == 0) NumCols = 256;
 
 		//get the BMP palette
@@ -168,13 +168,13 @@ bool LoadBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe){
 	//read BMP into memory
 	fseek(file, startpos, SEEK_SET);
 	fseek(file, BMPFileHead.bfOffBits, SEEK_CUR);
-	for(int y = bmp->Height() - 1; y >= 0; y--){
+	for(int32_t y = bmp->Height() - 1; y >= 0; y--){
 		fread(bmp->Data() + y * bmp->Pitch(), sizeof(unsigned char), bmp->Pitch(), file);
 	}
 
 	//Copy palette from file.
 	if(pe){
-		for(int i = 0; i < 256; i++){
+		for(int32_t i = 0; i < 256; i++){
 			pe[i].peRed = Palette[i].rgbRed;
 			pe[i].peGreen = Palette[i].rgbGreen;
 			pe[i].peBlue = Palette[i].rgbBlue;
@@ -186,7 +186,7 @@ bool LoadPackedBMP(void *bmi, Bitmap *bmp, PaletteEntry *pe){
 //	BitmapFileHeader    BMPFileHead;
 	BitmapInfoHeader	*BMPFileInfo;
 	RGBQuad             Palette[256];
-	int NumCols, BPP;
+	int32_t NumCols, BPP;
 
 	if(bmi == NULL || bmp == NULL) return false;
 
@@ -207,15 +207,15 @@ bool LoadPackedBMP(void *bmi, Bitmap *bmp, PaletteEntry *pe){
 	if(!bmp->Init(BMPFileInfo->biWidth, std::abs(BMPFileInfo->biHeight), BPP)) return false;
 
 	//read BMP into memory
-	int sy = 0;
-	for(int y = bmp->Height() - 1; y >= 0; y--){
+	int32_t sy = 0;
+	for(int32_t y = bmp->Height() - 1; y >= 0; y--){
 		memcpy(bmp->Data() + y * bmp->Pitch(), (char*)bmi + BMPFileInfo->biSize + NumCols * sizeof(RGBQuad) +
 			sy++ * bmp->Pitch(), bmp->Pitch());
 	}
 
 	//Copy palette from file.
 	if(pe){
-		for(int i = 0; i < 256; i++){
+		for(int32_t i = 0; i < 256; i++){
 			pe[i].peRed = Palette[i].rgbRed;
 			pe[i].peGreen = Palette[i].rgbGreen;
 			pe[i].peBlue = Palette[i].rgbBlue;
@@ -269,7 +269,7 @@ bool SaveBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe, bool noflip){
 	if(false == fwrite(&BMPFileInfo, sizeof(BMPFileInfo), 1, file)) return false;
 
 	if(bmp->BPP() == 8){
-		for(int i = 0; i < 256; i++){
+		for(int32_t i = 0; i < 256; i++){
 			if(pe){
 				Palette[i].rgbRed = pe[i].peRed;
 				Palette[i].rgbGreen = pe[i].peGreen;
@@ -282,11 +282,11 @@ bool SaveBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe, bool noflip){
 	}
 
 	if(noflip){
-		for(int y = 0; y < bmp->Height(); y++){
+		for(int32_t y = 0; y < bmp->Height(); y++){
 			fwrite(bmp->Data() + y * bmp->Pitch(), sizeof(unsigned char), bmp->Pitch(), file);
 		}
 	}else{
-		for(int y = bmp->Height() - 1; y >= 0; y--){
+		for(int32_t y = bmp->Height() - 1; y >= 0; y--){
 			fwrite(bmp->Data() + y * bmp->Pitch(), sizeof(unsigned char), bmp->Pitch(), file);
 		}
 	}
@@ -309,8 +309,8 @@ Bitmap::Bitmap(const Bitmap &bmp) : data(NULL), LineLeft(NULL), LineRight(NULL),
 			Suck(bmp.data, bmp.width, bmp.height, bmp.pitch);
 			if(bmp.nLines > 0){
 				if(InitAnalyze()){
-					memcpy(LineLeft, bmp.LineLeft, sizeof(int) * nLines);
-					memcpy(LineRight, bmp.LineRight, sizeof(int) * nLines);
+					memcpy(LineLeft, bmp.LineLeft, sizeof(int32_t) * nLines);
+					memcpy(LineRight, bmp.LineRight, sizeof(int32_t) * nLines);
 				}
 			}
 		}
@@ -329,8 +329,8 @@ Bitmap& Bitmap::operator=(const Bitmap &bmp){
 		//	premap = bmp.premap;
 			if(bmp.nLines > 0){
 				if(InitAnalyze()){
-					memcpy(LineLeft, bmp.LineLeft, sizeof(int) * nLines);
-					memcpy(LineRight, bmp.LineRight, sizeof(int) * nLines);
+					memcpy(LineLeft, bmp.LineLeft, sizeof(int32_t) * nLines);
+					memcpy(LineRight, bmp.LineRight, sizeof(int32_t) * nLines);
 				}
 			}
 		}
@@ -345,7 +345,7 @@ void Bitmap::MakeMasks(){
 	ymask = (1 << yshift) - 1;
 }
 */
-bool Bitmap::Init(int w, int h, int b){	//Creates an empty bitmap.
+bool Bitmap::Init(int32_t w, int32_t h, int32_t b){	//Creates an empty bitmap.
 	Free();
 	if(w > 0 && h > 0 && (b == 8 || b == 16 || b == 24 || b == 32)){
 		width = w;
@@ -379,7 +379,7 @@ void Bitmap::Free(){
 }
 bool Bitmap::Clear(unsigned char color){
 	if(data && width > 0 && height > 0){
-		for(int y = 0; y < height; y++){
+		for(int32_t y = 0; y < height; y++){
 			memset(data + y * pitch, color, width * (bpp >>3));
 		}
 		flags |= BFLAG_CLEARED;
@@ -392,41 +392,41 @@ bool Bitmap::ColorCorrect(float rgain, float ggain, float bgain, float again,
 					float rscale, float gscale, float bscale, float ascale,
 					float rshift, float gshift, float bshift, float ashift){
 	const float i255 = 1.0f / 255.0f;
-	int t;
+	int32_t t;
 	if(bpp == 8 && ppe){
-		for(int i = 0; i < 256; i++){
-			t = (int)((Bias(rbias, Gain(rgain, (float)ppe[i].peRed * i255)) * rscale + rshift) * 255.0f);
+		for(int32_t i = 0; i < 256; i++){
+			t = (int32_t)((Bias(rbias, Gain(rgain, (float)ppe[i].peRed * i255)) * rscale + rshift) * 255.0f);
 			ppe[i].peRed = std::min(std::max(t, 0), 255);
-			t = (int)((Bias(gbias, Gain(ggain, (float)ppe[i].peGreen * i255)) * gscale + gshift) * 255.0f);
+			t = (int32_t)((Bias(gbias, Gain(ggain, (float)ppe[i].peGreen * i255)) * gscale + gshift) * 255.0f);
 			ppe[i].peGreen = std::min(std::max(t, 0), 255);
-			t = (int)((Bias(bbias, Gain(bgain, (float)ppe[i].peBlue * i255)) * bscale + bshift) * 255.0f);
+			t = (int32_t)((Bias(bbias, Gain(bgain, (float)ppe[i].peBlue * i255)) * bscale + bshift) * 255.0f);
 			ppe[i].peBlue = std::min(std::max(t, 0), 255);
 		}
 		flags |= BFLAG_COLORCORRECTED;
 		return true;
 	}else if((bpp == 24 || bpp == 32) && data && width > 0 && height > 0){
 		unsigned char tab[4][256];
-		for(int i = 0; i < 256; i++){
-			t = (int)((Bias(bbias, Gain(bgain, (float)i * i255)) * bscale + bshift) * 255.0f);
+		for(int32_t i = 0; i < 256; i++){
+			t = (int32_t)((Bias(bbias, Gain(bgain, (float)i * i255)) * bscale + bshift) * 255.0f);
 			tab[0][i] = std::min(std::max(t, 0), 255);
-			t = (int)((Bias(gbias, Gain(ggain, (float)i * i255)) * gscale + gshift) * 255.0f);
+			t = (int32_t)((Bias(gbias, Gain(ggain, (float)i * i255)) * gscale + gshift) * 255.0f);
 			tab[1][i] = std::min(std::max(t, 0), 255);
-			t = (int)((Bias(rbias, Gain(rgain, (float)i * i255)) * rscale + rshift) * 255.0f);
+			t = (int32_t)((Bias(rbias, Gain(rgain, (float)i * i255)) * rscale + rshift) * 255.0f);
 			tab[2][i] = std::min(std::max(t, 0), 255);
-			t = (int)((Bias(abias, Gain(again, (float)i * i255)) * ascale + ashift) * 255.0f);
+			t = (int32_t)((Bias(abias, Gain(again, (float)i * i255)) * ascale + ashift) * 255.0f);
 			tab[3][i] = std::min(std::max(t, 0), 255);
 		}
-		for(int y = 0; y < height; y++){
+		for(int32_t y = 0; y < height; y++){
 			unsigned char *p = data + pitch * y;
 			if(bpp == 24){
-				for(int x = width; x; x--){
+				for(int32_t x = width; x; x--){
 					p[0] = tab[0][p[0]];
 					p[1] = tab[1][p[1]];
 					p[2] = tab[2][p[2]];
 					p += 3;
 				}
 			}else{
-				for(int x = width; x; x--){
+				for(int32_t x = width; x; x--){
 					p[0] = tab[0][p[0]];
 					p[1] = tab[1][p[1]];
 					p[2] = tab[2][p[2]];
@@ -449,7 +449,7 @@ bool Bitmap::GammaCorrect(const float fGamma)
 	if(fLastGamma != fGamma)
 	{
 		float fInvGamma = 1.0f / fGamma;
-		for(int i = 0; i < 256; i++)
+		for(int32_t i = 0; i < 256; i++)
 		{
 			if(i < 5)
 				GammaTable[i] = 4.5f * float(i);
@@ -460,10 +460,10 @@ bool Bitmap::GammaCorrect(const float fGamma)
 
 	if(bpp == 32 && data)
 	{
-		for(int y = 0; y < height; y++)
+		for(int32_t y = 0; y < height; y++)
 		{
 			unsigned char* tmpBase = data + y * pitch;
-			for(int x = 0; x < width * 4; x++)
+			for(int32_t x = 0; x < width * 4; x++)
 			{
 				tmpBase[x] = GammaTable[tmpBase[x]];
 			}
@@ -476,14 +476,14 @@ bool Bitmap::To32Bit(PaletteEntry *pe){
 	if(!pe) pe = ppe;	//Null param, try stored palette pointer.
 	if(bpp == 32) return true;
 	if(data && width > 0 && height > 0 && (bpp == 8 || bpp == 24)){
-		int NewPitch = CalcPitch(width, 32);
+		int32_t NewPitch = CalcPitch(width, 32);
 		unsigned char *newdata, *tdata, *tnewdata;
 		newdata = (unsigned char*)malloc(CalcLength(width, height, 32));
 		if(newdata){
-			for(int y = 0; y < height; y++){
+			for(int32_t y = 0; y < height; y++){
 				tdata = (data + y * pitch);
 				tnewdata = (newdata + y * NewPitch);
-				for(int x = 0; x < width; x++){
+				for(int32_t x = 0; x < width; x++){
 					if(bpp == 8){	//8bit original.
 						if(pe){
 							*tnewdata++ = pe[*tdata].peBlue;
@@ -516,14 +516,14 @@ bool Bitmap::To32Bit(PaletteEntry *pe){
 
 bool Bitmap::RotateRight90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 	if(data && width > 0 && height > 0 && bpp == 8){
-		int NewWidth = height, NewHeight = width;
-		int NewPitch = (NewWidth + 3) & (~3);
+		int32_t NewWidth = height, NewHeight = width;
+		int32_t NewPitch = (NewWidth + 3) & (~3);
 	//	if(NewWidth % 4 != 0) NewPitch = NewWidth + 4 - NewWidth % 4;
 	//		else NewPitch = NewWidth;
 		unsigned char *newdata = (unsigned char*)malloc(NewPitch * NewHeight);
 		if(newdata){
-			for(int y = 0; y < NewHeight; y++){
-				for(int x = 0; x < NewWidth; x++){
+			for(int32_t y = 0; y < NewHeight; y++){
+				for(int32_t x = 0; x < NewWidth; x++){
 					*(newdata + x + y * NewPitch) = *(data + y + pitch * (height - 1) - x * pitch);
 				}
 			}
@@ -540,14 +540,14 @@ bool Bitmap::RotateRight90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 }
 bool Bitmap::RotateLeft90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 	if(data && width > 0 && height > 0 && bpp == 8){
-		int NewWidth = height, NewHeight = width;
-		int NewPitch = (NewWidth + 3) & (~3);
+		int32_t NewWidth = height, NewHeight = width;
+		int32_t NewPitch = (NewWidth + 3) & (~3);
 	//	if(NewWidth % 4 != 0) NewPitch = NewWidth + 4 - NewWidth % 4;
 	//		else NewPitch = NewWidth;
 		unsigned char *newdata = (unsigned char*)malloc(NewPitch * NewHeight);
 		if(newdata ){
-			for(int y = 0; y < NewHeight; y++){
-				for(int x = 0; x < NewWidth; x++){
+			for(int32_t y = 0; y < NewHeight; y++){
+				for(int32_t x = 0; x < NewWidth; x++){
 					*(newdata + x + y * NewPitch) = *(data + (width - 1) - y + x * pitch);
 				}
 			}
@@ -564,39 +564,39 @@ bool Bitmap::RotateLeft90(){	//NOTE:  Function only works with 8 BPP Bitmaps!
 }
 bool Bitmap::ScaleToPow2(){
 	if(data && width > 0 && height > 0){
-		int NewWidth = 1 << HiBit(width);
-		int NewHeight = 1 << HiBit(height);
+		int32_t NewWidth = 1 << HiBit(width);
+		int32_t NewHeight = 1 << HiBit(height);
 		//(NewWidth * height) / width;
 		if(NewWidth == width && NewHeight == height) return true;	//Already correct.
 		return Scale(NewWidth, NewHeight);
 	}
 	return false;
 }
-bool Bitmap::Scale(int NewWidth, int NewHeight, bool lerp){
+bool Bitmap::Scale(int32_t NewWidth, int32_t NewHeight, bool lerp){
 	if(data && width > 0 && height > 0){// && bpp == 8){
-		int NewPitch = CalcPitch(NewWidth, bpp);//(NewWidth + 3) & (~3);
+		int32_t NewPitch = CalcPitch(NewWidth, bpp);//(NewWidth + 3) & (~3);
 		unsigned char *newdata;
 		if(NewWidth > 0 && NewHeight > 0 && NewPitch > 0 && (newdata = (unsigned char*)malloc(CalcLength(NewWidth, NewHeight, bpp)))){//NewPitch * NewHeight))){
-			int Dx = (width <<16) / NewWidth;
-			int Dy = (height <<16) / NewHeight;
-			int SrcX = 0, SrcY = 0;
+			int32_t Dx = (width <<16) / NewWidth;
+			int32_t Dy = (height <<16) / NewHeight;
+			int32_t SrcX = 0, SrcY = 0;
 			if(lerp && bpp >= 24){	//Right now, this will only lerp when down-sizing...
-				for(int y = 0; y < NewHeight; y++){
+				for(int32_t y = 0; y < NewHeight; y++){
 					SrcX = 0;
 					unsigned char *td = newdata + y * NewPitch;
-					int bts = bpp / 8;
-					int h2 = ((SrcY + Dy) >>16) - (SrcY >>16);
+					int32_t bts = bpp / 8;
+					int32_t h2 = ((SrcY + Dy) >>16) - (SrcY >>16);
 					h2 = std::min(h2, height - (SrcY >>16));
-					for(int x = 0; x < NewWidth; x++){
-						int w2 = ((SrcX + Dx) >>16) - (SrcX >>16);
+					for(int32_t x = 0; x < NewWidth; x++){
+						int32_t w2 = ((SrcX + Dx) >>16) - (SrcX >>16);
 						w2 = std::min(w2, width - (SrcX >>16));
-						int pxls = w2 * h2;
+						int32_t pxls = w2 * h2;
 						if(pxls > 0){
-							int accum[4] = {0, 0, 0, 0};	//Color accumulators.
+							int32_t accum[4] = {0, 0, 0, 0};	//Color accumulators.
 							unsigned char *ts1 = data + (SrcX >>16) * bts + (SrcY >>16) * pitch;
-							for(int y2 = h2; y2; y2--){
+							for(int32_t y2 = h2; y2; y2--){
 								unsigned char *ts2 = ts1;
-								for(int x2 = w2; x2; x2--){
+								for(int32_t x2 = w2; x2; x2--){
 									accum[0] += *ts2++;
 									accum[1] += *ts2++;
 									accum[2] += *ts2++;
@@ -604,12 +604,12 @@ bool Bitmap::Scale(int NewWidth, int NewHeight, bool lerp){
 								}
 								ts1 += pitch;
 							}
-							for(int z = 0; z < bts; z++){
+							for(int32_t z = 0; z < bts; z++){
 								*td++ = accum[z] / pxls;
 							}
 						}
 					//	ts = data + (SrcX >>16) * bts + (SrcY >>16) * pitch;
-					//	for(int z = bts; z; z--){
+					//	for(int32_t z = bts; z; z--){
 					//		*td++ = *ts++;
 					//	}
 					//	*(newdata + x + y * NewPitch) = *(data + (SrcX >>16) + (SrcY >>16) * pitch);
@@ -618,14 +618,14 @@ bool Bitmap::Scale(int NewWidth, int NewHeight, bool lerp){
 					SrcY += Dy;
 				}
 			}else{
-				for(int y = 0; y < NewHeight; y++){
+				for(int32_t y = 0; y < NewHeight; y++){
 					SrcX = 0;
 					unsigned char *td = newdata + y * NewPitch;
 					unsigned char *ts;
-					int bts = bpp / 8;
-					for(int x = 0; x < NewWidth; x++){
+					int32_t bts = bpp / 8;
+					for(int32_t x = 0; x < NewWidth; x++){
 						ts = data + (SrcX >>16) * bts + (SrcY >>16) * pitch;
-						for(int z = bts; z; z--){
+						for(int32_t z = bts; z; z--){
 							*td++ = *ts++;
 						}
 					//	*(newdata + x + y * NewPitch) = *(data + (SrcX >>16) + (SrcY >>16) * pitch);
@@ -645,10 +645,10 @@ bool Bitmap::Scale(int NewWidth, int NewHeight, bool lerp){
 	}
 	return false;
 }
-uint32_t Bitmap::GetPixel(int x, int y){
+uint32_t Bitmap::GetPixel(int32_t x, int32_t y){
 	if(data && x >= 0 && x < width && y >= 0 && y < height){
 		if(bpp == 8) return (uint32_t)*(data + y * pitch + x);
-		if(bpp == 16) return (uint32_t)*((unsigned short*)(data + y * pitch + x));
+		if(bpp == 16) return (uint32_t)*((uint16_t*)(data + y * pitch + x));
 		if(bpp == 24){
 			unsigned char *tp = data + y * pitch + x * 3;
 			return (uint32_t)tp[0] | ((uint32_t)tp[1] <<8) | ((uint32_t)tp[2] <<16);
@@ -657,11 +657,11 @@ uint32_t Bitmap::GetPixel(int x, int y){
 	}
 	return 0;
 }
-bool Bitmap::PutPixel(int x, int y, uint32_t pixel){
+bool Bitmap::PutPixel(int32_t x, int32_t y, uint32_t pixel){
 	if(data && x >= 0 && x < width && y >= 0 && y < height){
 		switch(bpp){
 		case 8 : *(data + y * pitch + x) = (unsigned char)pixel; break;
-		case 16 : *((unsigned short*)(data + y * pitch + x)) = (unsigned short)pixel; break;
+		case 16 : *((uint16_t*)(data + y * pitch + x)) = (uint16_t)pixel; break;
 		case 24 :
 			unsigned char *tp; tp = data + y * pitch + x * 3;
 			tp[0] = pixel & 255; tp[1] = (pixel >>8) & 255; tp[2] = (pixel >>16) & 255;
@@ -673,27 +673,27 @@ bool Bitmap::PutPixel(int x, int y, uint32_t pixel){
 	return false;
 }
 
-bool Bitmap::Suck(void *vsrc, int sw, int sh, int spitch, int sbpp){	//Works with 32bit, with proper pitches in bytes and widths in pixels.
+bool Bitmap::Suck(void *vsrc, int32_t sw, int32_t sh, int32_t spitch, int32_t sbpp){	//Works with 32bit, with proper pitches in bytes and widths in pixels.
 	unsigned char *src = (unsigned char*)vsrc;
 	if(sbpp <= 0) sbpp = bpp;	//Not entering value assumes identical bpps.
 	if(data && src && (sbpp == bpp || (sbpp >= 24 && bpp >= 24) || (bpp == 8 && sbpp >= 24))){	//Must be the same bpp, or both true color.  No mixing true and paletteded.
 		sw = std::min(sw, width);
 		sh = std::min(sh, height);
 		if(sw > 0 && sh > 0){
-			for(int y = 0; y < sh; y++){
+			for(int32_t y = 0; y < sh; y++){
 				if(sbpp == bpp){	//Bits per pixel match, so we just memcpy.
 					memcpy(data + y * pitch, src + y * spitch, sw * (bpp >>3));
 				}else{	//Time for the true-color mambo.  If one is 8 bit we're sunk!
-					int skips = (sbpp == 24 ? 0 : 1);
-					int skipd = (bpp == 24 ? 0 : 1);	//Alpha skipping?
+					int32_t skips = (sbpp == 24 ? 0 : 1);
+					int32_t skipd = (bpp == 24 ? 0 : 1);	//Alpha skipping?
 					unsigned char *sp = src + y * spitch, *dp = data + y * pitch;
 					if(bpp == 8){	//Do the grayscale convert.
-						for(int x = 0; x < sw; x++){
+						for(int32_t x = 0; x < sw; x++){
 							*dp++ = ((sp[0] + sp[1] + sp[2]) / 3);
 							sp += 3 + skips;
 						}
 					}else{	//Do the color copy.
-						for(int x = 0; x < sw; x++){
+						for(int32_t x = 0; x < sw; x++){
 							*dp++ = *sp++;
 							*dp++ = *sp++;
 							*dp++ = *sp++;
@@ -719,17 +719,17 @@ bool Bitmap::FlipH()
 		unsigned char*		dl;			// data pointer for the left side
 		unsigned char*		dr;			// data pointer for the right side
 
-		for(int y = 0; y < height; y++)
+		for(int32_t y = 0; y < height; y++)
 		{
 			dl = data + (y * pitch);
 			dr = dl + ((width - 1) * iNumBytes);
 
-			for(int x = 0; x < (width >> 1); x++)
+			for(int32_t x = 0; x < (width >> 1); x++)
 			{
 				if(dr == dl)
 					break;
 
-				for(int i = 0; i < iNumBytes; i++)
+				for(int32_t i = 0; i < iNumBytes; i++)
 				{
 					tmpByte = *dl;
 
@@ -753,15 +753,15 @@ bool Bitmap::FlipH()
 
 bool Bitmap::SuckARGB(Bitmap *bmp, ARGB *argb){
 	if(bmp && argb && bpp >= 16 && bmp->BPP() == 8 && data && bmp->Data()){
-		int sw = std::min(bmp->Width(), width);
-		int sh = std::min(bmp->Height(), height);
-		for(int y = 0; y < sh; y++){
+		int32_t sw = std::min(bmp->Width(), width);
+		int32_t sh = std::min(bmp->Height(), height);
+		for(int32_t y = 0; y < sh; y++){
 			unsigned char *dp = data + y * pitch, *sp = bmp->Data() + y * bmp->Pitch();
 			unsigned char *ta;
-			int bytes = bpp >>3;
-			for(int x = 0; x < sw; x++){
+			int32_t bytes = bpp >>3;
+			for(int32_t x = 0; x < sw; x++){
 				ta = (unsigned char*)&argb[*sp++];
-				for(int b = bytes; b > 0; b--) *dp++ = *ta++;
+				for(int32_t b = bytes; b > 0; b--) *dp++ = *ta++;
 			}
 		}
 		return true;
@@ -772,18 +772,18 @@ bool Bitmap::SuckARGB(Bitmap *bmp, ARGB *argb){
 //Clipped blitter, assumes entire Bitmap as source.
 //Uses Bitmap's HotSpot.
 //This SHOULD WORK with true color bitmaps, though transparency isn't supported!
-bool Bitmap::Blit(void *vdest, int dw, int dh, int dp, int dx, int dy, bool trans){
+bool Bitmap::Blit(void *vdest, int32_t dw, int32_t dh, int32_t dp, int32_t dx, int32_t dy, bool trans){
 	return Blit(vdest, dw, dh, dp, dx, dy, 0, 0, width, height, trans);
 }
-bool Bitmap::Blit(void *vdest, int dw, int dh, int dp, int dx, int dy,
-				 int sx, int sy, int sw, int sh, bool trans){
+bool Bitmap::Blit(void *vdest, int32_t dw, int32_t dh, int32_t dp, int32_t dx, int32_t dy,
+				 int32_t sx, int32_t sy, int32_t sw, int32_t sh, bool trans){
 	unsigned char *dest = (unsigned char*)vdest;
 	if(data && dest && dw > 0 && dh > 0){
 		//Initial values for rectangle to blit from Bitmap.
-		int inx = sx;//std::min(std::max(sx, 0), width);
-		int iny = sy;//std::min(std::max(sy, 0), height);
-		int w = std::min(std::max(sw, 0), width - inx);//width;
-		int h = std::min(std::max(sh, 0), height - iny);//height;
+		int32_t inx = sx;//std::min(std::max(sx, 0), width);
+		int32_t iny = sy;//std::min(std::max(sy, 0), height);
+		int32_t w = std::min(std::max(sw, 0), width - inx);//width;
+		int32_t h = std::min(std::max(sh, 0), height - iny);//height;
 		dx -= xhot;
 		dy -= yhot;
 		//Lets get clipping!
@@ -823,7 +823,7 @@ bool Bitmap::Blit(void *vdest, int dw, int dh, int dp, int dx, int dy,
 	return false;
 }
 //Unclipped blitter, allows partial area of Bitmap as source.
-bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int h, bool trans){
+bool Bitmap::BlitRaw(void *vdest, int32_t dpitch, int32_t insetx, int32_t insety, int32_t w, int32_t h, bool trans){
 	unsigned char *dest = (unsigned char*)vdest;
 //	if(data && dest && w > 0 && h > 0 && insetx >= 0 && insety >= 0 && w + insetx <= width && h + insety <= height){
 	if(data && dest && w > 0 && h > 0 && insetx >= 0 && insety >= 0){
@@ -831,7 +831,7 @@ bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int
 		if(h <= 0) h = height;
 		w = std::min(w, width - insetx);
 		h = std::min(h, height - insety);
-		int x, y;
+		int32_t x, y;
 	//	uint32_t *lsource, *ltsrc, *ltdst;
 		unsigned char *source, *tsrc, *tdst;
 		if(trans && (bpp == 8 || bpp == 16 || bpp == 32)){	//Transblit not supported on 24bit.
@@ -847,7 +847,7 @@ bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int
 					}
 				}else if(bpp == 16){
 					for(x = 0; x < w; x++){
-						if(((unsigned short*)tsrc)[x]) ((unsigned short*)tdst)[x] = ((unsigned short*)tsrc)[x];
+						if(((uint16_t*)tsrc)[x]) ((uint16_t*)tdst)[x] = ((uint16_t*)tsrc)[x];
 					//	tdst += 2; tsrc += 2;
 					}
 				}else{
@@ -870,14 +870,14 @@ bool Bitmap::BlitRaw(void *vdest, int dpitch, int insetx, int insety, int w, int
 	}
 	return false;
 }
-bool Bitmap::BlitRaw8to32(uint32_t *dest, int dpitch, int insetx, int insety, int w, int h, bool trans, ARGB *argb){
+bool Bitmap::BlitRaw8to32(uint32_t *dest, int32_t dpitch, int32_t insetx, int32_t insety, int32_t w, int32_t h, bool trans, ARGB *argb){
 	ARGB argb2[256];
 	if(!argb && ppe){
 		BGRAfromPE(argb2, ppe);
 		argb = argb2;
 	}
 	if(argb && bpp == 8 && data && dest && w > 0 && h > 0 && insetx >= 0 && insety >= 0 && w + insetx <= width && h + insety <= height){
-		int x, y;
+		int32_t x, y;
 		unsigned char *source, *tsrc;
 		uint32_t *tdst;
 	//	ARGB argb[256];
@@ -910,7 +910,7 @@ bool Bitmap::Quantize32to8HighQuality(Bitmap *destb, PaletteEntry *pe){
 			if(!pic) return 0;
 			unsigned char *tp = pic;
 			//
-			int y, x, i;
+			int32_t y, x, i;
 			for(y = 0; y < height; y++){
 				unsigned char *sl = data + y * pitch;
 				for(x = 0; x < width; x++){
@@ -950,7 +950,7 @@ bool Bitmap::Quantize32to8HighQuality(Bitmap *destb, PaletteEntry *pe){
 	}
 	return false;
 }
-bool Bitmap::Quantize32to8(Bitmap *destb, PaletteEntry *pe, int cols, int prequantize){
+bool Bitmap::Quantize32to8(Bitmap *destb, PaletteEntry *pe, int32_t cols, int32_t prequantize){
 	if(!destb) return false;
 	if(!pe) pe = destb->ppe;
 	if((bpp == 24 || bpp == 32) && data && width > 0 && height > 0 && destb && pe && cols > 0 && cols <= 256){
@@ -958,16 +958,16 @@ bool Bitmap::Quantize32to8(Bitmap *destb, PaletteEntry *pe, int cols, int prequa
 			destb->Init(width, height, 8);	//Make sure dest bitmap is compatible with our output.
 		}
 		if(destb->Data() && destb->BPP() == 8){
-			int x, y, w, h;
+			int32_t x, y, w, h;
 			PaletteEntry col;
 			ColorOctree oct;
 			unsigned char *sp, *dp;
-			int skip = (bpp == 24 ? 0 : 1);	//Bytes to skip over (alpha channel).
+			int32_t skip = (bpp == 24 ? 0 : 1);	//Bytes to skip over (alpha channel).
 			w = std::min(width, destb->Width());
 			h = std::min(height, destb->Height());
 			//
 			unsigned char pqm = 0xff;
-			for(int i = 0; i < std::min(prequantize, 8); i++) pqm = (pqm <<1) & 0xfe;
+			for(int32_t i = 0; i < std::min(prequantize, 8); i++) pqm = (pqm <<1) & 0xfe;
 			//First pass, collect colors.
 			for(y = 0; y < h; y++){
 				sp = data + y * pitch;
@@ -1021,16 +1021,16 @@ bool Bitmap::Quantize32to8(Bitmap *destb, PaletteEntry *pe, int cols, int prequa
 	return false;
 }
 
-bool Bitmap::MakeMipMap(Bitmap *sbm, MixTable *Mix, int mixmode, bool trans){	//8bit ONLY!
+bool Bitmap::MakeMipMap(Bitmap *sbm, MixTable *Mix, int32_t mixmode, bool trans){	//8bit ONLY!
 	if(sbm && sbm->data && Mix && sbm->bpp == 8){
 		if(Init(std::max(sbm->width / 2, 1), std::max(sbm->height / 2, 1), sbm->bpp)){
 			flags |= BFLAG_MIPMAP;
 			if(sbm->width <= 1 || sbm->height <= 1) return true;	//Just abort on miniscule mipmaps for now.  Code below assumes at least 2x2 source bitmap.
 			unsigned char ul, ur, dl, dr, u, d, *ts, *td;
-			for(int y = 0; y < height; y++){
+			for(int32_t y = 0; y < height; y++){
 				ts = sbm->data + (y <<1) * sbm->pitch;
 				td = data + y * pitch;
-				for(int x = 0; x < width; x++){
+				for(int32_t x = 0; x < width; x++){
 					if(trans){
 						if(*ts == 0){//*(sbm->data + (x <<1) + (y <<1) * sbm->pitch) == 0){
 						//	*(data + x + y * pitch) = 0;
@@ -1075,8 +1075,8 @@ bool Bitmap::Remap(unsigned char *Remap){	//8bit ONLY!
 	if(!Remap) Remap = premap;
 	if(Remap && data && width > 0 && height > 0 && bpp == 8){
 		unsigned char *pdata;
-		for(int y = 0; y < height; y++){	//Now remap pixel data using remap table.
-			for(int x = 0; x < width; x++){
+		for(int32_t y = 0; y < height; y++){	//Now remap pixel data using remap table.
+			for(int32_t x = 0; x < width; x++){
 				pdata = data + x + y * pitch;
 				*pdata = Remap[*pdata];
 			}
@@ -1101,7 +1101,7 @@ bool Bitmap::InitAnalyze(){
 	return false;
 }
 bool Bitmap::AnalyzeLines(){	//8bit ONLY at the moment!
-	int x, y;
+	int32_t x, y;
 	if(data && height > 0 && InitAnalyze() && bpp == 8){
 		for(y = 0; y < nLines; y++){
 			x = 0;
@@ -1140,17 +1140,17 @@ bool ImageSet::LoadSet(FILE *f){
 	if(f){
 		fread(buf, 4, 1, f);
 		if(strcmp("IMST", buf) == 0){
-			int Version = ReadLong(f);
+			int32_t Version = ReadLong(f);
 			if(Version > IMAGESETVERSION){
 				//OutputDebugString("Bad ImageSet version!\n");
 				return false;
 			}
-			int nImg = ReadLong(f);
+			int32_t nImg = ReadLong(f);
 			if(!InitSet(nImg)) return false;
-			int Cols = ReadLong(f);
+			int32_t Cols = ReadLong(f);
 			PaletteEntry gpe[256];
 			memset(gpe, 0, sizeof(gpe));
-			int i, j, pos, w, h, y;
+			int32_t i, j, pos, w, h, y;
 			Image *ip;
 			for(i = 0; i < Cols; i++){
 				gpe[i].peRed = fgetc(f);
