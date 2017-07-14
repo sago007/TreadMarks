@@ -1580,13 +1580,6 @@ void VoxelWorld::UndownloadTextures(){
 
 void VoxelWorld::PulseNetwork(PacketProcessorCallback *call){
 	UCB = call;
-//	if(Net.IsClientActive() && abs(lastsynch - msec) > SYNCH_EVERY){
-//		lastsynch = msec;
-//		char b[16];
-//		b[0] = BYTE_HEAD_TIMESYNCH;
-//		WLONG(&b[1], msec);
-//		Net.QueueSendServer(TM_Unreliable, b, 5);
-//	}
 	//
 	if(Net.IsServerActive()){
 		for(int32_t c = 0; c < MAX_CLIENTS; c++){	//Propagate craters to clients.
@@ -1602,13 +1595,6 @@ void VoxelWorld::PulseNetwork(PacketProcessorCallback *call){
 					bp.PackFloatInterval(ce->r, 0, 256, 11);
 					bp.PackFloatInterval(ce->d, -128, 128, 11);
 					bp.PackFloatInterval(ce->scorch, 0, 1.1f, 8);
-				//	char b[32];
-				//	b[0] = BYTE_HEAD_CRATER;
-				//	WSHORT(&b[1], (short)ce->x);
-				//	WSHORT(&b[3], (short)ce->y);
-				//	WFLOAT(&b[5], ce->r);
-				//	WFLOAT(&b[9], ce->d);
-				//	WFLOAT(&b[13], ce->scorch);
 					Net.QueueSendClient(c, TM_Ordered, (char*)bp.Data(), bp.BytesUsed());	//This is an issue...  Ordered is needed since otherwise crater packets will arrive before load-the-map packet and crater queue on client will be emptied...
 					Clients[c].LastCraterSent = ce;
 				}
@@ -1620,21 +1606,15 @@ void VoxelWorld::PulseNetwork(PacketProcessorCallback *call){
 }
 
 bool VoxelWorld::LoadEntityClasses(){
-//	ConfigFile cfg;
 	ConfigListHead.DeleteList();
-//	EntTypeHead.DeleteList();	//Clear out any existing types.
 	FM.PushFile();
 	FILE *f = FM.OpenWildcard("*.ent", NULL, 0, true, false);	//Find all .ent files in search path and packed files.
 	if(f){
 		while(f){
-		//	ConfigFileList *cfgl = ConfigListHead.AddObject(new ConfigFileList);
 			ConfigFileList *cfgl = new ConfigFileList;
 			if(cfgl){
-			//	cfg.Read(f, FM.length());	//Read .ent file as text config.
 				cfgl->Read(f, FM.length());
 				cfgl->Quantify();
-			//	EntTypeHead.AddObject(CreateEntityType(&cfg));	//Pass to global entity type manufacturer.
-			//	if(ConfigListHead.Find(cfgl->cname, cfgl->tname) == NULL){	//Not found already.
 				if(ConfigListHead.Find(cfgl->cname, cfgl->tname) == NULL){	//Not found already.
 					ConfigListHead.AddObject(cfgl);
 				}else{	//A duplicate .ent file.
@@ -1713,8 +1693,7 @@ EntityBase *VoxelWorld::AddEntity(ClassHash hash,
 }
 EntityBase *VoxelWorld::AddEntity(EntityTypeBase *et,
 								  Vec3 Pos, Rot3 Rot, Vec3 Vel, int32_t id, int32_t flags, EntityGID specificgid, int32_t AddFlags){
-//	EntityTypeBase *et = FindEntityType(hash);//EntTypeHead.NextLink();
-	if(et){// && (et = et->Find(Class, Type))){
+	if(et){
 		et->CacheResources();	//Attempting support for mid-stream resource caching.
 		EntityBase::SetSpecificNextGID(specificgid);
 		EntityBase *ent = et->CreateEntity(Pos, Rot, Vel, id, flags);
@@ -1731,7 +1710,6 @@ EntityBase *VoxelWorld::AddEntity(EntityTypeBase *et,
 	return NULL;
 }
 EntityBase *VoxelWorld::GetEntity(EntityGID id){	//Retrieves an entity pointer by ID number.  Don't hold long, unless entity guaranteed to stay alive.
-//	EntityLink *el = IDBucket.GetBucket(id);
 	if(id == 0) return NULL;
 	EntityBucketNode *el = IDBucket.GetBucket(id);
 	while(el){
@@ -1786,7 +1764,7 @@ bool VoxelWorld::AppendEntities(IFF *iff){
 	int32_t id, flags;
 
 	if(iff && iff->IsFileOpen() && iff->IsFileRead() && iff->FindChunk("ENTS")){
-		int32_t EntityVersion = iff->ReadLong();
+		iff->ReadLong();
 		int32_t NumEnts = iff->ReadLong();
 		for(i = 0; i < NumEnts; i++){
 			iff->ReadBytes((uchar*)eclass, iff->ReadLong()); iff->Even();
@@ -1812,7 +1790,6 @@ bool VoxelWorld::SaveEntities(IFF *iff){
 	EntityTypeBase *et;
 	EntityBase *ent;
 	int32_t NumEnts = CountEntities();//EntHead.CountItems(-1);
-//	int32_t NumTypes = EntTypeHead.CountItems(-1);
 	int32_t j;
 	if(iff && iff->IsFileOpen() && iff->IsFileWrite()){
 		iff->SetType("VOXL");	//Same as Terrain object, so they share basic file type.
@@ -1848,7 +1825,6 @@ bool VoxelWorld::SaveEntities(IFF *iff){
 }
 bool VoxelWorld::LoadVoxelWorld(const char *name, bool loadentities, bool mirror){
 	IFF iff;
-//	int32_t numeco;
 	FM.PushFile();
 	if(iff.OpenIn(FM.Open(name))){
 		MapFileName = name;	//So we can pass it back to clients who connect.
@@ -1919,10 +1895,6 @@ int32_t VoxelWorld::ClearVoxelWorld(){
 
 bool VoxelWorld::SaveVoxelWorld(const char *name){
 	IFF iff;
-//	int32_t numeco;
-//	for(numeco = MAXTERTEX - 1; numeco >= 0; numeco--){	//Find last valid ecosystem.
-//		if(strlen(Eco[numeco].name) > 0 && strcmp(Eco[numeco].name, "none") != 0) break;
-//	} numeco++;
 	if(iff.OpenOut(name)){	//FileManager not used for file writes, no writing to packed files.
 		if(Map.Save(&iff, Eco, nTex)){//numeco)){
 			if(SaveEntities(&iff)){
@@ -2039,12 +2011,11 @@ void VoxelWorld::InputTime(int32_t framemsec){
 //be used for shrubs and such...  Argh.  I need buckets that are updated dynamically
 //with the entities they hold...
 //
-int32_t VoxelWorld::ThinkEntities(/*int32_t framemsec,*/ int32_t flags){
+int32_t VoxelWorld::ThinkEntities( int32_t flags){
 	FrameFlags = flags;
 	int32_t nents = 0, i;
 	EntityBase *ent, *ent2;
 	//Add to ID/Collision buckets.
-//	IDBucket.ClearBuckets();
 	//
 	//Send time synch request packets here now.  Doing it in a consistent place should make for less jitter.
 	if(Net.IsClientActive() && std::abs(int32_t(msec - lastsynch)) > SYNCH_EVERY){
@@ -2068,7 +2039,6 @@ int32_t VoxelWorld::ThinkEntities(/*int32_t framemsec,*/ int32_t flags){
 	if(Net.IsClientActive()){	//Actually create craters sent from server.
 		if(OutgoingConnection.LastCraterSent == NULL) OutgoingConnection.LastCraterSent = &CraterHead;
 		int32_t lim = 20;	//Limit number of craters actually added to map each client frame.
-	//	int32_t lim = 1;	//Limit number of craters actually added to map each client frame.
 		while(lim > 0 && OutgoingConnection.LastCraterSent->NextLink()){
 			CraterEntry *ce = OutgoingConnection.LastCraterSent->NextLink();
 			Crater(ce->x, ce->y, ce->r, ce->d, ce->scorch);
@@ -2231,10 +2201,8 @@ bool VoxelWorld::CheckCollision(EntityBase *ent, EntityGroup maxgroup){
 		int32_t by2 = by1 + BUCKET_SIZE_2D * (1 + radlevel * 2);
 		//
 		for(int32_t grp = 0; grp <= maxgroup; grp++){
-		//	for(int32_t quad = 0; quad < 4; quad++){
 			for(int32_t by = by1; by <= by2; by += BUCKET_SIZE_2D){
 				for(int32_t bx = bx1; bx <= bx2; bx += BUCKET_SIZE_2D){
-				//	EntityBucketNode *ebn = EntBucket[grp].GetBucket(ent->Position[0], -ent->Position[2], quad);
 					EntityBucketNode *ebn = EntBucket[grp].GetBucket(bx, by);
 					while(ebn){
 						if(ebn->entity && ebn->entity != ent && ebn->entity->CanCollide){

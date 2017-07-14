@@ -206,7 +206,7 @@ bool LoadStats(){
 //
 CStr BreakLine(const char *s, int line, int wordwrap = 0){
 	if(s && line >= 0){
-		int n1 = 0, n2 = 0, nc = 0, lastspace = 0, lastlinepos = 0, linepos = 0;
+		int n1 = 0, nc = 0, lastspace = 0, lastlinepos = 0, linepos = 0;
 		int endoftext = 0;
 		char c = 0;
 		do{
@@ -1338,10 +1338,8 @@ void DoTankSelect()
 			e->SetInt(ATT_CMD_LISTBOX_RESET, 1);
 			e->SetInt(ATT_LISTBOX_WIDTH, 8);
 			e->SetInt(ATT_LISTBOX_HEIGHT, 5);
-			EntityTypeBase *et = 0;
-			int cookie = 0, i = 0, sel = 0;
 			CStr ltname;
-			for(i = 0; i < CTankGame::Get().GetNumAvailTeams() + 1; i++){
+			for(int32_t i = 0; i < CTankGame::Get().GetNumAvailTeams() + 1; i++){
 				if(i == 0) e->SetString(ATT_LISTBOX_NEWENTRY, "None");
 				else e->SetString(ATT_LISTBOX_NEWENTRY, CTankGame::Get().GetTeam(i - 1).name);
 				if((i == 0 && CTankGame::Get().GetGameState()->TeamHash == 0) || (i > 0 && CTankGame::Get().GetGameState()->TeamHash == CTankGame::Get().GetTeam(i - 1).hash)){
@@ -1502,7 +1500,6 @@ void DoTutorial()
 		e->SetInt(ATT_LISTBOX_WIDTH, 17);
 		e->SetInt(ATT_LISTBOX_HEIGHT, 7);
 
-		int set = 0;
 		int iCnt = 0;
 
 		TutList.BuildList();
@@ -2831,7 +2828,6 @@ inline void BuildJoyString(char *tmpstr, int iAxisName, uint32_t iAxis)
 void DoJoystickSettings()
 {
 	EntityBase	*e;
-	int		Sticks[K_MAXCONTROLLERS] = {-1};
 
 	switch(Activated(&e)){
 	case BID_Help :
@@ -2949,7 +2945,6 @@ void DoJoystickSettings()
 		{
 			if(CTankGame::Get().GetInputState()->input.GetControllerName(i, &tmpName))
 			{
-				Sticks[iNumSticks] = i;
 				e->SetString(ATT_LISTBOX_NEWENTRY, tmpName);
 				if(CTankGame::Get().GetSettings()->InputSettings.StickID == i)
 				{

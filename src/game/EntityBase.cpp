@@ -818,11 +818,9 @@ int EntitySkyplane::QueryInt(int type){
 	return 0;
 }
 float EntitySkyplane::QueryFloat(int type){
-	EntitySkyplaneType *TP = (EntitySkyplaneType*)TypePtr;
 	return 0.0f;
 }
 CStr EntitySkyplane::QueryString(int type){
-	EntitySkyplaneType *TP = (EntitySkyplaneType*)TypePtr;
 	return "";
 }
 bool EntitySkyplane::Think(){
@@ -1048,7 +1046,6 @@ void EntitySkyboxType::UnlinkResources(){
 }
 EntitySkybox::EntitySkybox(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 						 int id, int flags) : EntitySkyplane(et, Pos, Rot, Vel, id, flags) {
-	EntitySkyboxType *TP = (EntitySkyboxType*)et;
 }
 bool EntitySkybox::Think(){
 	EntitySkyboxType *TP = (EntitySkyboxType*)TypePtr;

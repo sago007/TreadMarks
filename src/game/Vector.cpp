@@ -25,7 +25,7 @@ int CDECL _matherr( struct _exception *except ){
 }
 */
 
-int seed1 = 0, seed2 = 0;
+uint32_t seed1 = 0, seed2 = 0;
 
 void TMsrandom(int s){
 	srand(s);
@@ -34,8 +34,8 @@ void TMsrandom(int s){
 }
 
 int TMrandom(){
-	int r1 = (seed1 = (seed1 * 1664525) + 1013904223);
-	int r2 = ((seed2 = seed2 * 1103515245 + 12345) >> 16) & 0x7fff;
+	uint32_t r1 = (seed1 = (seed1 * 1664525) + 1013904223);
+	uint32_t r2 = ((seed2 = seed2 * 1103515245 + 12345) >> 16) & 0x7fff;
 	return (r1 ^ r2 ^ rand()) & RAND_MAX;	//relies on RAND_MAX being contiguous 1s.
 }
 

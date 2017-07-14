@@ -162,20 +162,6 @@ inline void CrossVec3(const Vec3 src1, const Vec3 src2, Vec3 dst){	//Cross produ
 inline float LengthVec3(const Vec3 src1){
 	return sqrtf(src1[0] * src1[0] + src1[1] * src1[1] + src1[2] * src1[2]);
 };
-/*
-inline void NormVec3(Vec3 src1, Vec3 dst){	//Normalizes vector.  dst == src is OK.
-//	float d = LengthVec3(src1);
-//	if(d == 0.0f){
-//		ClearVec3(dst);
-//	}else{
-//		float tlenr = 1.0f / d;//LengthVec3(src1);
-	float tlenr = fsqrt_inv(src1[0] * src1[0] + src1[1] * src1[1] + src1[2] * src1[2]);
-		dst[0] = src1[0] * tlenr;
-		dst[1] = src1[1] * tlenr;
-		dst[2] = src1[2] * tlenr;
-//	}
-};
-*/
 inline void NormVec3(const Vec3 src1, Vec3 dst){	//Normalizes vector.  dst == src is OK.
 	float d = LengthVec3(src1);
 	if(d == 0.0f){
@@ -217,11 +203,9 @@ inline void NormMat3(Mat3 mat){
 	NormMat3(mat, mat);
 };
 inline void LerpMat3(const Mat3 src1, const Mat3 src2, float t, Mat3 dst){
-//	for(int32_t i = 0; i < 3; i++){
 	LerpVec3(src1[0], src2[0], t, dst[0]); NormVec3(dst[0]);
 	LerpVec3(src1[1], src2[1], t, dst[1]); NormVec3(dst[1]);
 	LerpVec3(src1[2], src2[2], t, dst[2]); NormVec3(dst[2]);
-//	}
 };
 inline void Vec3MulMat3(const Vec3 src, const Mat3 mat, Vec3 dst){	//Grinds src vec through rotation matrix to produce output vec.
 	dst[0] = mat[0][0] * src[0] + mat[1][0] * src[1] + mat[2][0] * src[2];	//Dest X coord is X of three matrix vectors multiplied by first vector coords which are the scalars.
@@ -259,16 +243,7 @@ inline void Mat43MulMat43(const Mat43 src1, const Mat43 src2, Mat43 dst){
 	Vec3MulMat3(src1[0], src2, dst[0]);	//Grind X axis vector of first matrix through second matrix, dump into X axis vector of third.
 	Vec3MulMat3(src1[1], src2, dst[1]);	//Ditto Y axis vector.
 	Vec3MulMat3(src1[2], src2, dst[2]);	//Ditto Z axis vector.
-//	Vec3 tmp;
-//	AddVec3(src1[3], src2[3], tmp);	//Ditto Translate axis vector.
-//	Vec3MulMat3(tmp, src2, dst[3]);	//Ok, it needs to be rotated after adding...
 	Vec3MulMat43(src1[3], src2, dst[3]);
-	//Nope, actually translate should be fully 43 matrix mulled by the matrix.
-	//
-//	Vec3MulMat43(src1[0], src2, dst[0]);	//Grind X axis vector of first matrix through second matrix, dump into X axis vector of third.
-//	Vec3MulMat43(src1[1], src2, dst[1]);	//Ditto Y axis vector.
-//	Vec3MulMat43(src1[2], src2, dst[2]);	//Ditto Z axis vector.
-//	Vec3MulMat43(src1[3], src2, dst[3]);	//Ditto Translate axis vector.
 };
 
 inline void Rot3ToMat3(const Rot3 rot, Mat3 dst){	//Creates a 3x3 rotation matrix based on the input angles, in Radians.
@@ -319,32 +294,5 @@ inline void DeltaRot3(Rot3 rot, const float clamp = PI){	//Normalizes rotation d
 		rot[i] = CLAMP(rot[i], -clamp, clamp);	//Optionally clamp to lower than PI values in each direction.
 	}
 };
-/*	dst[0][0] = (cosb) * cosc + (sinb * sina) * -sinc;	//Three axis, A, B, C.
-	dst[0][1] = (0) * cosc + (cosa) * -sinc;
-	dst[0][2] = (-sinb) * cosc + (cosb * sina) * -sinc;
-	dst[1][0] = (sinb * sina) * cosc + (cosb) * sinc;	//(y axis vector component) (x component)
-	dst[1][1] = (cosa) * cosc + 0 * sinc;
-	dst[1][2] = (cosb * sina) * cosc + (-sinb) * sinc;
-	dst[2][0] = sinb * cosa;	//Z axis vector is fine now, isn't affected by C rotation.
-	dst[2][1] = -sina;
-	dst[2][2] = cosb * cosa;*/
-/*	dst[0][0] = cosb;	//Two axis, A, B rotation.
-	dst[0][1] = 0;
-	dst[0][2] = -sinb;
-	dst[1][0] = sinb * sina;
-	dst[1][1] = cosa;
-	dst[1][2] = cosb * sina;
-	dst[2][0] = sinb * cosa;
-	dst[2][1] = -sina;
-	dst[2][2] = cosb * cosa;*/
-/*	dst[0][0] = cosb;	//One axis, B rotation.
-	dst[0][1] = 0;
-	dst[0][2] = -sinb;
-	dst[1][0] = 0;
-	dst[1][1] = 1;
-	dst[1][2] = 0;
-	dst[2][0] = sinb;
-	dst[2][1] = 0;
-	dst[2][2] = cosb;*/
 
 #endif

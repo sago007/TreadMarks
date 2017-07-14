@@ -223,28 +223,15 @@ int main(int argc, char** argv)
 	CreateDirectoriesRecursivly(sScores.get());
 	
 //	if(strlen(szCmdLine) > 4 && ReadConfigCfg(szCmdLine)){
-	int bConfigFound = 0;
+	bool bConfigFound = false;
 	if(argc > 1)
 	{
-		if(CmpLower(FileExtension(argv[1]), "cfg"))
+		if(CmpLower(FileExtension(argv[1]), "cfg")) {
 			bConfigFound = CTankGame::Get().ReadConfigCfg(argv[1]);
+		}
 		else if(strlen(argv[1]) > 5 && isdigit(argv[1][0]))
 		{
-/*			int colon = -1;
-
-			bConfigFound = CTankGame::Get().ReadConfigCfg("config.cfg");	//Read default.
-			for(int i = 0; i < strlen(argv[1]); i++)
-			{
-				if(argv[1][i] == ':')
-					colon = i;
-			}
-			if(colon != -1)
-			{
-				CTankGame::Get().GetSettings()->ServerAddress = Left(argv[1], colon - 1);
-				CTankGame::Get().GetSettings()->ServerPort = atoi(Right(argv[1], strlen(argv[1]) - colon - 1));
-			}
-			else
-*/				CTankGame::Get().GetSettings()->ServerAddress = argv[1];
+			CTankGame::Get().GetSettings()->ServerAddress = argv[1];
 			CTankGame::Get().GetSettings()->AutoStart = true;
 		}
 	}

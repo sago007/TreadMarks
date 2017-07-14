@@ -33,9 +33,9 @@ public:
 	Timer();
 	~Timer();
 	void Start();
-	unsigned int Check(unsigned int FracSec);	//Enter the fractions of a second you'd like the result in, e.g. 1000 for ms.
+	uint32_t Check(uint32_t FracSec);	//Enter the fractions of a second you'd like the result in, e.g. 1000 for ms.
 
-	static unsigned int GetClock();
+	static uint32_t GetClock();
 };
 
 #endif

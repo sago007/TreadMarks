@@ -21,13 +21,14 @@
 #define TREES_H
 
 #include <new>
+#include <stdint.h>
 
 //Returns bool of whether bit is set.
-inline int TestBit(int val, int bit){
-	return (val & (1 <<bit)) ? 1 : 0;
+inline bool TestBit(int val, int bit){
+	return (val & (1 <<bit)) ? true : false;
 };
 //Returns val with specified bit either set or cleared.
-inline int SetBit(int val, int bit, int set = 1){
+inline int32_t SetBit(int32_t val, int32_t bit, int32_t set = 1){
 	return (set ? val | (1 <<bit) : val & (~(1 <<bit)));
 };
 
@@ -82,16 +83,6 @@ public:
 			Ptr2->UnlinkItem();	//Unlink current item.
 			delete Ptr2;	//Destroy unlinked item.
 		}
-	//	if(Next){
-	//		Next->Prev = nullptr;
-	//		delete Next;
-	//		Next = nullptr;
-	//	}
-	//	if(Prev){
-	//		Prev->Next = nullptr;
-	//		delete Prev;
-	//		Prev = nullptr;
-	//	}
 	};
 	void UnlinkItem(){
 		//Use this function to link and unlink items in various lists without deleting them.
@@ -111,35 +102,25 @@ public:
 	ME *FindItem(int n){	//Returns pointer to nth item in list, 0 being the item whose member you called.
 		ME *Ptr;	// Russ - bug fix, was used out of scope
 		if(n < 0) return 0;
-	//	if(n == 0) return (ME*)this;
-	//	if(Next) return Next->FindItem(n - 1);
 		for(Ptr = (ME*)this; Ptr && n; Ptr = Ptr->Next) n--;
 		return Ptr;
-	//	return 0;
 	};
 	int CountItems(int n = 0){	//Counts items in list including head, going forwards.  To not count the head, pass in -1.
-	//	if(Next) return Next->CountItems(n + 1);
-	//	return n + 1;
 		for(ME *Ptr = (ME*)this; Ptr; Ptr = Ptr->Next) n++;
 		return n;
 	};
 	ME *Head(){	//Finds and returns the head.
-	//	if(Prev) return Prev->Head();
-	//	return (ME*)this;
 		ME *Ptr = (ME*)this;
 		while(Ptr->Prev) Ptr = Ptr->Prev;
 		return Ptr;
 	};
 	ME *Tail(){	//Finds tail (end) of list.
-	//	if(Next) return Next->Tail();
-	//	return (ME*)this;
 		ME *Ptr = (ME*)this;
 		while(Ptr->Next) Ptr = Ptr->Next;
 		return Ptr;
 	};
 	ME *AddObject(ME *item){
 		//USAGE:  foo->AddItem(new MyClass(whatever));
-	//	if(Next) return Next->AddObject(item);
 		if(Next) return Tail()->AddObject(item);
 		//Head and Tail have been optimized to non-recursive
 		Next = item;
