@@ -18,7 +18,6 @@
 
 #include <new>
 #include <iostream>
-#include <experimental/filesystem>
 
 #ifdef QT_CORE_LIB
 #include <QApplication>
@@ -221,19 +220,8 @@ int main(int argc, char** argv)
 	//
 	CStr sScores(GetCommonAppDataDir());
 	sScores.cat("scores");
-	std::error_code e;
-	std::experimental::filesystem::create_directories(sScores.get(), e);
-	if (e) {
-		fprintf(stderr, "Failed to create \"%s\". Error: %s", sScores.get(), e.message().c_str());
-	}
+	CreateDirectoriesRecursivly(sScores.get());
 	
-	// TODO: Make a platform-independent function for creating directories
-#if 0
-//#ifdef WIN32 
-	CreateDirectory(sScores.get(), NULL);	//Make dir for holding ladder saves and map stats files.
-#endif
-	//
-
 //	if(strlen(szCmdLine) > 4 && ReadConfigCfg(szCmdLine)){
 	int bConfigFound = 0;
 	if(argc > 1)

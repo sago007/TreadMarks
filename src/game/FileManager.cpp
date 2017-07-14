@@ -205,3 +205,11 @@ char FileManager::ReadByte(){
 	if(f) ::fread(&c, sizeof(c), 1, f);
 	return c;
 }
+
+void CreateDirectoriesRecursivly(const char* the_path) {
+	std::error_code e;
+	std::experimental::filesystem::create_directories(the_path, e);
+	if (e) {
+		fprintf(stderr, "Failed to create \"%s\". Error: %s\n", the_path, e.message().c_str());
+	}
+}

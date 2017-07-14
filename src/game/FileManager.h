@@ -72,4 +72,7 @@ public:
 	char ReadByte();
 };
 
+//Creates all directories. Fails silently on error (except for printing to stderr)
+void CreateDirectoriesRecursivly(const char* the_path);
+
 #endif
