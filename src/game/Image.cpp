@@ -295,15 +295,9 @@ bool SaveBMP(FILE *file, Bitmap *bmp, PaletteEntry *pe, bool noflip){
 
 Bitmap::Bitmap() : data(NULL), LineLeft(NULL), LineRight(NULL), ppe(NULL), premap(NULL),
 					width(0), height(0), pitch(0), bpp(0), xhot(0), yhot(0), id(0), flags(0), nLines(0) {
-//	data = NULL;
-//	LineLeft = LineRight = NULL;
-//	width = height = pitch = xhot = yhot = nLines = 0;
 }
-Bitmap::Bitmap(const Bitmap &bmp) : data(NULL), LineLeft(NULL), LineRight(NULL), ppe(NULL), premap(NULL),
-					width(0), height(0), pitch(0), bpp(0), xhot(0), yhot(0), id(0), flags(0), nLines(0) {
-//	data = NULL;
-//	LineLeft = LineRight = NULL;
-//	width = height = pitch = xhot = yhot = nLines = 0;
+Bitmap::Bitmap(const Bitmap &bmp) : data(NULL), nLines(0), LineLeft(NULL), LineRight(NULL), ppe(NULL), premap(NULL),
+					width(0), height(0), pitch(0), bpp(0), xhot(0), yhot(0), id(0), flags(0) {
 	if(bmp.data){
 		if(Init(bmp.width, bmp.height, bmp.bpp)){
 			Suck(bmp.data, bmp.width, bmp.height, bmp.pitch);
@@ -448,7 +442,6 @@ bool Bitmap::GammaCorrect(const float fGamma)
 
 	if(fLastGamma != fGamma)
 	{
-		float fInvGamma = 1.0f / fGamma;
 		for(int32_t i = 0; i < 256; i++)
 		{
 			if(i < 5)

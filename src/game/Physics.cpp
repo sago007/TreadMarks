@@ -48,7 +48,6 @@ using namespace std;
 //20ths of a second...
 
 inline float PntDistGroundPlane(float pnty, Vec3 plane){
-	float planex = -plane[1];
 	float planey = sqrtf(plane[0] * plane[0] + plane[2] * plane[2]);
 	return pnty * planey;// / sqrtf(planex * planex + planey * planey));
 	//Dot product is simplified but we need another bloody sqrt to normalize the thing.
@@ -636,7 +635,6 @@ void Vehicle::Think2(float LeftAccel, float RightAccel, float turrotvel, Terrain
 	//
 	//Reduce rotational velocity by specific fraction.
 	Mat3 trotvel;
-	float rp = 1.0f - DAMP(1.0f, 1.0f - .75f, Fraction / 0.05f);	//20hz was where initial values were based.
 	for(i = 0; i < 3; i++){
 		//20hz hack.
 		LerpVec3(LRotVelM[i], RotVelM[i], 0.75f, trotvel[i]);

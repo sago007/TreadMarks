@@ -95,7 +95,6 @@ void CTankAI::SortPowerUps(EntityTankGod *egod)
 		Vec3 tmp;
 
 		SubVec3(tmpPowUp->pos, ThisTank->Position, tmp);
-		float slope = fabsf(tmp[1]) / (fabsf(tmp[0]) + fabsf(tmp[2]));
 		float Distance = LengthVec3(tmp);
 		ScaleVec3(tmp, 1.0f / std::max(0.000001f, Distance)); // Normalize tmp
 
@@ -127,7 +126,6 @@ void CTankAI::SortEnemies(EntityTankGod *egod)
 			Vec3 tmp;
 
 			SubVec3(tmpTarget->pos, ThisTank->Position, tmp);
-			float slope = fabsf(tmp[1]) / (fabsf(tmp[0]) + fabsf(tmp[2]));
 			float Distance = LengthVec3(tmp);
 			ScaleVec3(tmp, 1.0f / std::max(0.000001f, Distance)); // Normalize tmp
 
@@ -149,7 +147,6 @@ void CTankAI::UpdateDriving(EntityTankGod *egod)
 	float	eta;
 	float	steerboost;
 	float	okcone;
-	float	oversteer;
 	float	AngleToMoveTo;
 	float	AngleToMoveTo2;
 	float	anticipate;
@@ -222,9 +219,6 @@ void CTankAI::UpdateDriving(EntityTankGod *egod)
 
 	okcone = fabsf(atan2f(ThisTank->ai_movetoradius, dist) * 0.50f);
 
-	//Oversteer is actually the amount to FACE past the desired angle to destination.
-	oversteer = 1.0 + std::min(1.0f, ThisTank->vh.LinearVelocity / ModMaxSpeed);
-
 	AngleToMoveTo = atan2f(MoveToVector[0], MoveToVector[2]);
 
 	if(fabsf(NormRot(AngleToMoveTo - VelocityAngle)) > okcone && eta < 3.0f)
@@ -280,7 +274,7 @@ void CTankAI::UpdateDestination(EntityTankGod *egod)
 		WaypointNode *waypt = NULL, *wayptmajor = NULL;
 		if(ew)
 		{
-			int newway = ew->WalkWaypoints(ThisTank->waypoint, ThisTank->Position, ThisTank->Velocity, &waypt, &wayptmajor);
+			ew->WalkWaypoints(ThisTank->waypoint, ThisTank->Position, ThisTank->Velocity, &waypt, &wayptmajor);
 			if(waypt)
 			{
 				CopyVec3(waypt->Pos, ThisTank->ai_moveto);

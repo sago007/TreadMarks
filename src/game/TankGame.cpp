@@ -352,12 +352,10 @@ void CTankGame::DoHUD()
 	static EntityGID LapID = 0;
 	static EntityGID PlaceID = 0;
 	static EntityGID ThisTimeID = 0;
-	static EntityGID BestTimeID = 0;
 	static EntityGID PingID = 0;
 
 	static EntityGID LapIconID = 0;
 	static EntityGID Clock1ID = 0;
-	static EntityGID Clock2ID = 0;
 
 	static EntityGID FlagStatusID = 0;
 
@@ -2966,7 +2964,6 @@ void CTankGame::ProcessServerCommand(char* sCommand)
 		if (FirstCommand.next != NULL)
 		{
 			char	sOutput[1024];
-			int		iCount = 0;
 			EntityBase	*ent = VW.EntHead->NextLink();
 
 			while (ent != NULL)

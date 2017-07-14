@@ -52,8 +52,6 @@ ResourceManager::ResourceManager(FileManager *fm) : pFM(fm) {
 	maxsoundbits = 0;
 	maxsoundfreq = 0;
 	TextureFlush = false;
-	//
-	int Texels = 0;
 }
 
 void ResourceManager::SetTextureFlush(bool flush){	//Set to 1 to free local copies of disk based textures after download.

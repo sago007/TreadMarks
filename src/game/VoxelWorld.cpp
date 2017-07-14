@@ -1059,7 +1059,7 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int32_t len){
 				EntityBase *e = AddEntity(Clients[source].EntType, NULL, NULL, NULL, 0, 0, 0, ADDENTITY_NONET);
 				if(!e){	//Try again with default entity type.
 					Clients[source].EntType = DefClientEntType;
-					EntityBase *e = AddEntity(Clients[source].EntType, NULL, NULL, NULL, 0, 0, 0, ADDENTITY_NONET);
+					AddEntity(Clients[source].EntType, NULL, NULL, NULL, 0, 0, 0, ADDENTITY_NONET);
 				}
 				if(e){
 					Clients[source].ClientEnt = e->GID;
@@ -1287,38 +1287,23 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int32_t len){
 			Vec3 vel = {0, 0, 0};
 			int32_t flg = 0;
 			int32_t id = 0;
-			int32_t d = 10;
-			if(flags & CREATEFLAGS_POS){// && d + 12 <= len){
-			//	for(int32_t n = 0; n < 3; n++){
-			//	//	pos[n] = RFLOAT(&data[d]);
-			//	//	d += 4;
-			//		bp.UnpackFloatInterval(pos[n], CrRng1, CrRng2, CrBits);
-			//		pos[n] += worldcenter[n];
-			//	}
+			if(flags & CREATEFLAGS_POS){
 				UnpackPosition(bp, pos, CrBits);
 			}
-			if(flags & CREATEFLAGS_ROT){// && d + 12 <= len){
+			if(flags & CREATEFLAGS_ROT){
 				for(int32_t n = 0; n < 3; n++){
-				//	rot[n] = RFLOAT(&data[d]);
-				//	d += 4;
 					bp.UnpackFloatInterval(rot[n], CrRotRng1, CrRotRng2, CrRotBits);
 				}
 			}
-			if(flags & CREATEFLAGS_VEL){// && d + 12 <= len){
+			if(flags & CREATEFLAGS_VEL){
 				for(int32_t n = 0; n < 3; n++){
-				//	vel[n] = RFLOAT(&data[d]);
-				//	d += 4;
 					bp.UnpackFloatInterval(vel[n], CrVelRng1, CrVelRng2, CrVelBits);
 				}
 			}
-			if(flags & CREATEFLAGS_ID){// && d + 4 <= len){
-			//	id = RLONG(&data[d]);
-			//	d += 4;
+			if(flags & CREATEFLAGS_ID){
 				bp.UnpackUInt(id, 32);
 			}
-			if(flags & CREATEFLAGS_FLG){// && d + 4 <= len){
-			//	flg = RLONG(&data[d]);
-			//	d += 4;
+			if(flags & CREATEFLAGS_FLG){
 				bp.UnpackUInt(flg, 32);
 			}
 			EntityBase *e = AddEntity(hash, pos, rot, vel, id, flg, gid, 0);
@@ -1354,8 +1339,6 @@ void VoxelWorld::PacketReceived(ClientID source, const char *data, int32_t len){
 					}
 				}
 				msecdiff = tot / (double)(MSDIFF_HISTORY - 2);
-				//
-			//	msecdiff = (int32_t)((double)msecdiff * 0.3 + (double)msd * 0.7);
 			}
 		//	OutputDebugLog("MSECDIFF: " + String(msecdiff) + "  MSD: " + String(msd) + "\n");
 			return;
@@ -1502,7 +1485,7 @@ int32_t VoxelWorld::ChatMessage(const char *text, uint32_t teamid){	//Sends a ch
 	}
 	return 0;
 }
-VoxelWorld::VoxelWorld() : FM(), ResourceManager(&FM), ForceGroup(false) {
+VoxelWorld::VoxelWorld() : ResourceManager(&FM), FM(), ForceGroup(false) {
 	pFM = &FM;	//Just in case.
 #ifndef HEADLESS
 	PolyRend = &GLPolyRend;
@@ -1518,8 +1501,6 @@ VoxelWorld::VoxelWorld() : FM(), ResourceManager(&FM), ForceGroup(false) {
 	CraterTail = &CraterHead;
 	ClearVec3(gravity);
 	ClearVec3(worldcenter);
-	//
-//	PacketPriDist = 100.0f;
 	PacketPriDist = 50.0f;
 	//
 	mousex = mousey = 0.0f;

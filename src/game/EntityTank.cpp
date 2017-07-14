@@ -124,7 +124,6 @@ EntityBase *EntityTankGodType::CreateEntity(Vec3 Pos, Rot3 Rot, Vec3 Vel, int id
 }
 EntityTankGod::EntityTankGod(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 						 int id, int flags) : EntityGod(et, Pos, Rot, Vel, id, flags) {
-	EntityTankGodType *TP = (EntityTankGodType*)et;
 	CanCollide = false;
 	RegisterEntity("TANKGOD");	//So peons can specifically find the TANK GOD and cast to him.  Accept no substitutes.
 	racelaps = 1;
@@ -1214,7 +1213,6 @@ CStr EntityCourseType::InterrogateString(const char *thing)
 bool EntityCourse::Think(){
 	EntityCourseType *TP = (EntityCourseType*)TypePtr;
 	if(master){	//Do powerup spawn stuff.
-		int numpowerups = powenumhead.CountItems(-1);
 		for(PowerUpSpawnPoint *pow = powhead.NextLink(); pow; pow = pow->NextLink()){	//Iterate spawn points.
 			EntityBase *e = VW->GetEntity(pow->entity);
 			if(!pow->entity || !e || e->QueryInt(ATT_WEAPON_STATUS)){	//No ent, or ent on tank.
@@ -2664,7 +2662,6 @@ void EntitySpewerType::ListResources(FileCRCList *fl){
 }
 EntitySpewer::EntitySpewer(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 						 int id, int flags) : EntityMesh(et, Pos, Rot, Vel, id, flags) {
-	EntitySpewerType *TP = (EntitySpewerType*)TypePtr;
 	CanCollide = false;
 	lastspewtime = VW->Time();
 	lastspewtype = 0;
