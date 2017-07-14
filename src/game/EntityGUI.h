@@ -40,10 +40,10 @@ public:
 	CStr type_clicksound;
 public:
 	EntityGUIType(ConfigFile *cfg, const char *c, const char *t);// : EntityTypeBase(c, t) { };
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	virtual int InterrogateInt(const char *thing);	//Responds to "IsGUIEntity".
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	virtual int InterrogateInt(const char *thing) override;	//Responds to "IsGUIEntity".
 };
 
 #define ATT_GUIENTITY	0x37f15001
@@ -61,11 +61,11 @@ public:
 	EntityGUI(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
-	void SetPos(Vec3 pos);
-	int QueryInt(int type);
-	bool SetInt(int type, int att);	//Use ATT_CMD_NICEREMOVE.
-	EntityGroup Group(){ return GROUP_PROP; };
+	bool Think() override;
+	void SetPos(Vec3 pos) override;
+	int QueryInt(int type) override;
+	bool SetInt(int type, int att) override;	//Use ATT_CMD_NICEREMOVE.
+	EntityGroup Group() override { return GROUP_PROP; };
 };
 
 //ALL EntityGUI sub-classes should at least call EntityGUI::Think(), to handle clickability.
@@ -82,7 +82,7 @@ public:
 	float type_perturbxv, type_perturbyv;
 public:
 	EntityGUIBackgroundType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 class EntityGUIBackground : public EntityGUI {
 public:
@@ -92,7 +92,7 @@ public:
 	EntityGUIBackground(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
+	bool Think() override;
 };
 
 ////////////////////////////////////////////////
@@ -107,7 +107,7 @@ public:
 	float type_overlinger, type_pulseamount, type_pulsetime;
 public:
 	EntityGUIButtonType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 #define FLAG_BUTTON_DISABLED	0x100000
 #define ATT_BUTTON_XFLIP		0xf1380001
@@ -129,10 +129,10 @@ public:
 		int id = 0, int flags = 0);
 	~EntityGUIButton();
 public:
-	bool Think();
-	bool SetString(int type, const char *s);
-	CStr QueryString(int type);
-	bool SetInt(int type, int att);
+	bool Think() override;
+	bool SetString(int type, const char *s) override;
+	CStr QueryString(int type) override;
+	bool SetInt(int type, int att) override;
 };
 
 ////////////////////////////////////////////////
@@ -158,7 +158,7 @@ public:
 	float type_cursorflash;
 public:
 	EntityGUIEditType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 class EntityGUIEdit : public EntityGUIButton {
 public:
@@ -170,12 +170,12 @@ public:
 	EntityGUIEdit(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	bool SetInt(int type, int att);
-	bool SetString(int type, const char *s);
-	CStr QueryString(int type);
+	bool Think() override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	bool SetInt(int type, int att) override;
+	bool SetString(int type, const char *s) override;
+	CStr QueryString(int type) override;
 };
 
 ////////////////////////////////////////////////
@@ -215,9 +215,9 @@ public:
 	int type_knobwidth;
 public:
 	EntityGUIListboxType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityGUIListbox : public EntityGUI {
 public:
@@ -232,12 +232,12 @@ public:
 		int id = 0, int flags = 0);
 	~EntityGUIListbox();
 public:
-	bool Think();
-	bool SetInt(int type, int val);
-	int QueryInt(int type);
-	bool SetString(int type, const char *s);
-	CStr QueryString(int type);
-	bool SetVec(int type, const void *v);
+	bool Think() override;
+	bool SetInt(int type, int val) override;
+	int QueryInt(int type) override;
+	bool SetString(int type, const char *s) override;
+	CStr QueryString(int type) override;
+	bool SetVec(int type, const void *v) override;
 };
 
 ////////////////////////////////////////////////
@@ -252,9 +252,9 @@ public:
 	int type_bpp;
 public:
 	EntityGUIImageBrowserType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityGUIImageBrowser : public EntityGUIButton {
 private:
@@ -264,12 +264,9 @@ public:
 	EntityGUIImageBrowser(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
-	bool SetString(int type, const char *s);
-	bool SetInt(int type, int att);
-//	int QueryInt(int type);
-//	float QueryFloat(int type);
-//	CStr QueryString(int type);
+	bool Think() override;
+	bool SetString(int type, const char *s) override;
+	bool SetInt(int type, int att) override;
 };
 
 ////////////////////////////////////////////////
@@ -283,10 +280,10 @@ public:
 	float type_scale;
 public:
 	EntityGUIMeshType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 class EntityGUIMesh : public EntityGUI {
 public:
@@ -296,7 +293,7 @@ public:
 		int id = 0, int flags = 0);
 	~EntityGUIMesh();
 public:
-	bool Think();
+	bool Think() override;
 };
 
 ////////////////////////////////////////////////
@@ -308,14 +305,14 @@ public:
 	Vec3 type_rotation, type_rotatespeed;
 public:
 	EntityGUIMouseType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 class EntityGUIMouse : public EntityGUIMesh {
 public:
 	EntityGUIMouse(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
+	bool Think() override;
 };
 
 #endif

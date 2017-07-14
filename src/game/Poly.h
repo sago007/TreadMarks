@@ -211,8 +211,8 @@ public:
 	//	IntRot = introt;
 	};
 	SpriteObject() : IntRot(0) { };
-	void Render(PolyRender *PR);
-	bool Transparent(){ return true; };
+	void Render(PolyRender *PR) override;
+	bool Transparent() override{ return true; };
 };
 
 class MeshObject : public Object3D{
@@ -238,8 +238,8 @@ public:
 		M = m;  BndRad = rad;  LodBias = lod;
 	};
 	MeshObject() : PerturbX(0), PerturbZ(0), PerturbScale(1), Perturb(0) { };
-	void Render(PolyRender *PR);
-	bool Transparent(){
+	void Render(PolyRender *PR) override;
+	bool Transparent() override{
 		if(!(Flags & MESH_BLEND_ADD) && (Opacity >= 1.0f || (Flags & MESH_BLEND_ENVMAP))) return false;
 		else return true;
 	};
@@ -261,8 +261,8 @@ public:
 		Width = w;  Height = h;  CopyVec3(pos, Pos);
 	};
 	ParticleCloudObject() : IntRot(0) { };
-	void Render(PolyRender *PR);
-	bool Transparent(){ return true; };
+	void Render(PolyRender *PR) override;
+	bool Transparent() override{ return true; };
 };
 
 class ObjectOrtho{
@@ -298,7 +298,7 @@ public:
 		memcpy(Glyph, glyphs, std::min(count, MAX_TEXTLEN));  nGlyph = count;
 		Opacity = opac;  Red = r;  Green = g;  Blue = b;
 	};
-	void Render(PolyRender *PR);
+	void Render(PolyRender *PR) override;
 };
 
 #define MAX_LINEMAP 128
@@ -331,7 +331,7 @@ public:
 	Chamfered2DBoxObject(){ x = y = w = h = chamferwidth = red = green = blue = alpha = 0.0f; }
 	void Configure(float _x, float _y, float _w, float _h, float _chamferwidth, float r, float g, float b, float a){
 		x = _x; y = _y; w = _w; h = _h; chamferwidth = _chamferwidth; red = r; green = g; blue = b; alpha = a;}
-	void Render(PolyRender *PR);
+	void Render(PolyRender *PR) override;
 };
 
 class TilingTextureObject : public ObjectOrtho {
@@ -362,12 +362,12 @@ public:
 		PerturbX = PerturbY = PerturbScale = Perturb = 0.0f;
 	};
 	~TilingTextureObject(){ };
-	void Render(PolyRender *PR);
+	void Render(PolyRender *PR) override;
 };
 
 class OrthoMeshObject : public ObjectOrtho, public MeshObject {
 public:
-	void Render(PolyRender *PR){
+	void Render(PolyRender *PR) override{
 		MeshObject::Render(PR);
 	};
 };

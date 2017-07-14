@@ -21,23 +21,23 @@
 
 class GLPolyRender : public PolyRender {
 public:
-	bool GLDoRender();	//Renders using OpenGL.
-	bool GLDoRenderTrans();	//Renders transparents, MUST BE CALLED AFTER ABOVE CALL!
-	bool GLDoRenderOrtho();
-	bool GLDoRenderSecondary();	//Renders using OpenGL.
+	bool GLDoRender() override;	//Renders using OpenGL.
+	bool GLDoRenderTrans() override;	//Renders transparents, MUST BE CALLED AFTER ABOVE CALL!
+	bool GLDoRenderOrtho() override;
+	bool GLDoRenderSecondary() override;	//Renders using OpenGL.
 
-	void GLResetStates();
-	void GLBlendMode(int32_t mode);	//Will not re-set already set modes.
-	void GLBindTexture(uint32_t name);	//Will not re-bind already bound textures.
+	void GLResetStates() override;
+	void GLBlendMode(int32_t mode) override;	//Will not re-set already set modes.
+	void GLBindTexture(uint32_t name) override;	//Will not re-bind already bound textures.
 
 	//Russ
-	void GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR);
-	void GLRenderSpriteObject(SpriteObject *thissprite, PolyRender *PR);
-	void GLRenderParticleCloudObject(ParticleCloudObject *thispc, PolyRender *PR);
-	void GLRenderStringObject(StringObject *thisstring, PolyRender *PR);
-	void GLRenderLineMapObject(LineMapObject *thislinemap, PolyRender *PR);
-	void GLRenderTilingTextureObject(TilingTextureObject *thistile, PolyRender *PR);
-	void GLRenderChamfered2DBoxObject(Chamfered2DBoxObject *thisbox, PolyRender *PR);
+	void GLRenderMeshObject(MeshObject *thismesh, PolyRender *PR) override;
+	void GLRenderSpriteObject(SpriteObject *thissprite, PolyRender *PR) override;
+	void GLRenderParticleCloudObject(ParticleCloudObject *thispc, PolyRender *PR) override;
+	void GLRenderStringObject(StringObject *thisstring, PolyRender *PR) override;
+	void GLRenderLineMapObject(LineMapObject *thislinemap, PolyRender *PR) override;
+	void GLRenderTilingTextureObject(TilingTextureObject *thistile, PolyRender *PR) override;
+	void GLRenderChamfered2DBoxObject(Chamfered2DBoxObject *thisbox, PolyRender *PR) override;
 };
 
 #endif

@@ -271,7 +271,7 @@ typedef LinklistBase<EntityBase> EntityBaseHead;
 class EntityGenericType : public EntityTypeBase {
 public:
 	EntityGenericType(ConfigFile *cfg, const char *c, const char *t) : EntityTypeBase(cfg, c, t) { };
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 
 //Generic entity class.
@@ -281,7 +281,7 @@ public:
 		int id = 0, int flags = 0);
 	~EntityGeneric(){ };
 public:
-	bool Think(){ return true; };
+	bool Think() override{ return true; };
 };
 
 //
@@ -373,10 +373,10 @@ protected:
 public:
 	EntityGodType(ConfigFile *cfg, const char *c, const char *t);
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
-		int id = 0, int flags = 0);	//Manufactures an entity of type of current entity type object.
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+		int id = 0, int flags = 0) override;	//Manufactures an entity of type of current entity type object.
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 private:
 	void ReadCfg(ConfigFile *cfg);
 };
@@ -437,9 +437,9 @@ public:
 //	//
 public:
 	EntitySkyplaneType(ConfigFile *cfg, const char *c, const char *t);// : EntityTypeBase(c, t) { };
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 	void UnlinkResources() override;
 private:
 	void ReadCfg(ConfigFile *cfg);
@@ -510,11 +510,11 @@ public:
 	int type_forcemaxtexres;
 public:
 	EntitySpriteType(ConfigFile *cfg, const char *c, const char *t);// : EntityTypeBase(c, t) { };
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
-	CStr InterrogateString(const char *thing);	//Responds to "TextureName"
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
+	CStr InterrogateString(const char *thing) override;	//Responds to "TextureName"
 };
 //
 //Use QueryString with this to retrieve ResourceManager name of tank's texture.
@@ -541,15 +541,15 @@ public:
 	EntitySprite(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntitySprite(){ };
-	bool Think();
-	bool SetInt(int type, int val);//{ ifActive = val; return true; };
-	int QueryInt(int type);//{ return Active; };	//ATT_RENDFLAGS
-	bool SetFloat(int type, float att);//{ return false; };	//Set arbitrary attribute of entity.
-	float QueryFloat(int type);//{ return 0.0f; };
-	CStr QueryString(int type);
-	bool QueryVec(int type, void *out);	//ATT_TEXTURE_PTR
-	EntityGroup Group(){ return GROUP_PROP; };
-	int TerrainModified();
+	bool Think() override;
+	bool SetInt(int type, int val) override;//{ ifActive = val; return true; };
+	int QueryInt(int type) override;//{ return Active; };	//ATT_RENDFLAGS
+	bool SetFloat(int type, float att) override;//{ return false; };	//Set arbitrary attribute of entity.
+	float QueryFloat(int type) override;//{ return 0.0f; };
+	CStr QueryString(int type) override;
+	bool QueryVec(int type, void *out) override;	//ATT_TEXTURE_PTR
+	EntityGroup Group() override{ return GROUP_PROP; };
+	int TerrainModified() override;
 };
 //***************************************************************
 //             Generic Polygon Mesh entity.
@@ -641,13 +641,13 @@ public:
 	EntityText(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntityText(){ };
-	bool Think();
-	bool SetFloat(int type, float val);
-	float QueryFloat(int type);
-	bool SetString(int type, const char *s);
-	CStr QueryString(int type);
-	EntityGroup Group(){ return GROUP_ACTOR; };
-	void DeliverPacket(const unsigned char *data, int len);
+	bool Think() override;
+	bool SetFloat(int type, float val) override;
+	float QueryFloat(int type) override;
+	bool SetString(int type, const char *s) override;
+	CStr QueryString(int type) override;
+	EntityGroup Group() override { return GROUP_ACTOR; };
+	void DeliverPacket(const unsigned char *data, int len) override;
 };
 //***************************************************************
 //             Icon entity.

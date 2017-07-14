@@ -22,16 +22,16 @@ extern NetworkError LastDisconnectError;
 void OOBPing(sockaddr_in *to);	//Sends an out of band ping using MasterNet object.
 
 class TankPacketProcessor : public PacketProcessorCallback {
-	virtual void Connect(ClientID source);
-	virtual void Disconnect(ClientID source, NetworkError ne);
-	virtual void PacketReceived(ClientID source, const char *data, int len);
-	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int len);
+	virtual void Connect(ClientID source) override;
+	virtual void Disconnect(ClientID source, NetworkError ne) override;
+	virtual void PacketReceived(ClientID source, const char *data, int len) override;
+	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int len) override;
 };
 
 class MasterClientPacketProcessor : public TankPacketProcessor {
-	virtual void Connect(ClientID source);
-	virtual void Disconnect(ClientID source, NetworkError ne);
-	virtual void PacketReceived(ClientID source, const char *data, int len);
+	virtual void Connect(ClientID source) override;
+	virtual void Disconnect(ClientID source, NetworkError ne) override;
+	virtual void PacketReceived(ClientID source, const char *data, int len) override;
 };
 //
 #endif // __PACKETPROCESSORS_H__

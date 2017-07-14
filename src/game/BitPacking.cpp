@@ -181,8 +181,7 @@ int32_t BitUnpackEngine::UnpackFloatInterval(float &val, float min, float max, i
 	if(bits > 0 && max > min){
 		uint32_t v;
 		if(UnpackUInt(v, bits)){
-			double size = (max - min) / (double)(bits >= 32 ? 0xffffffff : 1 << bits);
-		//	val = min + (max - min) * ((float)v / (float)((1 << bits) - 1));
+			double size = (max - min) / (double)(bits >= 32 ? -1 : 1 << bits);
 			val = (float)(min + size * ((double)v + 0.5));
 			return 1;
 		}

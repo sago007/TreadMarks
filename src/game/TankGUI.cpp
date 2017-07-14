@@ -54,7 +54,7 @@ MenuPage ReturnFromText = MP_Main;
 
 bool bTrainingOnly = false;
 
-int FirstTimeOnMenu = 0;
+bool FirstTimeOnMenu = false;
 
 struct GUIElementSlot{
 	EntityGID gid;
@@ -97,7 +97,7 @@ void FreeGui(){
 int Activated(EntityBase **e = NULL){
 	if(FirstTimeOnMenu){
 		if(e) *e = NULL;
-		FirstTimeOnMenu = 0;
+		FirstTimeOnMenu = false;
 		return BID_FirstTimeOnMenu;
 	}
 	EntityGID a = CTankGame::Get().GetVW()->GetActivated();
@@ -3380,7 +3380,7 @@ void DoMenus(){
 	LMenuFire = CTankGame::Get().GetSettings()->GraphicsSettings.MenuFire;
 	//
 	if(CurrentMenu != LastMenu){
-		FirstTimeOnMenu = 1;
+		FirstTimeOnMenu = true;
 	}
 	LastMenu = CurrentMenu;
 	//

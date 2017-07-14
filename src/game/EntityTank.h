@@ -70,10 +70,10 @@ private:
 public:
 	EntityTankGodType(ConfigFile *cfg, const char *c, const char *t);
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
-		int id = 0, int flags = 0);	//Manufactures an entity of type of current entity type object.
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+		int id = 0, int flags = 0) override;	//Manufactures an entity of type of current entity type object.
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 private:
 	void ReadCfg(ConfigFile *cfg);	//We override defaults from map config file.
 };
@@ -156,13 +156,13 @@ private:
 	int globalmultikill, timesincegmkdec;
 public:
 	EntityTankGod(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	void DeliverPacket(const unsigned char *data, int len);
-	bool SetInt(int type, int attr);
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	CStr QueryString(int type);
-	EntityGroup Group(){ return GROUP_ACTOR; };//GROUP_OMNIPOTENT
+	bool Think() override;
+	void DeliverPacket(const unsigned char *data, int len) override;
+	bool SetInt(int type, int attr) override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	CStr QueryString(int type) override;
+	EntityGroup Group() override{ return GROUP_ACTOR; };//GROUP_OMNIPOTENT
 public:
 	//This is the public interface for praying to the Tank God to be told what place you are in the race
 	//and what juicy targets of opportunity are closest at hand.
@@ -262,18 +262,18 @@ public:
 public:
 	EntityRacetankType(ConfigFile *cfg, const char *c, const char *t);
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
-		int id = 0, int flags = 0);	//Manufactures an entity of type of current entity type object.
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
-	int InterrogateInt(const char *thing);	//Responds to "minimal rescache" and "normal rescache".
-	CStr InterrogateString(const char *thing);	//Responds to "namesound".
+		int id = 0, int flags = 0) override;	//Manufactures an entity of type of current entity type object.
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
+	int InterrogateInt(const char *thing) override;	//Responds to "minimal rescache" and "normal rescache".
+	CStr InterrogateString(const char *thing) override;	//Responds to "namesound".
 };
 class EntityRacetank;
 //Vehicle subclass.
 class TankVehicle : public Vehicle {
 public:
-	bool CheckCollision();
+	bool CheckCollision() override;
 	EntityRacetank *tank;
 	TankVehicle() : tank(NULL) { return; };//EntityRacetank *t) : tank(t) {};
 };
@@ -359,23 +359,23 @@ public:
 public:
 	EntityRacetank(EntityRacetankType *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityRacetank();
-	void SetPos(Vec3 pos);
-	void SetRot(Rot3 rot);
-	void SetVel(Vec3 vel);
-	bool Think();
-	void DeliverPacket(const unsigned char *data, int len);
-	int ExtraCreateInfo(unsigned char *data, int len);
-	bool SetFloat(int type, float attr);
-	bool SetInt(int type, int attr);
-	bool SetString(int type, const char *s);
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	CStr QueryString(int type);
+	void SetPos(Vec3 pos) override;
+	void SetRot(Rot3 rot) override;
+	void SetVel(Vec3 vel) override;
+	bool Think() override;
+	void DeliverPacket(const unsigned char *data, int len) override;
+	int ExtraCreateInfo(unsigned char *data, int len) override;
+	bool SetFloat(int type, float attr) override;
+	bool SetInt(int type, int attr) override;
+	bool SetString(int type, const char *s) override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	CStr QueryString(int type) override;
 	bool InitCollide();
-	bool CollisionWith(EntityBase *collider, Vec3 colpnt);
+	bool CollisionWith(EntityBase *collider, Vec3 colpnt) override;
 	bool Collide(EntityBase *collider, Vec3 colpnt, bool callother);	//Specific to derived class function that holds collison guts.  Set CallOther to call collidee's CollisionWith member.
 	bool CheckCollision();	//Specific function to do whole collision checking shebang.
-	EntityGroup Group(){ return GROUP_ACTOR; };
+	EntityGroup Group() override{ return GROUP_ACTOR; };
 	int ReadyToFire();
 	void FlagDeath(const int KillerID);
 };
@@ -388,17 +388,17 @@ class EntityRacetankDoppelgangerType : public EntityRacetankType {
 public:
 	EntityRacetankDoppelgangerType(ConfigFile *cfg, const char *c, const char *t);
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
-		int id = 0, int flags = 0);	//Manufactures an entity of type of current entity type object.
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+		int id = 0, int flags = 0) override;	//Manufactures an entity of type of current entity type object.
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityRacetankDoppelganger : public EntityRacetank {
 public:
 	EntityRacetankType *RTP;
 public:
 	EntityRacetankDoppelganger(EntityRacetankDoppelgangerType *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	bool SetString(int type, const char *s);
+	bool Think() override;
+	bool SetString(int type, const char *s) override;
 };
 //
 
@@ -409,17 +409,17 @@ public:
 	CStr type_explodefol, type_explokill;
 public:
 	EntityTreeType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityTree : public EntitySprite {
 public:
 	int mssincesmoke;
 public:
 	EntityTree(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CollisionWith(EntityBase *collider, Vec3 colpnt);
-	bool Think();
+	bool CollisionWith(EntityBase *collider, Vec3 colpnt) override;
+	bool Think() override;
 };
 
 //SMOKE superclass, derived from SPRITE.
@@ -434,16 +434,16 @@ public:
 	int type_randomrotate;
 public:
 	EntitySmokeType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntitySmoke : public EntitySprite {
 public:
 	int timetodie, timeofbirth;
 	EntitySmoke(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	virtual EntityGroup Group(){ return GROUP_ETHEREAL; };	//Queries group type of entity object.
+	bool Think() override;
+	virtual EntityGroup Group() override{ return GROUP_ETHEREAL; };	//Queries group type of entity object.
 };
 
 //CRUD superclass, handling debris kicked up from treads.
@@ -456,10 +456,10 @@ public:
 	int type_usegroundcolor;
 public:
 	EntityCrudType(ConfigFile *cfg, const char *c, const char *t);// : EntityTypeBase(c, t) { };
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 class EntityCrud : public EntitySprite {
 public:
@@ -470,8 +470,8 @@ public:
 	EntityCrud(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntityCrud(){ };
-	bool Think();
-	virtual EntityGroup Group(){ return GROUP_ETHEREAL; };	//Queries group type of entity object.
+	bool Think() override;
+	virtual EntityGroup Group() override{ return GROUP_ETHEREAL; };	//Queries group type of entity object.
 };
 
 //COURSE superclass, deriving from Waypoint.
@@ -515,11 +515,11 @@ public:
 	float type_pushstartpoints;
 public:
 	EntityCourseType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 	void ReadCfg(ConfigFile *cfg);
-	virtual CStr InterrogateString(const char *thing);
+	virtual CStr InterrogateString(const char *thing) override;
 };
 //Actual object.
 class EntityCourse : public EntityWaypoint {
@@ -531,7 +531,7 @@ public:
 public:
 	EntityCourse(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
-	bool Think();
+	bool Think() override;
 };
 
 //EXPLO superclass, derived from SPRITE.  Explosions via packs of clouds.
@@ -551,9 +551,9 @@ public:
 	CStr type_soundenttype;
 public:
 	EntityExploType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class ExploSpriteObject : public SpriteObject {
 public:
@@ -568,7 +568,7 @@ public:
 public:
 	EntityExplo(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityExplo();
-	bool Think();
+	bool Think() override;
 };
 
 //EXPLOSPHERE superclass, derived from MESH.  Explosions via transparent spheres.
@@ -581,16 +581,16 @@ public:
 	float type_expand, type_expandstart, type_rotatespeed, type_rotatespeedz;
 	CStr type_soundenttype;
 	EntityExploSphereType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityExploSphere : public EntityMesh {
 public:
 	Vec3 OriRotation;
 	int timetodie, timeofbirth;
 	EntityExploSphere(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
+	bool Think() override;
 };
 
 //PROJECTILE superclass, derived from SPRITE.
@@ -622,10 +622,10 @@ public:
 	float type_smoketrailtime;
 public:
 	EntityProjectileType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	float InterrogateFloat(const char *thing);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	float InterrogateFloat(const char *thing) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityProjectile : public EntityMesh {
 public:
@@ -643,10 +643,10 @@ public:
 public:
 	EntityProjectile(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityProjectile();
-	float QueryFloat(int type);
-	int QueryInt(int type);
-	bool Think();
-	void DeliverPacket(const unsigned char *data, int len);
+	float QueryFloat(int type) override;
+	int QueryInt(int type) override;
+	bool Think() override;
+	void DeliverPacket(const unsigned char *data, int len) override;
 private:
 	void Detonate(EntityGID nosplash);	//Creates crater and calcs splash damage.  Does not do explo or direct damage.
 };
@@ -660,9 +660,9 @@ class EntityBaubleType : public EntityMeshType {
 public:
 	float type_stiffness, type_dampening;
 	EntityBaubleType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityBauble : public EntityMesh {
 public:
@@ -673,9 +673,9 @@ public:
 public:
 	EntityBauble(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityBauble();
-	bool Think();
-	bool SetInt(int type, int attr);
-	int QueryInt(int type);
+	bool Think() override;
+	bool SetInt(int type, int attr) override;
+	int QueryInt(int type) override;
 };
 
 //WEAPON superclass, derived from MESH.
@@ -724,11 +724,11 @@ private:
 	int type_unique;
 public:
 	EntityWeaponType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	int InterrogateInt(const char *thing);	//Responds to "powerup-family", "powerup-level", and "powerup-weight".
-	float InterrogateFloat(const char *thing);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	int InterrogateInt(const char *thing) override;	//Responds to "powerup-family", "powerup-level", and "powerup-weight".
+	float InterrogateFloat(const char *thing) override;
 };
 class EntityWeapon : public EntityMesh {
 	MeshObject secmeshobj;
@@ -742,13 +742,13 @@ class EntityWeapon : public EntityMesh {
 public:
 	EntityWeapon(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityWeapon();
-	bool Think();
-	bool CollisionWith(EntityBase *collider, Vec3 colpnt);
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	CStr QueryString(int type);
-	bool SetInt(int type, int attr);
-	void DeliverPacket(const unsigned char *data, int len);
+	bool Think() override;
+	bool CollisionWith(EntityBase *collider, Vec3 colpnt) override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	CStr QueryString(int type) override;
+	bool SetInt(int type, int attr) override;
+	void DeliverPacket(const unsigned char *data, int len) override;
 };
 
 //POWERUP superclass, derived from MESH.
@@ -762,20 +762,20 @@ private:
 	CStr type_pickupsound, type_inentity, type_spawnsound, type_outentity, type_spawnentity;
 public:
 	EntityPowerUpType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	int InterrogateInt(const char *thing);	//Responds to "powerup-family", "powerup-level", "powerup-weight", "ammoadd"
-	float InterrogateFloat(const char *thing); //Responds to "healthfix", and "boltonammoadd"
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	int InterrogateInt(const char *thing) override;	//Responds to "powerup-family", "powerup-level", "powerup-weight", "ammoadd"
+	float InterrogateFloat(const char *thing) override; //Responds to "healthfix", and "boltonammoadd"
 };
 class EntityPowerUp : public EntityMesh {
 	EntityGID tankgod;
 public:
 	EntityPowerUp(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	bool CollisionWith(EntityBase *collider, Vec3 colpnt);
-	int QueryInt(int type);
-	bool SetInt(int type, int attr);
+	bool Think() override;
+	bool CollisionWith(EntityBase *collider, Vec3 colpnt) override;
+	int QueryInt(int type) override;
+	bool SetInt(int type, int attr) override;
 };
 
 //SPEWER superclass, derived from MESH.
@@ -792,9 +792,9 @@ private:
 	int type_maxspewcount, type_iterations;
 public:
 	EntitySpewerType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntitySpewer : public EntityMesh {
 	int lastspewtime;
@@ -803,7 +803,7 @@ class EntitySpewer : public EntityMesh {
 	EntityGID curowner;
 public:
 	EntitySpewer(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
+	bool Think() override;
 };
 
 
@@ -816,15 +816,15 @@ private:
 	CStr type_bouncesound;
 public:
 	EntitySquishyType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntitySquishy : public EntityMesh {
 public:
 	EntitySquishy(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	void DeliverPacket(const unsigned char *data, int len);
+	bool Think() override;
+	void DeliverPacket(const unsigned char *data, int len) override;
 };
 
 
@@ -838,18 +838,18 @@ private:
 	int hflip;
 public:
 	EntityInsigniaType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	int InterrogateInt(const char *thing);	//Responds to "TEAM".
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	int InterrogateInt(const char *thing) override;	//Responds to "TEAM".
 };
 class EntityInsignia : public EntityMesh {
 public:
 	Mat3 rotMat;
 public:
 	EntityInsignia(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	bool SetVec(int type, const void *v);
-	void SetPos(Vec3 pos);
-	void SetRot(Rot3 rot);
+	bool Think() override;
+	bool SetVec(int type, const void *v) override;
+	void SetPos(Vec3 pos) override;
+	void SetRot(Rot3 rot) override;
 };
 
 #define MAX_DESC_STRINGS 40
@@ -871,11 +871,11 @@ public:
 	int descid;
 	CStr DescStrings[MAX_DESC_STRINGS];
 	EntityTutorialType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	CStr InterrogateString(const char *thing);
-	int InterrogateInt(const char *thing);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	CStr InterrogateString(const char *thing) override;
+	int InterrogateInt(const char *thing) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
 };
 class EntityTutorial : public EntityMesh {
 private:
@@ -888,8 +888,8 @@ private:
 public:
 	~EntityTutorial();
 	EntityTutorial(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool Think();
-	bool SetString(int type, const char *s);
+	bool Think() override;
+	bool SetString(int type, const char *s) override;
 };
 
 #endif

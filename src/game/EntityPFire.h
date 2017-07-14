@@ -36,10 +36,10 @@ public:
 	int type_size, type_particles;
 public:
 	EntityPFireType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 #define ATT_PFIRE_PING		0x68c80000
 //SetInt this to 1 on a regular basis (every second at least) to make sure particle fire effect is rendered.
@@ -61,11 +61,11 @@ public:
 	EntityPFire(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 public:
-	bool Think();
-	int QueryInt(int type);
-	bool SetInt(int type, int att);
-	bool SetFloat(int type, float att);
-	EntityGroup Group(){ return GROUP_PROP; };
+	bool Think() override;
+	int QueryInt(int type) override;
+	bool SetInt(int type, int att) override;
+	bool SetFloat(int type, float att) override;
+	EntityGroup Group() override{ return GROUP_PROP; };
 };
 
 #endif

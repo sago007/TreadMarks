@@ -1004,7 +1004,7 @@ bool GLPolyRender::GLDoRenderOrtho(){
 
 
 //Downloads loaded images to OpenGL driver as textures.
-//Indexed Images are only used to paint32_t terrain, so aren't downloaded.
+//Indexed Images are only used to paint terrain, so aren't downloaded.
 //Download sliced up terrain textures in Terrain class.
 bool ResourceManager::DownloadTextures(bool UpdateOnly){
 	if(DisableLoading) return true;	//Just skip if we have resource loading disabled.
@@ -1079,7 +1079,6 @@ bool ResourceManager::DownloadTextures(bool UpdateOnly){
 								for(int32_t c = 0; c < 3; c++) rgba[i].byte[c] = (rgba[i].byte[c] >>2) + 191;
 								rgba[i].byte[3] = av;
 							}else{
-							//	rgba[i].argb = (rgba[i].argb & 0xffffff) | (av <<24);
 								//
 								av = (int32_t)(Bias(node->AlphaGradBias, (float)av / 255.0f) * 255.0f);
 								//

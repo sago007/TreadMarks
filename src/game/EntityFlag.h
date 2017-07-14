@@ -42,10 +42,10 @@ private:
 	CStr type_pickupsound, type_inentity, type_spawnsound, type_outentity, type_spawnentity;
 public:
 	EntityFlagType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	int InterrogateInt(const char *thing); // Repsonds to "unique"
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	int InterrogateInt(const char *thing) override; // Repsonds to "unique"
 };
 class EntityFlag : public EntityInsignia {
 private:
@@ -59,12 +59,12 @@ private:
 public:
 	EntityFlag(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntityFlag();
-	bool Think();
-	bool CollisionWith(EntityBase *collider, Vec3 colpnt);
-	int QueryInt(int type);
-	float QueryFloat(int type);
-	bool SetInt(int type, int att);
-	void DeliverPacket(const unsigned char *data, int len);
+	bool Think() override;
+	bool CollisionWith(EntityBase *collider, Vec3 colpnt) override;
+	int QueryInt(int type) override;
+	float QueryFloat(int type) override;
+	bool SetInt(int type, int att) override;
+	void DeliverPacket(const unsigned char *data, int len) override;
 };
 
 #endif // __ENTITYFLAG_H__

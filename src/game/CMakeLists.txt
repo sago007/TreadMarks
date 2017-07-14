@@ -122,7 +122,7 @@ IF(NOT BUILD_HEADLESS)
 ENDIF(NOT BUILD_HEADLESS)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wno-unused-parameter -Wno-unknown-pragmas -Wno-sign-compare -Wno-reorder")
+  SET(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wno-unused-parameter -Wno-unknown-pragmas -Wno-sign-compare -Wno-reorder") #-Wsuggest-override
 ENDIF()
 
 IF(WIN32 AND NOT BUILD_HEADLESS)

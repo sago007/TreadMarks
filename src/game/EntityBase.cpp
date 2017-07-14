@@ -1102,8 +1102,6 @@ bool EntitySpriteType::CacheResources(){
 	ResCached = true;	//Prevents circular caching.  Be sure to set false if failure.
 	texture = VW->GetImage(texturefile, true, (type_rendflags & SPRITE_BLEND_ADD) ? false : type_transparent, type_alphagrad);	//MipMap and Transparent.
 	if(texture){
-	//	if((texture->flags & BFLAG_ROTATED) == 0) texture->RotateLeft90();
-	//	texture->AnalyzeLines();	//Temporary, make non-vertical sprite drawer some time...
 		texture->SizeBias = MAX(abs(type_sizebias), abs(texture->SizeBias));	//Set size bias (to largest ever set).
 		if(type_alphagradbias != 0.5f) texture->AlphaGradBias = type_alphagradbias;
 		texture->ForceMaxTexRes = MAX(type_forcemaxtexres, texture->ForceMaxTexRes);	//Set to largest ever set.

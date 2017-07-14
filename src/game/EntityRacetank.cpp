@@ -292,7 +292,6 @@ EntityRacetank::EntityRacetank(EntityRacetankType *et, Vec3 Pos, Rot3 Rot, Vec3 
 	ourkiller = 0;	//Last tank to smack us.
 	ourkillerweapontype = 0;	//Type hash of weapon killer used.
 	//
-//	Name = "AI-Tank-" + String((int)(GID & (~ENTITYGID_NETWORK)));	//TODO: Propogate this through net.
 	Name = "AI-Tank-" + String((int)(GID & (~ENTITYGID_NETWORK)) % 255);	//TODO: Propogate this through net.  DONE.
 	sendreliablepos = 0;
 	ping = 0;

@@ -246,7 +246,7 @@ float Basis::Noise(float x, float y, int octaves, int xrpt, int yrpt){
 double Bias(double b, double v){
 	//return pow(v, log(b) / log(0.5));
 	//That was Perlin's, now let's try Schlick's.
-	return v / ((1 / b - 2.0) * (1.0 - v) + 1.0);
+	return v / ((1.0 / b - 2.0) * (1.0 - v) + 1.0);
 }
 double Gain(double g, double v){
 	if(v < 0.5){

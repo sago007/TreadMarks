@@ -110,9 +110,9 @@ friend class ClientConnection;
 private:
 	PacketID Ident;
 	TimeStamp LastSent;
-	int Acked;
-	int Length;
-	int Priority;
+	int32_t Acked;
+	int32_t Length;
+	int32_t Priority;
 	char *Data;
 public:
 	MiniPacket();
