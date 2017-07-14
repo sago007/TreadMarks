@@ -33,8 +33,6 @@ struct FeaturePoint{
 
 class Basis{
 public:
-//	double NthDist[MAXNTH];	//Array of distances for cellular return.
-//	int NthAss[MAXNTH];
 	FeaturePoint NthFeature[MAXNTH];
 private:
 	float NoiseFloatTable[TABSIZE * 2];	//0.0 - 1.0
@@ -58,8 +56,6 @@ public:
 	//individual cells different shades.
 
 	float Noise(float x, float y, int octaves = 0, int xrpt = 0, int yrpt = 0);
-//	int Noise(unsigned char *table, int length, float x, float y, float xdelta, float ydelta,
-//		int octaves = 0, int xrpt = 0, int yrpt = 0);
 };
 
 double Bias(double b, double v);

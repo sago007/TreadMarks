@@ -51,20 +51,7 @@ void foo(){
 // Gary Tarolli's clever inverse square root technique
 const float ONE_HALF = 0.5f;
 const float THREE_HALVES = 1.5f;
-/*
-float fsqrt_inv(float f)
-{
- long i;
- float x2, y;
- x2 = 0.5f*f;
- i = *(long *)&f;
- i = 0x5f3759df - (i>>1);
- y = *(float *)&i;
- // repeat this iteration for more accuracy
- y = 1.5f*y - (x2*y * y*y);
- return y;
-}
-*/
+
 // same as above but in assembly
 #ifdef WIN32
 	__declspec(naked) float CDECL fsqrt_inv(float f)

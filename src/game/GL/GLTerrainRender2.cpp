@@ -285,7 +285,6 @@ inline int32_t FloatToLong(float f) { // relies on IEEE format for float
 	f += -0.499999f;	//This change makes it CHOP TO LOWER!!
 	f += (3 << 22);
 	return ((*(int32_t*)&f)&0x007fffff) - 0x00400000;
-//	return (long)f;
 }
 
 //#define MORPH_DIST 2

@@ -36,8 +36,6 @@
 #ifndef IFF_H
 #define IFF_H
 
-//typedef unsigned long ulong;
-//typedef unsigned short ushort;
 typedef unsigned char uchar;
 
 //#include "stdio.h"

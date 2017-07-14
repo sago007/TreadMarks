@@ -222,14 +222,12 @@ bool ConfigFile::FindNextKey(const char *n){
 		if(comment){
 			i++; continue;	//Skip rest of loop.
 		}
-	//	if(toupper(data[i]) == tname[match] && linestate < 2){
 		if(tolower(data[i]) == tname[match] && ((match == 0 && linestate == 0) || (match > 0 && linestate == 1)) ){
 			//This change will prevent end-of-substring matches.
 			match++;
 		}else{
 			match = 0;
 		}
-	//	if(isalpha(data[i])) linestate = std::max(linestate, 1);
 		if(isalnum(data[i]) || data[i] == '_') linestate = std::max(linestate, 1);	//Allows keys to start with digits and underscores.
 		if((data[i] == ' ' || data[i] == '\t') && linestate == 1) linestate = 2;	//First space AFTER alpha chars turns off key search for this line.  Check is done after search to catch one space char at end of key name.
 		i++;
@@ -271,7 +269,7 @@ bool ConfigFile::GetStringVal(CStr &str){
 	return false;
 }
 
-bool ConfigFile::GetEnumVal(int *i, ConfigEnum *enm, int nenm){
+bool ConfigFile::GetEnumVal(int32_t *i, ConfigEnum *enm, int nenm){
 	char buf[1024];
 	if(i && enm && nenm > 0 && GetStringVal(buf, 1024)){
 		for(int n = 0; n < nenm; n++){
@@ -284,7 +282,7 @@ bool ConfigFile::GetEnumVal(int *i, ConfigEnum *enm, int nenm){
 	return false;
 }
 
-bool ConfigFile::GetIntVal(int *pi){
+bool ConfigFile::GetIntVal(int32_t *pi){
 	if(pi && data && datapos){
 		*pi = atoi(&data[datapos]);
 		return true;

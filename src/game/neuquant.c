@@ -20,6 +20,7 @@
 
 
 #include "neuquant.h"
+#include <stdint.h>
 
 
 /* Network Definitions
@@ -48,7 +49,7 @@
 /* defs for decreasing alpha factor */
 #define alphabiasshift	10			/* alpha starts at 1.0 */
 #define initalpha	(((int) 1)<<alphabiasshift)
-int alphadec;					/* biased by 10 bits */
+int32_t alphadec;					/* biased by 10 bits */
 
 /* radbias and alpharadbias used for radpower calculation */
 #define radbiasshift	8
@@ -61,19 +62,19 @@ int alphadec;					/* biased by 10 bits */
    -------------------------- */
    
 static unsigned char *thepicture;		/* the input image itself */
-static int lengthcount;				/* lengthcount = H*W*3 */
+static int32_t lengthcount;				/* lengthcount = H*W*3 */
 
-static int samplefac;				/* sampling factor 1..30 */
+static int32_t samplefac;				/* sampling factor 1..30 */
 
 
-typedef int pixel[4];				/* BGRc */
+typedef int32_t pixel[4];				/* BGRc */
 static pixel network[netsize];			/* the network itself */
 
-static int netindex[256];			/* for network lookup - really 256 */
+static int32_t netindex[256];			/* for network lookup - really 256 */
 
-static int bias [netsize];			/* bias and freq arrays for learning */
-static int freq [netsize];
-static int radpower[initrad];			/* radpower for precomputation */
+static int32_t bias [netsize];			/* bias and freq arrays for learning */
+static int32_t freq [netsize];
+static int32_t radpower[initrad];			/* radpower for precomputation */
 
 
 /* Initialise network in range (0,0,0) to (255,255,255) and set parameters
@@ -253,9 +254,9 @@ int contest(int b, int g, int r)
 	/* for frequently chosen neurons, freq[i] is high and bias[i] is negative */
 	/* bias[i] = gamma*((1/netsize)-freq[i]) */
 
-	register int i,dist,a,biasdist,betafreq;
-	int bestpos,bestbiaspos,bestd,bestbiasd;
-	register int *p,*f, *n;
+	int32_t i,dist,a,biasdist,betafreq;
+	int32_t bestpos,bestbiaspos,bestd,bestbiasd;
+	int32_t *p,*f, *n;
 
 	bestd = ~(((int) 1)<<31);
 	bestbiasd = bestd;

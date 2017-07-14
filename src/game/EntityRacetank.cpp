@@ -748,7 +748,7 @@ bool EntityRacetank::Think(){
 	if(!(rendflags & MESH_BLEND_ADD) && (fade >= 1.0f || (rendflags & MESH_BLEND_ENVMAP))) trans = 0;
 	else trans = 1;
 	//
-	int tankvis = 0;
+	bool tankvis = false;
 	if(TP->mesh){
 		meshobj.Configure(texture, TP->mesh, tankMat, tankMat[3], rendflags, fade, TP->mesh->BndRad, TP->mesh->LodBias);
 		if(trans) tankvis = VW->PolyRend->AddTransObject(&meshobj);
@@ -1763,28 +1763,18 @@ bool EntityRacetankDoppelganger::Think(){
 		Mat43MulMat43(tmpMat, tankMat, turMat);	//Transform by tank matrix.
 		//
 		int rendflags = RTP->type_rendflags;
-		int trans;	//Decide if we're transparent or not.  Add opacity checking once there is opacity!
-		if(!(rendflags & MESH_BLEND_ADD) && (fade >= 1.0f || (rendflags & MESH_BLEND_ENVMAP))) trans = 0;
-		else trans = 1;
 		//
-		int tankvis = 0;
 		if(RTP->mesh){
 			meshobj.Configure(RTP->texture, RTP->mesh, tankMat, tankMat[3], rendflags, fade, RTP->mesh->BndRad, 10.0f);//RTP->mesh->LodBias);
-		//	if(trans) tankvis = VW->PolyRend->AddTransObject(&meshobj);
-			tankvis = VW->PolyRend->AddSecondaryObject(&meshobj);
-		//	VW->PolyRend->AddMeshMat(TP->mesh, tankMat, false, TP->type_rendflags);
+			VW->PolyRend->AddSecondaryObject(&meshobj);
 		}
 		if(RTP->turretmesh){
 			turretmeshobj.Configure(RTP->texture, RTP->turretmesh, turMat, turMat[3], rendflags, turretfade, RTP->turretmesh->BndRad, 10.0f);//TP->turretmesh->LodBias);
-		//	if(trans || turretfade < 1.0f) VW->PolyRend->AddTransObject(&turretmeshobj);
 			VW->PolyRend->AddSecondaryObject(&turretmeshobj);
-		//	VW->PolyRend->AddMeshMat(TP->turretmesh, turMat, true, TP->type_rendflags);
 		}
 		if(RTP->gunmesh){
 			gunmeshobj.Configure(RTP->texture, RTP->gunmesh, turMat, turMat[3], rendflags, turretfade, RTP->gunmesh->BndRad, 10.0f);//TP->gunmesh->LodBias);
-		//	if(trans || turretfade < 1.0f) VW->PolyRend->AddTransObject(&gunmeshobj);
 			VW->PolyRend->AddSecondaryObject(&gunmeshobj);
-		//	VW->PolyRend->AddMeshMat(TP->gunmesh, turMat, true, TP->type_rendflags);
 		}
 		//
 	}

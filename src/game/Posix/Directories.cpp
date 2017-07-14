@@ -21,11 +21,6 @@ CStr GetAppDataDir()
 {
 	CStr the_path =  getenv("HOME");
 	the_path = the_path + CStr("/.local/share/Tread Marks/");
-	/*std::error_code e;
-	std::experimental::filesystem::create_directories(the_path.get(), e);
-	if (e) {
-		fprintf(stderr, "Failed to create \"%s\". Error: %s", the_path.get(), e.message().c_str());
-	}*/
 	CreateDirectoriesRecursivly(the_path.get());
 	return the_path;
 }

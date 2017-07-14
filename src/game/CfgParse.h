@@ -25,6 +25,7 @@
 
 #include <cstdio>
 #include <functional>
+#include <stdint.h>
 
 #include "CStr.h"
 
@@ -54,11 +55,11 @@ public:
 	bool FindNextKey(const char *n);
 	int GetStringVal(char *s, int length);
 	bool GetStringVal(CStr &str);
-	bool GetIntVal(int *i);
+	bool GetIntVal(int32_t *i);
 	bool GetBoolVal(bool *pb);
 	bool GetFloatVal(float *i);
 	int GetFloatVals(float *i, int num);	//Reads comma-seperated list of floats
-	bool GetEnumVal(int *i, ConfigEnum *enm, int nenm);
+	bool GetEnumVal(int32_t *i, ConfigEnum *enm, int nenm);
 public:
 	int GetCompressedLength();
 	int GetCompressedData(char *dest, int maxlen, int offset = 0, int bytes = 0);

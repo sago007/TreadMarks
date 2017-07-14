@@ -64,8 +64,8 @@ bool RegisterEntityTypeCreator(ENTITYTYPECREATORPTR etcp);	//Use this to registe
 
 EntityTypeBase *CreateEntityType(ConfigFile *cfg);	//Asks registered Entity Type creators if they can handle class/type in config file.
 
-typedef unsigned int EntityGID;
-typedef unsigned int ClassHash;
+typedef uint32_t EntityGID;
+typedef uint32_t ClassHash;
 
 #define ENTITYGID_NETWORK 0x80000000
 //High bit of GID is ON for network persistent entities.

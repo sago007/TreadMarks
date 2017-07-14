@@ -30,9 +30,9 @@
 
 #include "BanList.h"
 
-typedef unsigned int PacketID;
-typedef unsigned int TimeStamp;
-typedef unsigned int ClientID;
+typedef uint32_t PacketID;
+typedef uint32_t TimeStamp;
+typedef uint32_t ClientID;
 
 //Macros for inserting network-order shorts and longs into arbitrary memory locations.
 //Can be used by App when reading/writing to mini-packets.
