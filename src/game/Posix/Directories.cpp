@@ -14,16 +14,17 @@
 // along with Tread Marks.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../Directories.h"
+#include <experimental/filesystem>
 
 CStr GetAppDataDir()
 {
 	CStr the_path =  getenv("HOME");
 	the_path = the_path + CStr("/.local/share/Tread Marks/");
-
-	//Create the directory if it does not exist. Should be replaced by a library call instead at some point.
-	std::string mkdirCommand = "mkdir -p \""+std::string(the_path.get())+"\"";
-	system(mkdirCommand.c_str());
-
+	std::error_code e;
+	std::experimental::filesystem::create_directories(the_path.get(), e);
+	if (e) {
+		fprintf(stderr, "Failed to create \"%s\". Error: %s", the_path.get(), e.message().c_str());
+	}
 	return the_path;
 }
 
