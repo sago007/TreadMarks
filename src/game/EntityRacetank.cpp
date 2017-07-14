@@ -1257,7 +1257,7 @@ void EntityRacetank::DeliverPacket(const unsigned char *data, int len){
 		}
 		if(data[0] == MSG_HEAD_STATUS && len >= 2){	//Generic, flag controlled status message.
 			BitUnpackEngine pe(&data[1], len - 1);
-			int flag = 0, t = 0;
+			int32_t flag = 0, t = 0;
 			pe.UnpackUInt(flag, 8);
 			if(flag & 0x01) pe.UnpackUInt(turretblow, 1);
 			if(flag & 0x02) pe.UnpackUInt(t, 1); if(t) SetInt(ATT_CMD_FIXTANK, 1);
@@ -1281,8 +1281,6 @@ void EntityRacetank::DeliverPacket(const unsigned char *data, int len){
 				if(pe.UnpackUInt(LastLapTime, 10)) LastLapTime *= 1000;
 				if(pe.UnpackUInt(BestLapTime, 10)) BestLapTime *= 1000;
 			}
-		//	if(data[1] & 0x01 && len >= 3) turretblow = data[2];	//Send this Reliable!
-		//	if(data[1] & 0x02 && len >= 4 && data[3]) SetInt(ATT_CMD_FIXTANK, 1);
 			return;
 		}
 		if(data[0] == MSG_HEAD_NAME && len >= 2){

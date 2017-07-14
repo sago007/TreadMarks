@@ -698,18 +698,11 @@ static MapPatch2 *patches = 0;
 static int32_t npatches = 0;
 
 bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, float quality, int32_t ms){
-	//
-	//
-	//Align bintripool on 32byte boundary
-	//BinTriPool = (BinaryTriangle2*)((((uint32_t)RealBinTriPool) + 31) & (~31));
-//	BinTriPool = RealBinTriPool;
-	//
 	msecs += ms;
 	//
 	if(!map || !cam || map->Width() <= 0) return false;
 	curmap = map;
 	float viewdist = cam->farplane;	//This is now stored in the camera object.
-//	glViewport(0, 0, cam->viewwidth, cam->viewheight);//WinWidth, WinHeight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	GLViewplane(cam->viewwidth, cam->viewheight, cam->viewplane, 2.0, cam->farplane);
@@ -720,9 +713,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 		glClear(GL_DEPTH_BUFFER_BIT);
 	}
 	//
-	//
-//	if(flags & GLREND_NOTREA
-	//
 	//Draw the sky plane.  Simple ugly 2D plane that will break with shearing as
 	//currently coded...  Could be easily replaced with real SkyBox for serious
 	//6-DOF displays.
@@ -732,7 +722,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 		glDisable(GL_ALPHA_TEST);
 		glDisable(GL_BLEND);
 		glDisable(GL_FOG);
-	//	glDepthFunc(GL_ALWAYS);
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
@@ -743,7 +732,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 				float SkyPitchBias;
-			//	SkyPitchBias = 10.0f;
 				SkyPitchBias = std::max(-30.0f, RAD2DEG * -atan2f(cam->y, viewdist * 2.0f));
 				float boxw = cam->viewwidth;
 				float boxh = cam->viewheight;
@@ -808,10 +796,7 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 			glRotatef(cam->a, 1.0f, 0.0f, 0.0f);	//Apply camera rotation only.
 			glRotatef(camb, 0.0f, 1.0f, 0.0f);
 			glColor4f(1, 1, 1, 1);
-		//	float zero = 1.0f / 512.0f, one = 1.0f - zero;
 			float xzero, xone, yzero, yone;
-		//	if(SkyBox[0]){
-		//		zero = 1.0f / (float)
 			//SkyBox culling.
 			float needang = (atan2f(cam->viewwidth / 2.0f, cam->viewplane) + PI / 4.0f);// / 2.0f;
 			//Skybox plane extends 45' (quarter PI rads) from skybox plane center, plus half of viewangle.
@@ -828,8 +813,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 					int32_t w = 1, h = 1;
 					glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
 					glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-				//	zero = 1.0f / std::max(1.0f, (float)w * 0.999f);	//Little bigger "zero" to avoid seams.
-				//	one = 1.0f - zero;
 					xzero = 1.0f / std::max(1.0f, (float)w * 1.99f);	//Little bigger "zero" to avoid seams.
 					yzero = 1.0f / std::max(1.0f, (float)h * 1.99f);	//Little bigger "zero" to avoid seams.
 					xone = 1.0f - xzero;
@@ -851,7 +834,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 				}
 			}
 		}
-	//	glDepthFunc(GL_LESS);
 		glDepthMask(GL_TRUE);
 	}
 	//
@@ -859,26 +841,19 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	if(!(flags & GLREND_NOFOG)){
 		GLfloat fogcol[4] = {FogR, FogG, FogB, 1.0f};//0.0f};
 		glFogi(GL_FOG_MODE, GL_LINEAR);
-	//	glFogi(GL_FOG_MODE, GL_EXP2);
 		glFogf(GL_FOG_START, viewdist - viewdist / 3.0f);
 		glFogf(GL_FOG_END, viewdist);
-	//	glFogf(GL_FOG_DENSITY, 2.0f / viewdist);// / viewdist);
 		glFogfv(GL_FOG_COLOR, fogcol);
 		glEnable(GL_FOG);
 	}else{
 		glDisable(GL_FOG);
 	}
 	//
-//	glShadeModel(GL_SMOOTH);	//Testing.
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
-//	glEnable(GL_BLEND);	//See if transparent fog works...
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//
 	glEnable(GL_CULL_FACE);
-//	glDisable(GL_CULL_FACE);
 	//
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
@@ -900,30 +875,18 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	//
 	int32_t TexPerMapW = map->Width() / TexSize;
 	int32_t TexPerMapH = map->Height() / TexSize;
-//	BinaryTriangle2 bt[9];
-//	memset(bt, 0, sizeof(bt));
-//	bt[0].cl = bt[0].cr = &bt[1];
-//	bt[1].cr = bt[1].cl = &bt[2];
-//	bt[2].cr = bt[2].cl = &bt[3];
-//	bt[3].cr = bt[3].cl = &bt[4];
-//	bt[4].cr = bt[4].cl = &bt[5];
-//	bt[5].cr = bt[5].cl = &bt[6];
-//	bt[6].cr = bt[6].cl = &bt[7];
-//	bt[7].cr = bt[7].cl = &bt[8];
 	//
 	float tv[2];
     float bv[2];
     bv[0] = sin(-cam->b * DEG2RAD);
     bv[1] = cos(-cam->b * DEG2RAD);
 	float s;
-//	tv[0] = -cam->viewwidth / 2.0f; tv[1] = cam->viewplane;
 	//
 	float tcos = cos(cam->a * DEG2RAD);
 	tv[0] = -cam->viewwidth / (2.0f * SQUARE(tcos));
 	tv[1] = cam->viewplane * SQUARE(tcos);
 	//Adjustment to loosen clipping when camera pitches down ur up too much.
 	//
-//	tv[0] = -cam->viewwidth / 4.0f; tv[1] = cam->viewplane;
 	s = sqrtf(tv[0] * tv[0] + tv[1] * tv[1]);
 	lclip[0] = ((bv[0] * tv[0]) / s + (bv[1] * tv[1]) / s);	//90 deg right
 	lclip[1] = -((bv[1] * tv[0]) / s + (-bv[0] * tv[1]) / s);
@@ -939,20 +902,14 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	//Right-handed world coordinate clipping planes.
 	//
 	//
-//	rclip[0] = cam->viewwidth / 2.0f; rclip[1] = -cam->viewplane;
-//	zclip[0] = 1.0f; zclip[0] = 0;
-//	RotVec2(
-	//
 	ResetBinTriPool();
 	//
-//	glBindTexture(GL_TEXTURE_2D, map->TexIDs[0][0]);
 	int32_t x, y, x1, y1, n = 0;
 	//
 	gltmr.Start();
 	//
 	int32_t xs = floor(cam->x / (float)TexSize), ys = floor(-cam->z / (float)TexSize);
 	int32_t psize = viewdist / TexSize + 1;
-//	int
 	npatches = SQUARE(psize * 2 + 1);
 	//
 //	MapPatch2 *
@@ -961,9 +918,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	if(!patches) return false;
 	//
 	n = 0;
-//	MapPatch2 *tpatch = &patches[0];
-//	for(y = -TexPerMapH; y < TexPerMapH * 2; y++){	//Create and link list of patches.
-//		for(x = -TexPerMapW; x < TexPerMapW * 2; x++){
 	float patchrad = sqrtf((float)SQUARE(TexSize / 2)) * 1.4f;
 	for(y = ys - psize; y <= ys + psize; y++){	//Create and link list of patches.
 		for(x = xs - psize; x <= xs + psize; x++){
@@ -972,15 +926,9 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 			float t = (float)(xf) * lclip[0] + (float)(-yf) * lclip[1] - lclip[2];
 			float t2 = (float)(xf) * rclip[0] + (float)(-yf) * rclip[1] - rclip[2];
 			if(t > -patchrad && t2 > -patchrad){
-		//	if(t > 0 && t2 > 0){
-			//	patches[n].x = x;// * TexSize;
-			//	patches[n].y = y;// * TexSize;
-			//	patches[n].id = map->TexIDs[x & (TexPerMapW - 1)][y & (TexPerMapH - 1)];
 				patches[n].SetCoords(x, y, map->TexIDs[x & (TexPerMapW - 1)][y & (TexPerMapH - 1)]);
 				if(x > xs - psize && patches[n - 1].id != 0) patches[n].LinkLeft(&patches[n - 1]);
 				if(y > ys - psize && patches[n - ((psize <<1) + 1)].id != 0) patches[n].LinkUp(&patches[n - ((psize <<1) + 1)]);
-			//	if(x > -TexPerMapW) patches[n].LinkLeft(&patches[n - 1]);
-			//	if(y > -TexPerMapH) patches[n].LinkUp(&patches[n - TexPerMapW * 3]);
 			}
 			n++;
 		}
@@ -991,19 +939,15 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	int32_t triwant = (float)BINTRIMAX * quality;
 	float TQuality = CurQuality * (((float)triwant / (float)BINTRIMAX) / ((float)CurBinTris / (float)BINTRIMAX));
 	//Trying triangle-count pegging scheme.
-//	float DQuality = (TQuality - CurQuality) * 0.1f;	//Filter changes a little.
 	float DQuality = (TQuality - CurQuality) * 0.05f;	//Filter changes a little.
 	CurQuality += std::min(std::max(DQuality, -0.1f), 0.05f);
-//	CurQuality += std::min(std::max(DQuality, -0.01f), 0.005f);
 	CurQuality = std::min(std::max(0.1f, CurQuality), 1.0f);
 	quality = CurQuality;
 	//
 	float Variance = SQUARE(1.0f - quality) * 16.0f + 1.0f;
-//	LimitLod = std::max(0, (1.0f - quality) * 6.0f);
 	LimitLod = std::max(0.0f, (1.0f - InputQuality) * 4.0f);	//Fix limit lod based on specified virtual quality, to reduce lod oscillations.
 	//
 	//
-//	_controlfp(_RC_CHOP, _MCW_RC);	//Set FPU to CHOP mode for use with FastFtoL in following routines.
 	//
 	//Dive and create variable lod levels here.
 	for(n = 0; n < npatches; n++){
@@ -1015,9 +959,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	int32_t splittime = gltmr.Check(1000);
 	//
 	gltmr.Start();
-	//
-//	for(y = 0; y < TexPerMapH; y++){
-//		for(x = 0; x < TexPerMapW; x++){
 	//
 	texscalex = 1.0f / (float)(TexSize + 1);
 	texscaley = 1.0f / (float)(TexSize + 1);
@@ -1087,19 +1028,13 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 			texscaley = 1.0f / 16.0f;
 			glBindTexture(GL_TEXTURE_2D, Detail->id);
 			glEnable(GL_BLEND);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);//GL_DECAL);
-		//	glBlendFunc(GL_SRC_ALPHA, GL_ONE);//GL_ONE_MINUS_SRC_ALPHA);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glColor4f(0.0, 0.0, 0.0, 0.25);
-		//	glClear(GL_DEPTH_BUFFER_BIT);
 			glDepthMask(GL_FALSE);
 			glDepthFunc(GL_LEQUAL);
-			//Push near plane up a smidge to bias depth values towards viewer.
-		//	glMatrixMode(GL_PROJECTION);
-		//	glLoadIdentity();
-		//	GLViewplane(cam->viewwidth, cam->viewheight, cam->viewplane, 1.0f + 0.01f, viewdist + 2.0f);
 		}else{
 			glColor4f(1, 1, 1, 1);
 		}
@@ -1117,8 +1052,6 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 					texoffy += detailroty;
 				}
 				if(flags & GLREND_NOSTRIPFAN){
-				//	RenderBinTri(&patches[n].ul, x1, y1 + TexSize, x1 + TexSize, y1, x1, y1);
-				//	RenderBinTri(&patches[n].dr, x1 + TexSize, y1, x1, y1 + TexSize, x1 + TexSize, y1 + TexSize);
 				}else{
 					RenderBinTriFan(BTP(patches[n].ul), x1, y1 + TexSize, x1 + TexSize, y1, x1, y1, 1,
 						(float)map->GetHwrap(x1, y1 + TexSize) * 0.25f,
@@ -1165,10 +1098,8 @@ bool GLRenderEngine2::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, 
 	return true;
 }
 inline void SphericalYEnvMapCoords(float *out, Vec3 vert, Vec3 norm, Mat3 envbasis, Vec3 campos){
-	//r = u - 2 * n * (n dot u)
 	Vec3 u, tv, r;
 	SubVec3(vert, campos, u);
-//	NormVec3(u);
 	ScaleVec3(u, fsqrt_inv(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]));
 	//
 	ScaleVec3(norm, 2.0f * DotVec3(norm, u), tv);
@@ -1176,7 +1107,6 @@ inline void SphericalYEnvMapCoords(float *out, Vec3 vert, Vec3 norm, Mat3 envbas
 	//
 	Vec3 r2;
 	AddVec3(r, envbasis[1], r2);
-//	float im = 1.0f / (2.0f * LengthVec3(r2));	//1 / (2 * sqrtf((rx+envyx)^2 + (ry+envyy)^2 + (rz+envyz)^2))
 	float im = 0.5f * fsqrt_inv(r2[0] * r2[0] + r2[1] * r2[1] + r2[2] * r2[2]);
 	//
 	out[0] = DotVec3(r, envbasis[0]) * im + 0.5f;
@@ -1209,14 +1139,6 @@ bool GLRenderEngine2::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, fl
 		return false;
 	}
 
-	//Assume identical projection preserved.
-	//Erp, canna do dat.
-	//Erm, maybe can.
-//	glViewport(0, 0, cam->viewwidth, cam->viewheight);//WinWidth, WinHeight);
-//	glMatrixMode(GL_PROJECTION);
-//	glLoadIdentity();
-//	GLViewplane(cam->viewwidth, cam->viewheight, cam->viewplane, 2.0, cam->farplane);
-
 	//
 	//Draw water planes where needed.
 	if(!(flags & GLREND_NOFOG)){
@@ -1233,10 +1155,9 @@ bool GLRenderEngine2::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, fl
 	if(Water && Water->id){//Water->Data()){
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, Water->id);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);//GL_DECAL);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	}else{
 		glDisable(GL_TEXTURE_2D);
 	}
@@ -1254,9 +1175,7 @@ bool GLRenderEngine2::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, fl
 	//
 	if(WaterAmount > 0.05f){
 		glBegin(GL_TRIANGLES);
-		if(Water && Water->id){//Data()){
-		//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f - ((1.0f - WaterAlpha) / (1.0f - (WaterAlpha * 0.5f))) );
-		//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f - ((1.0f - WaterAlpha) / (1.0f - (WaterAlpha * ReflectAmount))) );
+		if(Water && Water->id){
 			glColor4f(1.0f, 1.0f, 1.0f, WaterAmount);
 		}else{
 			glColor4f(0, 0.3f, 0.3f, 0.5f);
@@ -1302,7 +1221,6 @@ bool GLRenderEngine2::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, fl
         cm[0] = cam->x - sin(turb) * 1.5f;
         cm[1] = cam->y + CamBackup;
         cm[2] = (-cam->z) + cos(turb) * 1.5f;
-	//	Vec3 nr = {sin(turb) * 0.2f, 1, cos(turb) * 0.2f};
 		Vec3 nr = {0, 1, 0};
 		glBegin(GL_TRIANGLES);
 		glColor4f(1.0f, 1.0f, 1.0f, WaterAlpha * 0.5f);
@@ -1312,22 +1230,10 @@ bool GLRenderEngine2::GLRenderWater(Terrain *map, Camera *cam, int32_t flags, fl
 				if(patches[n].lodul->waterflag){
 					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					EnvWaterTriR(WaterTessLevel, x1, y1 + TexSize, x1 + TexSize, y1, x1, y1, nr, id, cm);
-				//	EnvWaterVertex(x1, WATERHEIGHT, y1 + TexSize, nr, id, cm);
-				//	EnvWaterVertex(x1 + (TexSize >>1), WATERHEIGHT, y1 + (TexSize >>1), nr, id, cm);
-				//	EnvWaterVertex(x1, WATERHEIGHT, y1, nr, id, cm);
-				//	EnvWaterVertex(x1 + (TexSize >>1), WATERHEIGHT, y1 + (TexSize >>1), nr, id, cm);
-				//	EnvWaterVertex(x1 + TexSize, WATERHEIGHT, y1, nr, id, cm);
-				//	EnvWaterVertex(x1, WATERHEIGHT, y1, nr, id, cm);
 				}
 				if(patches[n].loddr->waterflag){
 					int32_t x1 = patches[n].x * TexSize, y1 = patches[n].y * TexSize;
 					EnvWaterTriR(WaterTessLevel, x1 + TexSize, y1, x1, y1 + TexSize, x1 + TexSize, y1 + TexSize, nr, id, cm);
-				//	EnvWaterVertex(x1, WATERHEIGHT, y1 + TexSize, nr, id, cm);
-				//	EnvWaterVertex(x1 + TexSize, WATERHEIGHT, y1 + TexSize, nr, id, cm);
-				//	EnvWaterVertex(x1 + (TexSize >>1), WATERHEIGHT, y1 + (TexSize >>1), nr, id, cm);
-				//	EnvWaterVertex(x1 + (TexSize >>1), WATERHEIGHT, y1 + (TexSize >>1), nr, id, cm);
-				//	EnvWaterVertex(x1 + TexSize, WATERHEIGHT, y1 + TexSize, nr, id, cm);
-				//	EnvWaterVertex(x1 + TexSize, WATERHEIGHT, y1, nr, id, cm);
 				}
 			}
 		}

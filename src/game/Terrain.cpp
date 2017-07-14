@@ -957,22 +957,10 @@ inline bool Terrain::SetBigH(int32_t x, int32_t y, unsigned short v){
 }
 //Now wraps.
 inline int32_t Terrain::GetI(int32_t x, int32_t y){
-//	if(data == NULL || x < 0 || y < 0 || (x >>FP) >= width - 1 || (y >>FP) >= height - 1) return 0;
 	if(data == NULL) return 0;
 	int32_t xx = x >>FP;
 	int32_t yy = y >>FP;
-	//return
-	//	(
-	//	(*(data + xx + yy * width) >> 8) * ((FPVAL - (x & 0xff)) + (FPVAL - (y & 0xff))) +
-	//	(*(data + xx + 1 + yy * width) >> 8) * ((x & 0xff) + (FPVAL - (y & 0xff))) +
-	//	(*(data + xx + (yy + 1) * width) >> 8) * ((FPVAL - (x & 0xff)) + (y & 0xff)) +
-	//	(*(data + xx + 1 + (yy + 1) * width) >> 8) * ((x & 0xff) + (y & 0xff)) <<VP
-	//	) >>(2 + FP);
 	int32_t h1, h2, h3, h4, top, bot;
-//	h1 = *(data + xx + yy * width) >>8;
-//	h2 = *(data + xx + 1 + yy * width) >>8;//) * ((x & 0xff) + (FPVAL - (y & 0xff))) +
-//	h3 = *(data + xx + (yy + 1) * width) >>8;//) * ((FPVAL - (x & 0xff)) + (y & 0xff)) +
-//	h4 = *(data + xx + 1 + (yy + 1) * width) >>8;//) * ((x & 0xff) + (y & 0xff)) <<VP
 	h1 = GetHwrap(xx, yy);
 	h2 = GetHwrap(xx + 1, yy);
 	h3 = GetHwrap(xx, yy + 1);

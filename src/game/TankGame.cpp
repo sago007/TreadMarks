@@ -327,7 +327,7 @@ CStr NumberTail(int n){
 struct ActiveTeam{
 	CStr name;
 	ClassHash hash;
-	int frags, tanks, deaths;
+	int32_t frags, tanks, deaths;
 	ActiveTeam() : hash(0), frags(0), tanks(0), deaths(0) {};
 };
 

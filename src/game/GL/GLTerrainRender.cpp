@@ -886,23 +886,16 @@ bool GLRenderEngine::GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, f
 			glBindTexture(GL_TEXTURE_2D, Detail->id);
 			glEnable(GL_BLEND);
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);//GL_DECAL);
-		//	glBlendFunc(GL_SRC_ALPHA, GL_ONE);//GL_ONE_MINUS_SRC_ALPHA);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glColor4f(0.0, 0.0, 0.0, 0.25);
-		//	glClear(GL_DEPTH_BUFFER_BIT);
 			glDepthMask(GL_FALSE);
 			glDepthFunc(GL_LEQUAL);
-			//Push near plane up a smidge to bias depth values towards viewer.
-		//	glMatrixMode(GL_PROJECTION);
-		//	glLoadIdentity();
-		//	GLViewplane(cam->viewwidth, cam->viewheight, cam->viewplane, 1.0f + 0.01f, viewdist + 2.0f);
 		}else{
 			glColor4f(1, 1, 1, 1);
 		}
 		for(n = 0; n < npatches; n++){
-			//	glBindTexture(GL_TEXTURE_2D, map->TexIDs[x][y]);
 			if(patches[n].id > 0){
 				if(mt == 0){
 					map->Redownload(patches[n].x, patches[n].y);

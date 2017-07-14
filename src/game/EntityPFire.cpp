@@ -426,7 +426,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 			pe[i].peBlue = (int)((float)cf[i].peBlue * it + (float)ct[i].peBlue * t);
 		}
 	}
-	int i, j;//, l;
+	int32_t i, j;//, l;
 	unsigned char *tdata, *tdata2;
 	LastTime = Time;
 	Time = time(NULL);
@@ -578,7 +578,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 		}
 		Emit = false;
 	}
-	int tt = (MultipleFollow ? 63 : 0x7fff);
+	int32_t tt = (MultipleFollow ? 63 : 0x7fff);
 	if(Attract || FollowMouse){
 		for(i = 0; i < nParticles; i++){
 			if(Follow && i & tt){

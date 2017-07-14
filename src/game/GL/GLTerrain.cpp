@@ -86,14 +86,10 @@ bool Terrain::DownloadTextures(){
 			for(x = 0; x < w; x += TexSize){
 				//Break color map into textures of TexSize width and height.
 				glBindTexture(GL_TEXTURE_2D, TexIDs[x / TexSize][y / TexSize]);
-			//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);//GL_MODULATE);//GL_DECAL);
 				//
 				//Stupid 3DFX opengl driver doesn't like row_length...
 				for(int32_t y2 = y; y2 < y + TexSize; y2++){
@@ -175,13 +171,6 @@ int32_t Terrain::Redownload(int32_t px, int32_t py){
 		unsigned char *ts, *td = (unsigned char*)tbuf;
 		int32_t xs = (px & (tpw - 1)) * TexSize + br.x;
 		int32_t ys = (py & (tph - 1)) * TexSize + br.y;
-		//
-	//	if(ys < 0 || ys + br.h > Height() || xs < 0 || xs + br.w > Width()){
-	//		OutputDebugLog("! ! ! ! Bad download!  xs" + String(xs) + " ys" + String(ys) + " w" +
-	//			String((int32_t)br.w) + " h" + String((int32_t)br.h) +
-	//			" x" + String((int32_t)br.x) + " y" + String((int32_t)br.y) + "\n");
-	//	}else{
-			//
 		if(br.x == 0){	//Suck from left.
 			for(int32_t y = ys; y < ys + br.h; y++){
 				*(data32 + xs + y * Width()) = *(data32 + ((xs - 1) & (Width() - 1)) + y * Width());
@@ -195,7 +184,6 @@ int32_t Terrain::Redownload(int32_t px, int32_t py){
 		//
 		ts = (unsigned char*)(data32 + ys * Width() + xs);
 		for(int32_t y = ys; y < ys + br.h; y++){
-		//	memcpy(td, ts, ((uint32_t)br.w) <<2);
 			for(uint32_t t = 0; t < ((uint32_t)br.w); t++) ((uint32_t*)td)[t] = ((uint32_t*)ts)[t];
 			ts += Width() <<2;
 			td += ((uint32_t)br.w) <<2;
