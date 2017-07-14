@@ -25,33 +25,34 @@
 #include "CJoyInput.h"
 #include "PacketProcessors.h"
 #include "TextLine.hpp"
+#include <stdint.h>
 
 enum MapType {MapTypeRace = 0, MapTypeDeathMatch, MapTypeTraining};
 
 struct MapInfo{
 	CStr title, file;
 	MapType maptype;
-	int MapID;
-	int GameType;
-	int Laps;
-	int AITanks;
-	int TimeLimit;
-	int FragLimit;
+	int32_t MapID;
+	int32_t GameType;
+	int32_t Laps;
+	int32_t AITanks;
+	int32_t TimeLimit;
+	int32_t FragLimit;
 	float EnemySkill;
-	int TankTypes;
-	int StartDelay;
-	int Mirror;
-	int AllowJoins;
-	int DisableFrags;
-	int NumTeams;
-	int TeamScores;
-	int MaxMapTeams;
-	int TeamDamage;
+	int32_t TankTypes;
+	int32_t StartDelay;
+	int32_t Mirror;
+	int32_t AllowJoins;
+	int32_t DisableFrags;
+	int32_t NumTeams;
+	int32_t TeamScores;
+	int32_t MaxMapTeams;
+	int32_t TeamDamage;
 };
 
 struct ServerEntryEx : public ServerEntry {
 	CStr MapTitle;
-	int PingTime, PingCount;
+	int32_t PingTime, PingCount;
 	ServerEntryEx() : PingTime(0), PingCount(0) { };
 };
 
@@ -72,7 +73,7 @@ struct ControlEntry{
 struct TeamInfo{
 	ClassHash hash;	//Insignia type hash.
 	CStr name;
-	int teamok;
+	int32_t teamok;
 };
 #define MaxTeams 32
 
@@ -103,7 +104,7 @@ struct CStrLink : public CStr, public LinklistBase<CStrLink> {
 struct TankInfo{
 	CStr title, type;
 	ClassHash hash;
-	int liquid;
+	int32_t liquid;
 };
 
 #define MAP_SNAP_SIZE 256 //Width and height of map snapshot files.
@@ -120,31 +121,31 @@ enum GameTypeID {RaceType = 0, DeathmatchType, TutorialType};
 
 struct CGraphicsSettings
 {
-	int RendFlags;
+	int32_t RendFlags;
 	bool Stretch;
 	bool UseFullScreen;
-	int DisableMT;
+	int32_t DisableMT;
 	bool UseFog;
 	bool UseAlphaTest;
-	int MenuFire;
-	int GLBWIDTH;
-	int GLBHEIGHT;
+	int32_t MenuFire;
+	int32_t GLBWIDTH;
+	int32_t GLBHEIGHT;
 
 	float Quality;
 	bool WireFrame;
 	bool StripFanMap;
 	bool TreadMarks;
 	bool DetailTerrain;
-	int PolyLod;
+	int32_t PolyLod;
 	float Particles;
 
-	int MaxTexRes;
+	int32_t MaxTexRes;
 	bool TexCompress;
 	bool TexCompressAvail;
-	int Trilinear;
+	int32_t Trilinear;
 	bool PalettedTextures;
 
-	int DebugLockPatches;
+	int32_t DebugLockPatches;
 	bool DebugPolyNormals;
 
 	float ViewDistance;
@@ -155,14 +156,14 @@ struct CGraphicsSettings
 struct CInputSettings
 {
 	float MouseSpeed;
-	int InvMouseY;
-	int MouseEnabled;
-	int AxisMapping[K_MAXJOYAXES + 2];
+	int32_t InvMouseY;
+	int32_t MouseEnabled;
+	int32_t AxisMapping[K_MAXJOYAXES + 2];
 	ControlEntry Controls[NumControls];
-	int FirstCamControl;
-	int UseJoystick;
+	int32_t FirstCamControl;
+	int32_t UseJoystick;
 	CStr sStickName;
-	int StickID;
+	int32_t StickID;
 	float DeadZone;
 
 	CInputSettings();
@@ -173,59 +174,59 @@ struct CGameSettings // This information is set at load time or changed with men
 {
 	CInputSettings InputSettings;
 	CGraphicsSettings GraphicsSettings;
-	int HowitzerTimeStart;
+	int32_t HowitzerTimeStart;
 	float HowitzerTimeScale;
-	int ShowMPH;
+	int32_t ShowMPH;
 	float EnemySkill;
-	int ServerRate;
+	int32_t ServerRate;
 	bool LogFileActive;
 	CStr LogFileName;
-	int CamStyle;
-	int BypassIntro;
-	int LimitTankTypes;	//All, Steel, Liquid.
-	int TeamPlay;
-	int TeamDamage;
-	int TeamScores;
-	int NumTeams;
-	int TimeLimit;
-	int FragLimit;
+	int32_t CamStyle;
+	int32_t BypassIntro;
+	int32_t LimitTankTypes;	//All, Steel, Liquid.
+	int32_t TeamPlay;
+	int32_t TeamDamage;
+	int32_t TeamScores;
+	int32_t NumTeams;
+	int32_t TimeLimit;
+	int32_t FragLimit;
 	CStr AIPrefix;
-	int HiFiSound;
-	int ClientPort;
-	int ServerPort;
-	int MasterPort;
-	int StartDelay;
+	int32_t HiFiSound;
+	int32_t ClientPort;
+	int32_t ServerPort;
+	int32_t MasterPort;
+	int32_t StartDelay;
 	bool MirroredMap;
-	int DediMapMode;	//1 is Randam.
-	int CoolDownTime;
-	int MaxClients;
+	int32_t DediMapMode;	//1 is Randam.
+	int32_t CoolDownTime;
+	int32_t MaxClients;
 	bool DedicatedServer;
-	int DedicatedFPS;
-	int MaxFPS;
-	int SendHeartbeats;	//Heartbeats to Masters.
+	int32_t DedicatedFPS;
+	int32_t MaxFPS;
+	int32_t SendHeartbeats;	//Heartbeats to Masters.
 	CStr ServerName;
 	CStr ServerWebSite;
 	CStr ServerInfo;
 	CStr ServerCorrectedIP; // If the master server misidentifies your IP address (eg, master and client are behind the same firewall) you can set this to correct it.
 	CStr MasterAddress;	//The single master that the client is connecting to.
-	int MasterPingsPerSecond;
-	int MasterPings;
-	int ClientRate;
-	int AllowSinglePlayerJoins;
+	int32_t MasterPingsPerSecond;
+	int32_t MasterPings;
+	int32_t ClientRate;
+	int32_t AllowSinglePlayerJoins;
 	CStr InsigniaType;
 	CStr TankType;
 	CStr MapFile;
 	CStr AnimationDir;
-	int AnimFPS;
+	int32_t AnimFPS;
 	bool PlayMusic;
 	float SoundVol, MusicVol;
-	int Laps;
-	int Deathmatch;
+	int32_t Laps;
+	int32_t Deathmatch;
 	CStr ServerAddress;
 	CStr PlayerName;
 	CStr OptAITankTeam;
-	int AIAutoFillCount;
-	int AIAutoFill;
+	int32_t AIAutoFillCount;
+	int32_t AIAutoFill;
 	bool AutoStart;
 
 	CGameSettings();
@@ -233,58 +234,58 @@ struct CGameSettings // This information is set at load time or changed with men
 
 struct CGameState // This information can change from frame to frame
 {
-	int HowitzerTime;
-	int PauseGame;
+	int32_t HowitzerTime;
+	int32_t PauseGame;
 	EntityGID CurrentLeader, LastLeader;
 	bool LadderMode;	//This is on if we are in ladder play mode.
-	int CurDediMap;	//So first map in cycle is 0.
-	int ReStartMap;
-	int CoolDownCounter;
-	int SomeoneWonRace;
+	int32_t CurDediMap;	//So first map in cycle is 0.
+	int32_t ReStartMap;
+	int32_t CoolDownCounter;
+	int32_t SomeoneWonRace;
 	bool DemoMode;	//This is set when we are in automatic demo mode, so we can restart the game and stay in demo mode.
 	float ViewAngle;
-	int sendstatuscounter;
-	int CountdownTimer;
+	int32_t sendstatuscounter;
+	int32_t CountdownTimer;
 	bool WritingAnim;
-	int TakeMapSnapshot;	//When set, causes a one-off power of 2 snapshot of the game to be taken and saved with the current map's name.
-	int AnimFrame;
+	int32_t TakeMapSnapshot;	//When set, causes a one-off power of 2 snapshot of the game to be taken and saved with the current map's name.
+	int32_t AnimFrame;
 	bool AutoDrive;
-	int NumAITanks;
+	int32_t NumAITanks;
 	bool FPSCounter;
 	bool Quit;
-	int ShowPlayerList;
+	int32_t ShowPlayerList;
 	bool ToggleMenu;
 	bool ActAsServer;
 	CStr ConnectedToAddress;
-	int PauseScreenOn;
-	int KillSelf;
+	int32_t PauseScreenOn;
+	int32_t KillSelf;
 	bool SwitchSoundMode;
 	ClassHash TeamHash;
 	CStr MasterError;
-	int MasterPingIter;
+	int32_t MasterPingIter;
 	MasterSortMode SortMode;
 	bool SwitchMode;
 	CStr sMusicFile;
 	float FPS;
-	int NetCPSOut, NetCPSIn;	//Networking stats.
-	unsigned int LastNetBytesOut, LastNetBytesIn;
+	int32_t NetCPSOut, NetCPSIn;	//Networking stats.
+	uint32_t LastNetBytesOut, LastNetBytesIn;
 
 	CGameState();
 };
 
 struct CInputState
 {
-	int GunTo;
-	int TurretCam;
-	int PointCamUD;
-	int PointCamLR;
-	int PointCamBK;
-	int ResetCam;
-	int FreeLook;
+	int32_t GunTo;
+	int32_t TurretCam;
+	int32_t PointCamUD;
+	int32_t PointCamLR;
+	int32_t PointCamBK;
+	int32_t ResetCam;
+	int32_t FreeLook;
 	CJoyInput input;
-	int TurnLR, MoveUD, AltUD, StrafeLR;
-	int TreadL, TreadR;
-	int SpaceBar;
+	int32_t TurnLR, MoveUD, AltUD, StrafeLR;
+	int32_t TreadL, TreadR;
+	int32_t SpaceBar;
 	float MouseLR, MouseUD;
 
 	CInputState();
@@ -293,7 +294,7 @@ struct CInputState
 struct CDediMap
 {
 	CStr FileName;
-	int Index;
+	int32_t Index;
 
 	CDediMap() {Index = -1;}
 };
@@ -317,42 +318,42 @@ public:
 	EntityTankGod	*GodEnt;
 
 	Timer			tmr, tmr2;
-	int				frames;
-	int				framems, polyms, voxelms, thinkms, blitms;
-	int				LastSecs;
+	int32_t				frames;
+	int32_t				framems, polyms, voxelms, thinkms, blitms;
+	int32_t				LastSecs;
 
 	float			ClientPacketRate;
 
 	ConfigFile		cfg;
 
-	int				CurChatLine;
+	int32_t				CurChatLine;
 	CStr			ChatLine[MaxChatLines];
-	int				ChatLineLen;
+	int32_t				ChatLineLen;
 	CStr			ChatEdit;
 	CStrLink		ChannelHead, UserHead;
 	CStr			CurrentChannel;
 
 	ClassHash		AITankTeam;
-	int				NumTankNames;
-	int				NextTankName;	//Since we are shuffling them at load time now.
+	int32_t				NumTankNames;
+	int32_t				NextTankName;	//Since we are shuffling them at load time now.
 	CStr			TankNames[MaxTankNames];
 
-	int				NumAvailTeams;
+	int32_t				NumAvailTeams;
 	TeamInfo		Teams[MaxTeams];
 //	CStr			OptTeams[MaxTeams];
-	int				MaxAllowedTeams;
+	int32_t				MaxAllowedTeams;
 
-	int				NumMusicFiles;
-	int				NextMusicFile;
+	int32_t				NumMusicFiles;
+	int32_t				NextMusicFile;
 	CStr			MusicFiles[MaxMusicFiles];
 
-	int				NumTankTypes;
+	int32_t				NumTankTypes;
 	TankInfo		TankTypes[MaxTankTypes];
 
-	int				NumMaps;
+	int32_t				NumMaps;
 	MapInfo			Maps[MaxMaps];
 	CDediMap		DediMaps[MaxMaps];	//Dedicated server map list.
-	int				NumDediMaps;
+	int32_t				NumDediMaps;
 
 	ServerEntryEx	ServerHead;
 	MasterServer	Master[MAX_MASTERS];
@@ -363,13 +364,13 @@ public:
 	StatsPackage	Stats;
 	LadderManager	Ladder;
 
-	int				HeartbeatTime;
+	int32_t				HeartbeatTime;
 
-	unsigned int	LastMasterPingTime;
-	int				FramesOver100MS;
+	uint32_t	LastMasterPingTime;
+	int32_t				FramesOver100MS;
 
 		//Render debugging buffer.
-	int				DbgBufLen;
+	int32_t				DbgBufLen;
 	char			DbgBuf[1024];
 
 private:
@@ -380,29 +381,29 @@ private:
 #ifndef HEADLESS
 	void DoSfmlEvents();
 #endif
-	int Announcement(const char *ann1, const char *ann2, EntityGID tank = 0);
+	int32_t Announcement(const char *ann1, const char *ann2, EntityGID tank = 0);
 	void DoPlayerAndCam();
 	CStr RandTankType();	//Chooses a random tank type, taking into account the type limiting variable.
 
 public:
 	static CTankGame& Get();
 
-	CStr MMSS(int secs);
+	CStr MMSS(int32_t secs);
 	bool DoFrame();
-	int Cleanup();
-	int EnumerateTanks();
-	int EnumerateTeams();
+	int32_t Cleanup();
+	int32_t EnumerateTanks();
+	int32_t EnumerateTeams();
 
 	bool StartGame();
 	bool StopGame();
-	int IsGameRunning();
-	int IsMapDMOnly(int num);
+	int32_t IsGameRunning();
+	int32_t IsMapDMOnly(int32_t num);
 
 	void ProcessServerCommand(char* sCommand);
-	int ReadConfigCfg(const char *name);
+	int32_t ReadConfigCfg(const char *name);
 	void NewMusic();
 	void FindMapTitle(ServerEntryEx *se);
-	int Heartbeat(sockaddr_in *dest);
+	int32_t Heartbeat(sockaddr_in *dest);
 	void SortMaps();
 	void LoadTankNames(CStr sFilename);
 	void LoadMaps();
@@ -411,30 +412,30 @@ public:
 	void ShuffleMusic();
 
 	VoxelWorld*		GetVW() {return &VW;}
-	int				GetNextTankName() {return NextTankName;}
-	int				GetNumTankNames() {return NumTankNames;}
-	int				GetNumTankTypes() {return NumTankTypes;}
-	CStr			GetTankName(const int iName) {return TankNames[iName];}
-	int				GetNumMaps() {return NumMaps;}
-	MapInfo*		GetMap(const int iMap) {return &Maps[iMap];}
+	int32_t				GetNextTankName() {return NextTankName;}
+	int32_t				GetNumTankNames() {return NumTankNames;}
+	int32_t				GetNumTankTypes() {return NumTankTypes;}
+	CStr			GetTankName(const int32_t iName) {return TankNames[iName];}
+	int32_t				GetNumMaps() {return NumMaps;}
+	MapInfo*		GetMap(const int32_t iMap) {return &Maps[iMap];}
 	CStr			GetAIPrefix() {return GameSettings.AIPrefix;}
-	int				GetNumTeams() {return MIN(MaxAllowedTeams,MIN(NumAvailTeams, GameSettings.NumTeams));}
-	int				GetNumAvailTeams() {return NumAvailTeams;}
-	int				GetTeamFillSpot();
-	TeamInfo		GetTeam(const int iTeam) {return Teams[iTeam];}
-	int				TeamIndexFromHash(const int hash, int *index);
+	int32_t				GetNumTeams() {return MIN(MaxAllowedTeams,MIN(NumAvailTeams, GameSettings.NumTeams));}
+	int32_t				GetNumAvailTeams() {return NumAvailTeams;}
+	int32_t				GetTeamFillSpot();
+	TeamInfo		GetTeam(const int32_t iTeam) {return Teams[iTeam];}
+	int32_t				TeamIndexFromHash(const int32_t hash, int32_t*index);
 	ServerEntryEx*	GetServerHead() {return &ServerHead;}
 	Network*		GetMasterNet() {return &MasterNet;}
 	CStrLink*		GetUserHead() {return &UserHead;}
 	CStrLink*		GetChannelHead() {return &ChannelHead;}
-	CStr*			GetChatLine(const int iChat) {return &ChatLine[iChat];}
-	int				GetCurChatLine() {return CurChatLine;}
+	CStr*			GetChatLine(const int32_t iChat) {return &ChatLine[iChat];}
+	int32_t				GetCurChatLine() {return CurChatLine;}
 	CStr*			GetCurChatLineText() {return &ChatLine[CurChatLine];}
-	int				GetCurChatLineLen() {return ChatLineLen;}
+	int32_t				GetCurChatLineLen() {return ChatLineLen;}
 	CStr*			GetChatEdit() {return &ChatEdit;}
 	CStr*			GetCurChannel() {return &CurrentChannel;}
 	LadderManager*	GetLadder() {return &Ladder;}
-	TankInfo		GetTankType(const int iTank) {return TankTypes[iTank];}
+	TankInfo		GetTankType(const int32_t iTank) {return TankTypes[iTank];}
 	StatsPackage*	GetStats() {return &Stats;}
 	SimpleStatus*	GetLoadingStatus() {return &LoadingStatus;}
 
@@ -442,9 +443,9 @@ public:
 	CGameSettings*	GetSettings() {return &GameSettings;}
 	CInputState*	GetInputState() {return &InputState;}
 
-	void			SetNextTankName(const int iName) {NextTankName = iName;}
+	void			SetNextTankName(const int32_t iName) {NextTankName = iName;}
 	void			SetCurrentChannel(const char *sChannel) {CurrentChannel = sChannel;}
-	void			SetCurChatLine(const int iChat) {CurChatLine = iChat;}
+	void			SetCurChatLine(const int32_t iChat) {CurChatLine = iChat;}
 	void			SetCurChatLineText(const char* sChat) {ChatLine[CurChatLine] = sChat;}
 };
 
