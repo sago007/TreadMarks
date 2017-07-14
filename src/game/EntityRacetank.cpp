@@ -515,7 +515,7 @@ bool EntityRacetank::Think(){
 			SubVec3(e->Position, Position, tv);
 			float wanta = atan2f(tv[0], tv[2]);
 			float cura = turRot[1] + Rotation[1];
-			float va = NormRot(wanta - cura);
+			NormRot(wanta - cura);
 			findera = wanta;	//Point arrow at nearest enemy in DM.
 		}
 	}
@@ -909,7 +909,7 @@ bool EntityRacetank::Think(){
 					NormVec3(targetvec);
 				}
 
-				EntityBase *ew = VW->AddEntity("projectile", TP->projectiletype, p, NULL, v, GID, 0, 0, ADDENTITY_FORCENET);
+				VW->AddEntity("projectile", TP->projectiletype, p, NULL, v, GID, 0, 0, ADDENTITY_FORCENET);
 				//Projectile will instead suck teamid out of owner.
 				lastfiretime = VW->Time();
 				ammo--;
@@ -1657,34 +1657,17 @@ bool EntityRacetank::Collide(EntityBase *col, Vec3 colpnt, bool callother){
 	if(DotVec3(ts, Velocity) < v){	//Only if we're moving towards collison.
 		//Find closest two corners.
 		int idx[4] = {vh.FrontLeft, vh.BackLeft, vh.FrontRight, vh.BackRight};
-		float dist = 0, dist2 = 9999;
-		int n = 0, n2 = 1;
+		float dist = 0;
+		int n = 0;
 		for(int i = 0; i < 4; i++){
 			Vec3 t;
 			SubVec3(vh.WP[idx[i]], colpnt, t);
 			float l = LengthVec3(t);
-		//	if(l < dist){
-		//		dist2 = dist; n2 = n;
-		//		dist = l; n = i;
-		//	}else{
-		//		if(l < dist2){ dist2 = l; n2 = i; }
-		//	}
 			if(l > dist){ dist = l; n = i; }	//Find FURTHEST point now...
 		}
 		for(int j = 0; j < 4; j++)
-		//	if(j != n) CopyVec3(tv, vh.AddAccelWP[idx[j]]);
 			if(j != n) ScaleVec3(tv, 0.5f, vh.AddAccelWP[idx[j]]);
-		//
-	//	CopyVec3(tv, vh.AddAccel);
 		ScaleVec3(tv, 0.5f, vh.AddAccel);
-	//	for(int j = 0; j < 3; j++) vh.AddAccel[j] = -Velocity[j] * 1.2f;
-		//
-	//	CopyVec3(tv, vh.AddAccelWP[idx[n]]);
-	//	CopyVec3(tv, vh.AddAccelWP[idx[n2]]);
-		//
-	//	CopyVec3(tv, vh.AddAccelWP[vh.BackLeft]);
-	//	CopyVec3(tv, vh.AddAccelWP[vh.FrontRight]);
-	//	CopyVec3(tv, vh.AddAccelWP[vh.BackRight]);
 		//
 		//Explosion sounds/smoke.
 		if(v > 8.0f && crashsoundmade == 0 &&

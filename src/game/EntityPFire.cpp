@@ -425,18 +425,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 			pe[i].peGreen = (int)((float)cf[i].peGreen * it + (float)ct[i].peGreen * t);
 			pe[i].peBlue = (int)((float)cf[i].peBlue * it + (float)ct[i].peBlue * t);
 		}
-	//	dib.SetPalette(pe);
-	//	dib.RealizePalette();
 	}
-	//
-	int iseconds = time(NULL) - FirstUseTime;	//Installed seconds.
-	int iminutes = iseconds / 60;
-	int ihours = iminutes / 60;
-	int sseconds = (time(NULL) - SecsStart);	//Session Seconds.
-	int bseconds = sseconds + TotalSecs;	//Blanked seconds.
-	int bminutes = bseconds / 60;
-	//
-	//
 	int i, j;//, l;
 	unsigned char *tdata, *tdata2;
 	LastTime = Time;
@@ -483,7 +472,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 		float size = fabs(frand(0.5)) + 0.4;
 		float w2 = (float)WIDTH * size * 0.5f;
 		float h2 = (float)HEIGHT * size * 0.5f;
-		int sunburst = rand() & 1;
+		bool sunburst = rand() & 1;
 		int rot = rand() % 4;
 		float rx = (float)WIDTH / 2.0f + frand((float)WIDTH / 2.0f - w2);
 		float ry = (float)HEIGHT / 2.0f + frand((float)HEIGHT / 2.0f - h2);
@@ -502,7 +491,6 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 				if(rot == 3) angle -= 3.14159f * 0.5f;
 				p[i].dx = -sin(angle) * pvel;
 				p[i].dy = cos(angle) * pvel;
-//				if(AltColor) p[i].color = rand() % 84 + 170;
 			}
 		}
 		InnerRing = false;
@@ -589,10 +577,6 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 //			if(AltColor) p[i].color = rand() % 84 + 170;
 		}
 		Emit = false;
-	}
-	static double cubex, cubey, cubez, cubesize = 100;
-	static int cppe = 10;
-	if(Cube3D){
 	}
 	int tt = (MultipleFollow ? 63 : 0x7fff);
 	if(Attract || FollowMouse){
@@ -798,12 +782,10 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 		int lwidth = bdescwidth / BLONGS;
 		int xlwidth = lwidth - BX4OFF;
 		int temp;//, x2;
-		unsigned char* bf;
 		if(1){
 		if(BurnDown){
 			for(y = HEIGHT - BYOFF - 2; y > BYOFF - 1; y--){
 				lptr = (BLONG*)bdescdata + (lpitch * y) + BX4OFF;
-				bf = &BurnFlags[BX4OFF];
 				for(x = BX4OFF; x < xlwidth; x++){
 					if(*(lptr)){
 						BURNIT2(0) BURNIT2(1) BURNIT2(2) BURNIT2(3);
@@ -832,7 +814,6 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 		}else{
 			for(y = BYOFF + 1; y < HEIGHT - BYOFF + 1; y++){
 				lptr = (BLONG*)bdescdata + (lpitch * y) + BX4OFF;
-				bf = &BurnFlags[BX4OFF];
 				for(x = BX4OFF; x < xlwidth; x++){
 					if(*(lptr)){
 						BURNIT(0) BURNIT(1) BURNIT(2) BURNIT(3);
@@ -845,7 +826,6 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 					}
 					lptr++;
 				}
-			//	lptr += lpitch - lwidth + (BX4OFF * 2);
 				if(y & 1){
 					tdata = (unsigned char*)bdescdata + y * bdescpitch + BXOFF;
 					if(y > BYOFF && y < HEIGHT - BYOFF - 1){	//Keeps boost splatter off edges.
@@ -873,13 +853,10 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 			if(TBM.Width() == bdescwidth && TBM.Height() == bdescheight && TBM.Data()){
 				TBM.Suck(bdescdata, bdescwidth, bdescheight, bdescpitch, 8);
 				int Blast = 0;
-			//	if((Time / 1) % 10 == 0) Blast = 1;
 				if((Frames / 10) % 10 == 0) Blast = 1;
 				int xshrink = WIDTH / 50, yshrink = HEIGHT / 50;
-			//	int xshrink = WIDTH / 10, yshrink = HEIGHT / 10;
 				if(Blast){
 					xshrink = WIDTH / 40; yshrink = HEIGHT / 40;
-			//		xshrink = WIDTH / 10; yshrink = HEIGHT / 10;
 				}
 				int xerr, yerr, xeadd, yeadd;
 				int srcy, srcx;
@@ -904,10 +881,7 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 					if(Blast){
 						for(x = w; x; x--){
 							unsigned char tc = *src >>1;
-						//	int t = (*dst >>1) + (tc >>2) + (tc);//(((*src <<7)) >>8);
-						//	if(t > 255) *dst = 255;
-						//	else *dst = (unsigned char)t;
-							*dst = clamptab[(*dst >>1) + (tc >>2) + (tc)];//(((*src <<7)) >>8);
+							*dst = clamptab[(*dst >>1) + (tc >>2) + (tc)];
 							//
 							xerr += xeadd;
 							if(xerr >= w) xerr -= w;
@@ -917,9 +891,6 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 					}else{
 						for(x = w; x; x--){
 							*dst = (*dst >>1) + (*src >>1);
-						//	int t = (*dst >>1) + (*src >>1) - 2;
-						//	if(t < 0) *dst = 0;
-						//	else *dst = (unsigned char)t;
 							dst++;
 							xerr += xeadd;
 							if(xerr >= w) xerr -= w;
@@ -929,21 +900,13 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 					//
 					yerr += yeadd;
 					if(yerr >= h){
-					//	srcy++;
 						yerr -= h;
 					}else{
 						srcy++;
 					}
-				//	srcy++;
 				}
 			}
 		}
-		//
-		//
-//		BurnTimes += tmr2.Check(10000);
-
-	//	buf.Unlock();
 	}
-//	tmr2.Start();
 }
 

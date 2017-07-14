@@ -249,7 +249,7 @@ bool EntityTankGod::Think(){
 		//Do compass.
 		float cx = tnk->Position[0] + sin((tnk->Rotation[1]) + PI * 0.5f) * TP->type_mmcliprad * 0.7f;
 		float cy = (-tnk->Position[2]) - cos((tnk->Rotation[1]) + PI * 0.5f) * TP->type_mmcliprad * 0.7f;
-		float s = TP->type_mmcliprad * 0.1f, s2 = s * 2.0f, s3 = s * 3.0f, sh = s * 0.5f;
+		float s = TP->type_mmcliprad * 0.1f, s2 = s * 2.0f, sh = s * 0.5f;
 		//Main arrows.
 		mm.AddLine(cx, cy, cx, cy - s2, TP->type_mmtcol[0], TP->type_mmtcol[1], TP->type_mmtcol[2]);
 		mm.AddLine(cx, cy - s2, cx - sh, cy - s, TP->type_mmtcol[0], TP->type_mmtcol[1], TP->type_mmtcol[2]);
@@ -1805,7 +1805,6 @@ void EntityProjectile::DeliverPacket(const unsigned char *data, int len){
 }
 
 float EntityProjectile::QueryFloat(int type){
-	EntityProjectileType *TP = (EntityProjectileType*)TypePtr;
 	if(type == ATT_DAMAGE) return damage;
 	return EntitySprite::QueryFloat(type);
 }
@@ -1838,9 +1837,6 @@ void EntityBaubleType::ListResources(FileCRCList *fl){
 
 EntityBauble::EntityBauble(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 						 int id, int flags) : EntityMesh(et, Pos, Rot, Vel, id, flags) {
-	EntityBaubleType *TP = (EntityBaubleType*)TypePtr;
-	CanCollide = false;
-//	CopyVec3(Position, lastpos);
 	IdentityMat3(baublemat);
 	ClearVec3(lasttippos);
 	ClearVec3(lasttipvel);
@@ -2294,9 +2290,7 @@ bool EntityWeapon::Think(){
 							Vec3MulMat3(TP->type_launchcoords, tm, p);
 						}
 						AddVec3(Position, p);
-						EntityBase *ep = VW->AddEntity("projectile", TP->type_projectile, p, NULL, v, tank, 0, 0, ADDENTITY_FORCENET);
-					//	if(e && ep) ep->SetInt(ATT_TEAMID, e->QueryInt(ATT_TEAMID));
-						//Projectile will instead suck teamid out of owner.
+						VW->AddEntity("projectile", TP->type_projectile, p, NULL, v, tank, 0, 0, ADDENTITY_FORCENET);
 					}
 				}
 				//
@@ -2559,7 +2553,6 @@ EntityPowerUp::EntityPowerUp(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 Vel,
 	//This should be a transitory entity.
 }
 int EntityPowerUp::QueryInt(int type){
-	EntityPowerUpType *TP = (EntityPowerUpType*)TypePtr;
 	return EntityMesh::QueryInt(type);
 }
 bool EntityPowerUp::SetInt(int type, int attr){
