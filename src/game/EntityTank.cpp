@@ -209,9 +209,14 @@ bool EntityTankGod::Think(){
 		else
 		{
 			p = p->PrevLink();
-			if(p)
+			if(p) {
 				p->NextLink()->DeleteItem();
+			}
 		}
+		if (!p) {
+			fprintf(stderr, "FATAL: p was null!\n");
+			abort();
+		} 
 	}
 	//
 	EntityWaypoint *ew = (EntityWaypoint*)FindRegisteredEntity("WaypointPath0");
@@ -3036,7 +3041,11 @@ bool EntityTutorial::Think()
 		meshobj.Configure(TP->texture, TP->mesh, tmpMat, tmpMat[3], TP->type_rendflags, fade, TP->mesh->BndRad, 10.0f);
 		VW->PolyRend->AddSecondaryObject(&meshobj);
 	}
-	if(TP->secmesh){
+	else {
+		fprintf(stderr, "FATAL: TP->mesh was null\n");
+		abort();
+	}
+	if( TP->mesh && TP->secmesh){
 		Vec3 secrotvel;
 		LerpVec3(TP->type_secrotmin, TP->type_secrotmax, secrotlerp, secrotvel);	//secrotlerp will go from 0 to 1 to denote speed of rotation.
 		ScaleAddVec3(secrotvel, VW->FrameFrac(), secrot);
@@ -3086,6 +3095,10 @@ bool EntityTutorial::SetString(int type, const char *s)
 {
 	if(type == ATT_DOPPELGANG && s){
 		EntityTutorialType *tp = (EntityTutorialType*)VW->FindEntityType("tutorial", s);
+		if (!tp) {
+			fprintf(stderr, "Failed to find entity \"tutorial\"\n");
+			return true;
+		}
 		if(tp && tp != TP){
 			TP->UnlinkResources();
 			tp->InterrogateInt("minimal rescache");

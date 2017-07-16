@@ -24,10 +24,10 @@
 
 struct PaletteEntry
 {
-	uint32_t peRed;
-	uint32_t peGreen;
-	uint32_t peBlue;
-	uint32_t peFlags;
+	uint32_t peRed = 0;
+	uint32_t peGreen = 0;
+	uint32_t peBlue = 0;
+	uint32_t peFlags = 0;
 };
 
 class InversePal{

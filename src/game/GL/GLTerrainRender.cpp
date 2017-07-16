@@ -165,6 +165,10 @@ inline void BinaryTriangle::Split(){
 			Split2();
 			BottomNeighbor->Split2();
 			//
+			if (!LeftChild) {
+				fprintf(stderr, "FATAL: No left child!\n");
+				abort();
+			}
 			LeftChild->RightNeighbor = BottomNeighbor->RightChild;
 			RightChild->LeftNeighbor = BottomNeighbor->LeftChild;
 			BottomNeighbor->LeftChild->RightNeighbor = RightChild;	//Link kids with each other.

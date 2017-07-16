@@ -199,6 +199,10 @@ bool ConfigFile::FindNextKey(const char *n){
 	bool comment;
 	char tname[256];
 	namelen = std::min(254, int(strlen(n)));
+	if (namelen < 1) {
+		fprintf(stderr, "ERROR: FindNextKey would cause UB\n");
+		return false;
+	}
 	for(i = 0; i < namelen; i++) tname[i] = tolower(n[i]);	//Get lower version of name to find.
 	if(tname[namelen - 1] != ' '){
 		tname[namelen++] = ' ';	//Adds a space after the name to find, so no substring mismatches.
