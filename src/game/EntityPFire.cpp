@@ -49,7 +49,7 @@ int RegisterPFireEntities(){
 
 int InitFire(int particles, int w, int h, int scheme, int flamehalf = 0, int gt = 20);
 int UninitFire();
-void DoFire(void *bData, int bWidth, int bHeight, int bPitch);
+static void DoFire(unsigned char *bData, int bWidth, int bHeight, int bPitch);
 
 PaletteEntry	pe[256], cf[256], ct[256];
 bool Explode = false;
@@ -290,9 +290,9 @@ bool			Comet = false, Emit = false;
 bool InnerRing = false;
 int EmitRotate;
 bool			Cube3D = true, Attract = true;
-int				EmitCount = 0;//, MouseX, MouseY;
+static int				EmitCount = 0;//, MouseX, MouseY;
 double			xgrav, ygrav;
-time_t			TimeStart, Time, LastTime;
+static time_t			TimeStart, Time, LastTime;
 bool BurnDown = false;
 bool RandomColor = false;
 
@@ -403,7 +403,7 @@ double frand(double range){
 int Frames = 0;
 float CycleT = 1.1f;
 
-void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
+static void DoFire(unsigned char *bData, int bWidth, int bHeight, int bPitch){
 	//
 	Frames++;
 	if(CycleColors && Frames % 10 == 0){	//Every half second.
@@ -421,9 +421,9 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 		}
 		float t = CycleT, it = 1.0f - t;
 		for(int i = 1; i < 255; i++){
-			pe[i].peRed = (int)((float)cf[i].peRed * it + (float)ct[i].peRed * t);
-			pe[i].peGreen = (int)((float)cf[i].peGreen * it + (float)ct[i].peGreen * t);
-			pe[i].peBlue = (int)((float)cf[i].peBlue * it + (float)ct[i].peBlue * t);
+			pe[i].peRed = (float)cf[i].peRed * it + (float)ct[i].peRed * t;
+			pe[i].peGreen = (float)cf[i].peGreen * it + (float)ct[i].peGreen * t;
+			pe[i].peBlue = (float)cf[i].peBlue * it + (float)ct[i].peBlue * t;
 		}
 	}
 	int32_t i, j;//, l;
@@ -686,10 +686,10 @@ void DoFire(void *bData, int bWidth, int bHeight, int bPitch){
 				p[i].dx += frand(KICK_STRENGTH);
 ///				if(AltColor) p[i].color = std::min(254, p[i].color + 32);
 			}
-			x = (int32_t)p[i].lx;
-			y = (int32_t)p[i].ly;
-			dx = (int32_t)p[i].x - x;
-			dy = (int32_t)p[i].y - y;
+			x = p[i].lx;
+			y = p[i].ly;
+			dx = p[i].x - x;
+			dy = p[i].y - y;
 			if(x >= XOFF && y >= YOFF && x < WIDTH - XOFF && y < HEIGHT - YOFF){	//Make sure LAST coords are inside bounds too.
 				//Bresenham style line drawer.
 				if(abs(dx) > abs(dy)){	//X major.

@@ -457,6 +457,7 @@ int32_t Terrain::Blow(unsigned char *dest, int32_t dw, int32_t dh, int32_t dp,
 	}
 	return 1;
 }
+#if 0
 
 //***************************************************
 //
@@ -468,7 +469,7 @@ int32_t Terrain::Blow(unsigned char *dest, int32_t dw, int32_t dh, int32_t dp,
 //
 //***************************************************
 #define STAT(a,b) if(Stat) (*Stat)(this, (a), (b))
-bool Terrain::FractalForm(int32_t level, int32_t min, int32_t max, int32_t Form1, int32_t Form2, EcoSystem *eco, int32_t numeco, void (*Stat)(Terrain*const, const char*, int) ){
+bool Terrain::FractalForm(int32_t level, int32_t min, int32_t max, int32_t Form1, int32_t Form2, EcoSystem *eco, int32_t numeco, void (*Stat)(Terrain*const, const char*, int32_t) ){
 
 	if(data == NULL) return false;
 	//|| eco == NULL || numeco <= 0) return false;
@@ -682,6 +683,8 @@ if(Form2 == TFORM_SPLINE){
 
 	return true;
 }
+#endif
+
 //Ambient must be set BEFORE MakeShadeLookup, and light vector BEFORE TextureLightEtc.
 void Terrain::SetLightVector(float lx, float ly, float lz, float amb){
 	float l = sqrtf(lx * lx + ly * ly + lz * lz);

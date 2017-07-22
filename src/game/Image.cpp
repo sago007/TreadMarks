@@ -331,14 +331,6 @@ Bitmap& Bitmap::operator=(const Bitmap &bmp){
 	}
 	return *this;
 }
-/*
-void Bitmap::MakeMasks(){
-	xshift = HiBit(width);
-	xmask = (1 << xshift) - 1;
-	yshift = HiBit(height);
-	ymask = (1 << yshift) - 1;
-}
-*/
 bool Bitmap::Init(int32_t w, int32_t h, int32_t b){	//Creates an empty bitmap.
 	Free();
 	if(w > 0 && h > 0 && (b == 8 || b == 16 || b == 24 || b == 32)){

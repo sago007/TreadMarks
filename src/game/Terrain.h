@@ -157,7 +157,7 @@ public:
 	void SetScorchEco(int32_t eco = -1);	//Sets an eco system to use as the Scorch texture, instead of black.
 	int32_t GetScorchEco();
 	//
-	bool FractalForm(int32_t level, int32_t min, int32_t max, int32_t Form1, int32_t Form2, EcoSystem *eco, int32_t numeco, void (*Stat)(Terrain*const, const char*, int32_t) );
+	//bool FractalForm(int32_t level, int32_t min, int32_t max, int32_t Form1, int32_t Form2, EcoSystem *eco, int32_t numeco, void (*Stat)(Terrain*const, const char*, int32_t) );
 	bool InitTextureID();
 	int32_t EcoTexture(EcoSystem *eco, int32_t numeco, int32_t x, int32_t y);	//EcoSystems the TexID for a specific point.
 	bool Texture(EcoSystem *eco, int32_t numeco, bool UseIDMap = false, int32_t x1 = 0, int32_t y1 = 0, int32_t x2 = 0, int32_t y2 = 0);

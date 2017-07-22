@@ -92,13 +92,16 @@ float CDECL fsqrt_inv(float f);
 void TMsrandom(int32_t s);
 int32_t TMrandom();
 
-class CVec3{
-public:
-	float x, y, z;
+#pragma pack(push,4)
+struct CVec3{
+	float x;
+	float y;
+	float z;
 	inline CVec3(){x = 0; y = 0; z = 0;};
 	inline CVec3(const float _x, const float _y, const float _z) {x = _x; y = _y; z = _z;};
-	inline operator float*(){ return (float*)this; };
+	inline operator float*(){ return &x; };
 };
+#pragma pack(pop)
 
 //Vector/Point/Euler functions.
 inline void SetVec3(const float x, const float y, const float z, Vec3 dst){

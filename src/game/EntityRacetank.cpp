@@ -1259,7 +1259,8 @@ void EntityRacetank::DeliverPacket(const unsigned char *data, int len){
 			int32_t flag = 0, t = 0;
 			pe.UnpackUInt(flag, 8);
 			if(flag & 0x01) pe.UnpackUInt(turretblow, 1);
-			if(flag & 0x02) pe.UnpackUInt(t, 1); if(t) SetInt(ATT_CMD_FIXTANK, 1);
+			if(flag & 0x02) pe.UnpackUInt(t, 1); 
+			if(t) SetInt(ATT_CMD_FIXTANK, 1);
 			if(flag & 0x04){
 				pe.UnpackUInt(insignia1, 32);
 				pe.UnpackUInt(insignia2, 32);

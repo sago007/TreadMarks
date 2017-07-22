@@ -90,7 +90,7 @@ public:
 	static void SetVoxelWorld(VoxelWorld *vw){ VW = vw; };
 	VoxelWorld *GetVW(){ return VW; };
 	CStr cname, tname, dname;	//read-only, plain text names, Class, Type, and Descriptive (never used for comparisons).
-	int nameid; // read-only string ID for dname equivalent
+	int32_t nameid; // read-only string ID for dname equivalent
 	ClassHash chash, thash;	//read-only, 32-bit hashes of just class name and class plus type, should be totally unique...
 	bool Transitory;	//If this is true, entity type will NOT be deleted by Server, and can safely be deleted
 	//client-side.  ONLY set if entity type has a fixed low Time To Live, or if entity is a client-side effect
@@ -251,8 +251,8 @@ public:
 	Rot3 Rotation;	//Rotation of entity.
 	Vec3 Velocity;	//Velocity.
 	float Mass;		//For collision physics.
-	int ID;			//Identification number, world designer assigned.
-	int Flags;		//Bitflags, designer assigned.
+	int32_t ID;			//Identification number, world designer assigned.
+	int32_t Flags;		//Bitflags, designer assigned.
 	Vec3 BoundMin;	//Bounding box minimums.
 	Vec3 BoundMax;	//Bounding box maximums.
 	float BoundRad;	//Bounding radius.
@@ -765,17 +765,17 @@ public:
 	CStr soundfile[MAX_SOUNDS];
 //	CStr soundfile, altsoundfile, altsoundfile2, altsoundfile3;
 	SoundNode *sound[MAX_SOUNDS];//, *altsound, *altsound2, *altsound3;
-	int soundid[MAX_SOUNDS];	// Russ - local vox stuff
+	int32_t soundid[MAX_SOUNDS];	// Russ - local vox stuff
 	float type_volume;
 	float type_freqvariance;
 	float type_priority;
 	bool type_loop;
 	float type_minmaxdistscale;
-	int type_is2dsound;
+	int32_t type_is2dsound;
 	float type_rampup, type_rampdown, type_rampfreq;
-	int type_announcer;
+	int32_t type_announcer;
 	float type_volumebias;	//This is a load time param for the sound.
-	int localise;	// Russ - local vox stuff
+	int32_t localise;	// Russ - local vox stuff
 public:
 	EntitySoundType(ConfigFile *cfg, const char *c, const char *t);
 	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
@@ -786,10 +786,10 @@ public:
 };
 class EntitySound : public EntityBase {
 public:
-	int chan, wave;
+	int32_t chan, wave;
 	float volume, freq;
 	EntityGID connectedent;
-	int rampup, rampdown, loiter;
+	int32_t rampup, rampdown, loiter;
 public:
 	EntitySound(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);

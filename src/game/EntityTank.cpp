@@ -1480,7 +1480,7 @@ EntityProjectile::EntityProjectile(EntityTypeBase *et, Vec3 Pos, Rot3 Rot, Vec3 
 	EntityMesh(et, Pos, Rot, Vel, id, flags) {
 	EntityProjectileType *TP = (EntityProjectileType*)TypePtr;
 	//
-	int ownerset = !!ID;	//True if owner id was set.
+	bool ownerset = ID;	//True if owner id was set.
 	//
 	if(ownerset){	//An owner was explicitly specified.
 		curowner = ID;	//Put our owner in the last-set-owner static.

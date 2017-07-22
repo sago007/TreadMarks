@@ -63,13 +63,13 @@ struct GUIElementSlot{
 
 #define MAX_SLOTS 128
 
-GUIElementSlot GUISlot[MAX_SLOTS];
-int NextSlot;
+static GUIElementSlot GUISlot[MAX_SLOTS];
+static int NextSlot;
 
 void GuiEntStart(){
 	NextSlot = 0;
 }
-EntityBase *GuiEnt(const char *c, const char *t, Vec3 pos, Vec3 rot, Vec3 vel, const char *txt, int but,
+static EntityBase *GuiEnt(const char *c, const char *t, Vec3 pos, Vec3 rot, Vec3 vel, const char *txt, int but,
 				   bool firsttimetextonly = false, int id = 0, int flags = 0){
 	EntityBase *e = CTankGame::Get().GetVW()->GetEntity(GUISlot[NextSlot].gid);
 	if(!e){

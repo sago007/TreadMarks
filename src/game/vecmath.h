@@ -42,7 +42,7 @@ public:
 	// Accessors
 	float& x(void) { return val[0]; }
 	float& y(void) { return val[1]; }
-	operator float*() const {return (float*)val;}
+	operator const float*() const {return val;}
 	// Operators
 	C2Vector& operator=(const C2Vector &_rhs) { val[0] = _rhs.val[0];
 												val[1] = _rhs.val[1];
