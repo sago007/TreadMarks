@@ -237,7 +237,7 @@ public:
 	int QueryInt(int type) override;
 	bool SetString(int type, const char *s) override;
 	CStr QueryString(int type) override;
-	bool SetVec(int type, const void *v) override;
+	bool SetVec(int type, const float *v) override;
 };
 
 ////////////////////////////////////////////////

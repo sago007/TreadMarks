@@ -1914,7 +1914,7 @@ bool EntityBauble::Think(){
 			if(e){
 				e->SetPos(mat[3]);
 			//	e->SetRot(Rotation);
-				e->SetVec(ATT_MATRIX3, mat);
+				e->SetVec(ATT_MATRIX3, (float*)mat);
 				//
 			}else if (i != 2){	//Create if not existing and not the CTF flag entity
 				e = VW->AddEntity(insigniatype[i], NULL, NULL, NULL, 0, 0, 0, 0);
@@ -2898,7 +2898,7 @@ bool EntityInsignia::Think(){
 	//
 	return EntityMesh::Think();
 }
-bool EntityInsignia::SetVec(int type, const void *v){
+bool EntityInsignia::SetVec(int type, const float *v){
 	EntityInsigniaType *TP = (EntityInsigniaType*)TypePtr;
 	if(v && (type == ATT_MATRIX3 || type == ATT_MATRIX43)){
 		Mat3 tm;

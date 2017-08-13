@@ -34,7 +34,7 @@ public:
 	void OutputFunc(const char *text, int level);
 
 protected:
-	void closeEvent(QCloseEvent* event);
+	void closeEvent(QCloseEvent* event) override;
 
 	void clickChat();
 	void clickStartMap();

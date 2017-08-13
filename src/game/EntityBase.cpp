@@ -191,18 +191,6 @@ bool EntityBase::Rebucket(){
 	if(VW) return VW->AddPosBucket(&PosNode, Position, Group());
 	return false;
 }
-/*
-int EntityBase::PacketToSelf(TransmissionMode tm, const char *data, int len){
-	static char b[1024];
-	if(data && len < 1000 && VW){
-		b[0] = BYTE_HEAD_MSGENT;
-		WLONG(&b[1], GID);
-		memcpy(&b[5], data, len);
-		return VW->Net.QueueSendClient(CLIENTID_BROADCAST, tm, b, len + 5);
-	}
-	return 0;
-}
-*/
 int EntityBase::QueuePacket(TransmissionMode tm, BitPackEngine &bpe, float priority){
 	return VW->QueueEntityPacket(this, tm, bpe, priority);
 };
@@ -1402,7 +1390,7 @@ int EntityMesh::QueryInt(int type){
 	if(type == ATT_TEAMID) return teamid;
 	return EntitySprite::QueryInt(type);
 }
-bool EntityMesh::SetVec(int type, const void *v){
+bool EntityMesh::SetVec(int type, const float *v){
 	if(v && (type == ATT_MATRIX3 || type == ATT_MATRIX43)){
 		for(int i = 0; i < 9; i++) ((float*)meshobj.Orient)[i] = ((float*)v)[i];
 		if(type == ATT_MATRIX43) CopyVec3(((float*)v) + 9, meshobj.Pos);

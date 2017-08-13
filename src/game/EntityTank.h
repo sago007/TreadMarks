@@ -847,7 +847,7 @@ public:
 public:
 	EntityInsignia(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	bool Think() override;
-	bool SetVec(int type, const void *v) override;
+	bool SetVec(int type, const float *v) override;
 	void SetPos(Vec3 pos) override;
 	void SetRot(Rot3 rot) override;
 };

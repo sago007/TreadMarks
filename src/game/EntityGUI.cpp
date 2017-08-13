@@ -732,7 +732,7 @@ CStr EntityGUIListbox::QueryString(int type){
 		return listhead.FindItem(selection+1)->get();
 	return EntityGUI::QueryString(type);
 }
-bool EntityGUIListbox::SetVec(int type, const void *v){
+bool EntityGUIListbox::SetVec(int type, const float *v){
 	if(type == ATT_LISTBOX_ENTRYCOLOR && v && listhead.NextLink()){
 		ListboxEntry *le = listhead.Tail();
 		if(le){

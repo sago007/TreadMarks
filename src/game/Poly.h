@@ -320,7 +320,7 @@ public:
 public:
 	LineMapObject(){ };
 	~LineMapObject(){ };
-	void Render(PolyRender *PR);
+	void Render(PolyRender *PR) override;
 };
 
 class Chamfered2DBoxObject : public ObjectOrtho {

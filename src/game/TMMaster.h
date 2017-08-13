@@ -25,10 +25,10 @@
 //For now this is identical to the game client/server challenge key.
 
 class MasterPacketProcessor : public PacketProcessorCallback {
-	virtual void Connect(ClientID source);
-	virtual void Disconnect(ClientID source, NetworkError ne);
-	virtual void PacketReceived(ClientID source, const char *data, int len);
-	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int len);
+	virtual void Connect(ClientID source) override;
+	virtual void Disconnect(ClientID source, NetworkError ne) override;
+	virtual void PacketReceived(ClientID source, const char *data, int len) override;
+	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int len) override;
 };
 
 #endif

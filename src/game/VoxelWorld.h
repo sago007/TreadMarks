@@ -369,10 +369,10 @@ private:
 	PacketProcessorCallback *UCB;
 	ClientStatus Status;
 public:	//Callback functions inherited from PPC above.
-	virtual void Connect(ClientID source);
-	virtual void Disconnect(ClientID source, NetworkError ne);
-	virtual void PacketReceived(ClientID source, const char *data, int32_t len);
-	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int32_t len);
+	virtual void Connect(ClientID source) override;
+	virtual void Disconnect(ClientID source, NetworkError ne) override;
+	virtual void PacketReceived(ClientID source, const char *data, int32_t len) override;
+	virtual void OutOfBandPacket(sockaddr_in *src, const char *data, int32_t len) override;
 public:
 	FileManager FM;
 	Terrain Map;

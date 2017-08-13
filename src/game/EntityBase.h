@@ -231,7 +231,7 @@ public:	//Entity functions common to all types.
 	virtual float QueryFloat(int type){ return 0.0f; };
 	virtual bool SetString(int type, const char *s){ return false; };
 	virtual CStr QueryString(int type){ return ""; };
-	virtual bool SetVec(int type, const void *v){ return false; };
+	virtual bool SetVec(int type, const float *v){ return false; };
 	virtual bool QueryVec(int type, void *out){ return false; };
 	virtual EntityGroup Group(){ return GROUP_ACTOR; };	//Queries group type of entity object.
 	virtual bool CacheResources(){ return TypePtr->CacheResources(); };
@@ -478,10 +478,10 @@ private:
 	Vec3 type_colorgain, type_colorbias, type_colorscale, type_colorshift;
 public:
 	EntitySkyboxType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 private:
 	void ReadCfg(ConfigFile *cfg);
 };
@@ -489,7 +489,7 @@ class EntitySkybox : public EntitySkyplane {
 public:
 	EntitySkybox(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
 	~EntitySkybox(){ };
-	bool Think();
+	bool Think() override;
 };
 //***************************************************************
 //             Sprite Entity.
@@ -581,10 +581,10 @@ public:
 	int type_secondaryfrustum;
 public:
 	EntityMeshType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 //Global function, for use by other more simplistic mesh loading classes.
 void ReadMeshRendFlags(ConfigFile *cfg, int &rendflags);
@@ -598,12 +598,12 @@ public:
 	EntityMesh(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntityMesh(){ };
-	bool Think();
-	EntityGroup Group();//{ return GROUP_PROP; };
-	bool SetInt(int type, int val);
-	int QueryInt(int type);
-	bool SetVec(int type, const void *v);
-	bool QueryVec(int type, void *out);
+	bool Think() override;
+	EntityGroup Group() override;//{ return GROUP_PROP; };
+	bool SetInt(int type, int val) override;
+	int QueryInt(int type) override;
+	bool SetVec(int type, const float *v) override;
+	bool QueryVec(int type, void *out) override;
 };
 //***************************************************************
 //             Text Font entity.
@@ -617,10 +617,10 @@ public:
 	int type_mixedcase;
 public:
 	EntityTextType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 #define ATT_TEXT_STRING		0xdb9a1000
 #define ATT_TEXT_OPACITY	0xdb9a1001
@@ -657,7 +657,7 @@ public:
 class EntityIconType : public EntitySpriteType {
 public:
 	EntityIconType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 
 class EntityIcon : public EntitySprite{
@@ -668,9 +668,9 @@ public:
 	EntityIcon(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntityIcon(){ };
-	bool SetFloat(int type, float val);
-	float QueryFloat(int type);
-	bool Think();
+	bool SetFloat(int type, float val) override;
+	float QueryFloat(int type) override;
+	bool Think() override;
 };
 
 class EntityChamfered2DBoxType : public EntityTypeBase {
@@ -678,7 +678,7 @@ public:
 	float chamferwidth;
 public:
 	EntityChamfered2DBoxType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
 };
 class EntityChamfered2DBox : public EntityBase{
 private:
@@ -689,9 +689,9 @@ public:
 	EntityChamfered2DBox(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntityChamfered2DBox(){ };
-	bool SetFloat(int type, float val);
-	float QueryFloat(int type);
-	bool Think();
+	bool SetFloat(int type, float val) override;
+	float QueryFloat(int type) override;
+	bool Think() override;
 };
 
 
@@ -722,10 +722,10 @@ public:
 	float type_hitradiusadd;
 public:
 	EntityWaypointType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
 };
 class EntityWaypoint : public EntityBase {
 protected:
@@ -734,8 +734,8 @@ protected:
 public:
 	EntityWaypoint(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0, int teamspawn = 0);
-	bool Think();
-	EntityGroup Group(){ return GROUP_PROP; };
+	bool Think() override;
+	EntityGroup Group() override{ return GROUP_PROP; };
 public:
 	int WalkWaypoints(int current, Vec3 pos, Vec3 vel, WaypointNode **wayreturn = NULL, WaypointNode **majorway = NULL);
 		//Starts with 'current' waypoint index and walks forwards a maximum of 1
@@ -778,11 +778,11 @@ public:
 	int32_t localise;	// Russ - local vox stuff
 public:
 	EntitySoundType(ConfigFile *cfg, const char *c, const char *t);
-	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0);
-	bool CacheResources();
-	void ListResources(FileCRCList *fl);
-	void UnlinkResources();
-	int InterrogateInt(const char *thing);	//Responds to "loop".
+	EntityBase *CreateEntity(Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0, int id = 0, int flags = 0) override;
+	bool CacheResources() override;
+	void ListResources(FileCRCList *fl) override;
+	void UnlinkResources() override;
+	int InterrogateInt(const char *thing) override;	//Responds to "loop".
 };
 class EntitySound : public EntityBase {
 public:
@@ -794,10 +794,10 @@ public:
 	EntitySound(EntityTypeBase *et, Vec3 Pos = 0, Rot3 Rot = 0, Vec3 Vel = 0,
 		int id = 0, int flags = 0);
 	~EntitySound();
-	bool Think();
-	EntityGroup Group(){ return GROUP_ACTOR; };
-	int QueryInt(int type);
-	bool SetInt(int type, int attr);	//Responds to ATT_CONNECTED_ENT
+	bool Think() override;
+	EntityGroup Group() override{ return GROUP_ACTOR; };
+	int QueryInt(int type) override;
+	bool SetInt(int type, int attr) override;	//Responds to ATT_CONNECTED_ENT
 };
 
 

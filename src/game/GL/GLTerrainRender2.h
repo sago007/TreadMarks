@@ -20,9 +20,9 @@
 
 class GLRenderEngine2 : public RenderEngine {
 public:
-	bool GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, float quality, int32_t ms = 0);	//Optional number of msecs for frame parameter.
-	bool GLRenderWater(Terrain *map, Camera *cam, int32_t flags, float quality);
-	const char *GLTerrainDriverName();
+	bool GLTerrainRender(Terrain *map, Camera *cam, int32_t flags, float quality, int32_t ms = 0) override;	//Optional number of msecs for frame parameter.
+	bool GLRenderWater(Terrain *map, Camera *cam, int32_t flags, float quality) override;
+	const char *GLTerrainDriverName() override;
 };
 
 #endif
