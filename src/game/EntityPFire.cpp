@@ -354,9 +354,9 @@ bool Preview = false;
 int BlankedSecs = 0;
 int TotalSecs = 0;
 
-long int FirstUseTime = 0;
+//int64_t FirstUseTime = 0;
 
-long int SecsStart = 0;
+//int64_t SecsStart = 0;
 
 int FlameHalf = 0;
 

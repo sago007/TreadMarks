@@ -164,7 +164,9 @@ int main(int argc, char** argv)
 	splash.show();
 	app.processEvents();
 #endif
-
+#ifdef __linux__
+	setlocale(LC_NUMERIC, "C");
+#endif
 	//
 	CTankGame::Get().GetVW()->Net.SetChallengeKey(TREADMARKS_CHALLENGE_KEY);	//Essentially version control for network layer.
 	//
