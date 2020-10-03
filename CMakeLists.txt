@@ -6,6 +6,8 @@ SET(BUILD_GAME true CACHE BOOL "Whether or not to build the main game.")
 SET(BUILD_MASTER false CACHE BOOL "Whether or not to build the master server.")
 SET(BUILD_HEADLESS false CACHE BOOL "Set to true if you want to build a headless server instead of the whole game.")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -funsafe-math-optimizations ")
+
 IF(WIN32)
   SET(CERT "" CACHE FILEPATH "The location of the digital certificate with which to sign your installer.")
   SET(CERT_PASS "" CACHE STRING "The password with which to use your digital certificate.")
